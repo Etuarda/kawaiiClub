@@ -1,0 +1,299 @@
+{
+  "name": "Kawaii Clube — Desafio técnico: app de parcerias e painel da equipe",
+  "version": "1.0.1",
+  "created_at": "2026-10-16",
+  "nature": "reference-demo-not-production",
+  "test_results": "19 node tests passed; TypeScript AST syntax checked; full build not verified: npm dependencies unavailable",
+  "items": [
+    {
+      "path": "AGENTS.md",
+      "size": 1976,
+      "sha256": "172fe97ba234abdd3b1c40b817917969f7b09e1f860683b2b258443758096735"
+    },
+    {
+      "path": "README.md",
+      "size": 7021,
+      "sha256": "6e63ada2c211021d89ef90ec388e23572833241c2e5ee4c9379bb01513b9506d"
+    },
+    {
+      "path": "package.json",
+      "size": 524,
+      "sha256": "15e6e529ecc5c6af7c177e3d9100c4c3f4c6c9669f1fe6aca0c6fe50a1684785"
+    },
+    {
+      "path": ".gitignore",
+      "size": 69,
+      "sha256": "062268fb934b710ba0fd2ee5c657a5ce8950962fc74e38af290d36c488e67eaa"
+    },
+    {
+      "path": "contracts/openapi-reference-v1.yaml",
+      "size": 11070,
+      "sha256": "62c6a6f6a3a9d26f601ef6fca846e67924b2a2f99b12636de19c9f1aac862682"
+    },
+    {
+      "path": "docs/ROTEIRO_APRESENTACAO_20_MIN.md",
+      "size": 2672,
+      "sha256": "49f953a3fa398ca5f84b1f2fe09c75f686b3877a126d0a8c6b9d4f8e84d5b30e"
+    },
+    {
+      "path": "docs/RESPOSTAS_19_PERGUNTAS.md",
+      "size": 6912,
+      "sha256": "10fcc5499818b4d25f0e75ffa59ba01d560b9449ac46e9b751daf58bec57c33d"
+    },
+    {
+      "path": "docs/BACKLOG_DELTA_COMUNICACAO.csv",
+      "size": 786,
+      "sha256": "1e274ebb83016b7799b69201e92e5c81da9aba1ae5e5ce1364deada992b76981"
+    },
+    {
+      "path": "docs/GUIA_CLAUDE_CODE.md",
+      "size": 1802,
+      "sha256": "a7e091d49633d835364c96d32184f52088a43d8ca1aa5452f13bcbfbbc856271"
+    },
+    {
+      "path": "docs/DIRECAO_VISUAL_E_MOTION.md",
+      "size": 3007,
+      "sha256": "ed489d47ea46150d2494bfbafd4e590e795a8566f39c4809d489f9ab7b3d4763"
+    },
+    {
+      "path": "docs/ARQUITETURA.md",
+      "size": 6528,
+      "sha256": "3b22112389c4d25d8e4f14c76a124c2d087514ab02e3d5452d1645855bb44848"
+    },
+    {
+      "path": "docs/FLUXOS_E_TELAS.md",
+      "size": 3527,
+      "sha256": "5966c0aa3b376270d6053c93b9342ec7b4caf0806e5680b254765426a8a92124"
+    },
+    {
+      "path": "docs/INTEGRACAO_REAL.md",
+      "size": 3610,
+      "sha256": "edc2e7f4878197182e18f5e3beea42942a3c0bb662a3b7c9f56aea31fb2145cf"
+    },
+    {
+      "path": "docs/QUALIDADE_E_TESTES.md",
+      "size": 2638,
+      "sha256": "5f8720785ecb3bf46dd31c0a895e2f145fdb4b465f15b84c8d0f445c43cf2c75"
+    },
+    {
+      "path": "docs/desafio-original.pdf",
+      "size": 106712,
+      "sha256": "e6519bcb887b83e3c825b8c2a0421342647b0fe07e601b491bb175b439ce55bd"
+    },
+    {
+      "path": "docs/Kawaii_Clube_Plano_Estrategico_Integrado_v2.docx",
+      "size": 55764,
+      "sha256": "da6f191bd4df473d98e570ad150198fb6cf3e162ca47d31aea768214689d79f9"
+    },
+    {
+      "path": "docs/Kawaii_Clube_Especificacao_Requisitos_Backlog_Arquitetura_Contratos_v1.docx",
+      "size": 91207,
+      "sha256": "16fba901707cec7922bead19f0ed039d04398d9349bc003847e0d7a4136e8092"
+    },
+    {
+      "path": "docs/Kawaii_Clube_Backlog_Executavel_v1.csv",
+      "size": 5969,
+      "sha256": "02853f6303e0a9d06ac90d7daa7de2b5d341aaee289ac3e63c92ed979d1e2888"
+    },
+    {
+      "path": "reference/prototipo-original.html",
+      "size": 302189,
+      "sha256": "769018a381abb24d3d50a2fdfa4e072617fcfc3b90631de6fb6e9dcf44eb8790"
+    },
+    {
+      "path": "apps/api/package.json",
+      "size": 507,
+      "sha256": "b22cb419131fc0e638d8ace017d5cc30892ba6d30277cbfdddc7e89d4aa71135"
+    },
+    {
+      "path": "apps/api/tsconfig.json",
+      "size": 301,
+      "sha256": "2d626966f9f73861c6130bcbfe5a9aeddecf430bd667c6108cc951e405a8740f"
+    },
+    {
+      "path": "apps/api/.env.example",
+      "size": 140,
+      "sha256": "6eaa86df218d586253de07dddf7849168d3efaa1099af86a0979bdefee3adc4f"
+    },
+    {
+      "path": "apps/web/vite.config.ts",
+      "size": 174,
+      "sha256": "77c0bc80cd78b69b2cf347c30bcbf45b6161bf4b981cef67987d90e09a229736"
+    },
+    {
+      "path": "apps/web/package.json",
+      "size": 588,
+      "sha256": "800a8b43b5da733f3d63ddcec948180c507cd95dc99f9bda39b7814d4dee5db0"
+    },
+    {
+      "path": "apps/web/index.html",
+      "size": 689,
+      "sha256": "2b3968c15fb9249c9b904dd05a54763b3c9c583cbe433510415f11d9685aa259"
+    },
+    {
+      "path": "apps/web/tsconfig.json",
+      "size": 471,
+      "sha256": "62e92e6ed5c8a5cf3f3029de92ffacbe91f321f07e462750daca5d67c5d560ee"
+    },
+    {
+      "path": "apps/web/tests/domain.test.ts",
+      "size": 4117,
+      "sha256": "540c924640f949e189869c7b24339468120da0dc5b164e0850ad115263c4af93"
+    },
+    {
+      "path": "apps/web/tests/gateway.test.ts",
+      "size": 3433,
+      "sha256": "abca062d99f1a3daadf2558c44d3459fe61f00a5c731072cbefcf61a4631b0a3"
+    },
+    {
+      "path": "apps/web/src/main.tsx",
+      "size": 239,
+      "sha256": "7834c5fe0d56201c5626870e7c2cd9e47fb9ac20321d18cc0ef267ea881b0385"
+    },
+    {
+      "path": "apps/web/src/domain/policies.ts",
+      "size": 2772,
+      "sha256": "a343c743b4a49dacf19896c1b2556474d46184408a0481046c276f0e7d0c8bd9"
+    },
+    {
+      "path": "apps/web/src/domain/types.ts",
+      "size": 3043,
+      "sha256": "8f6c7aa04898ea95a7c0b1d3a5d8b962f3788312dcf7d36180a16038fcd492a5"
+    },
+    {
+      "path": "apps/web/src/domain/communication.ts",
+      "size": 1910,
+      "sha256": "120bd53c1e69adea3cde6a466ec26e61983e7b6e56b019944ffba0f382aa10db"
+    },
+    {
+      "path": "apps/web/src/domain/proposal.ts",
+      "size": 2376,
+      "sha256": "d7f63c730535062fc2ad22438ad4d5bae43b012c924775717aa6699f3f9a627b"
+    },
+    {
+      "path": "apps/web/src/app/useDemoResource.ts",
+      "size": 1284,
+      "sha256": "7f2bcc5723d5646c7f599fb733ce541e296eb8dc2bb1ac4cf6b20afd12412e25"
+    },
+    {
+      "path": "apps/web/src/app/App.tsx",
+      "size": 2553,
+      "sha256": "4c788a318ca387c8535f93f097d4939b8da1f57d4de9d95793020d7295c132fe"
+    },
+    {
+      "path": "apps/web/src/styles/index.css",
+      "size": 20418,
+      "sha256": "0b23990b0d61277bec0776f40e17a8b3d9fb7b07879c8803e03a98358522f32b"
+    },
+    {
+      "path": "apps/web/src/assets/logo-kawaii.png",
+      "size": 28718,
+      "sha256": "19d5bddacaf961dbbeec2b3acb8a1bb81674fc0e481126a459888f3cb491ef0e"
+    },
+    {
+      "path": "apps/web/src/components/Layout.tsx",
+      "size": 3731,
+      "sha256": "9db5b1afbe5257bef0ad12efe3d01776201fdc2aeb6591b011582b8e886e21da"
+    },
+    {
+      "path": "apps/web/src/components/Shared.tsx",
+      "size": 2576,
+      "sha256": "c2f25368959d1621568635934b966c451c7b0f2ba1047b61e9d650d91f7e4f62"
+    },
+    {
+      "path": "apps/web/src/infrastructure/demo-gateway.ts",
+      "size": 7507,
+      "sha256": "4cf00d70008f86cf7625318e91ab617ee3150bf62ec0e321857646753c0bc48f"
+    },
+    {
+      "path": "apps/web/src/infrastructure/fixtures.ts",
+      "size": 7548,
+      "sha256": "6aaf69fc9b5aedcc0271882e98acfbeae4de708dbde5f9eecdfade7989162e91"
+    },
+    {
+      "path": "apps/web/src/infrastructure/demo-repository.ts",
+      "size": 1153,
+      "sha256": "e52d05a94452f9c68f844c2ed87426ff53878afa14bac1fa97c7a34a890b7fe1"
+    },
+    {
+      "path": "apps/web/src/features/community/AdminPages.tsx",
+      "size": 20504,
+      "sha256": "e99d182baf4ef2bde0dec5f967f688ecd7bb39f8c0daaeb081ab519df63af052"
+    },
+    {
+      "path": "apps/web/src/features/auth/LoginPage.tsx",
+      "size": 1751,
+      "sha256": "e831e39a835311400e186f01ffabe08ebe3a1202032c620ba23e61de560f071c"
+    },
+    {
+      "path": "apps/web/src/features/auth/AuthContext.tsx",
+      "size": 1208,
+      "sha256": "5f395d52ec700e03c87e74f3ff5dc08d77eb8829081ac959e9f974a3f456aae4"
+    },
+    {
+      "path": "apps/web/src/features/proposals/ProposalPages.tsx",
+      "size": 5553,
+      "sha256": "42d54b07c75427a7246c0bc5e32ae80cacff76e41621656b72dd48486628c018"
+    },
+    {
+      "path": "apps/web/src/features/opportunities/UserPages.tsx",
+      "size": 5289,
+      "sha256": "bfcbb59e9906642227af2d9fa8dcadfc02dd8befed16ead28e2f81d9d81080ea"
+    },
+    {
+      "path": "apps/web/src/features/opportunities/OpportunitiesPage.tsx",
+      "size": 6334,
+      "sha256": "c5ddd64e8137b86a78330981f8e6c4814eec8b5855cd7bfe254d06d54475ffa5"
+    },
+    {
+      "path": "apps/api/src/main.ts",
+      "size": 605,
+      "sha256": "6ba0e9f627dcd91fb05d1a38c1cd69b184fc0163ed2f7d8f8f2a621263fafea1"
+    },
+    {
+      "path": "apps/api/prisma/EXAMPLE-ONLY.prisma",
+      "size": 1036,
+      "sha256": "55927bfdb7dec0e2a36b0fca7c5befcb46cce5538a2f568489f0a362331d174f"
+    },
+    {
+      "path": "apps/api/src/domain/contracts.ts",
+      "size": 837,
+      "sha256": "2fb2efba52a732ee706de621d4a7ccb7bb654bce2492e7d74e00d57feafecc57"
+    },
+    {
+      "path": "apps/api/src/domain/demo-business.service.ts",
+      "size": 3547,
+      "sha256": "43c0a72e421f78394a233000caea2be16b29bb3931fffd53f3c0dd9528288c8a"
+    },
+    {
+      "path": "apps/api/src/modules/demo.controller.ts",
+      "size": 1526,
+      "sha256": "b42769380950eb0aae40fa2eb1efce9c7849e4af7f9d02500eb9e16cd4700b33"
+    },
+    {
+      "path": "apps/api/src/modules/app.module.ts",
+      "size": 268,
+      "sha256": "6cbf94d558c6168fbba0475a234260cf150d50cfe4373342237a4447e08194a0"
+    },
+    {
+      "path": "docs/adr/ADR-003-canais.md",
+      "size": 637,
+      "sha256": "a345936e806fdde4abed9771f41fc0d88682b3529634fb4c8692777d7061da8d"
+    },
+    {
+      "path": "docs/adr/ADR-001-monolito-modular.md",
+      "size": 591,
+      "sha256": "714dbde980af82215a48adf3ec4033575d4fb578ff9c1f4b1dbf1dc11dc06ba6"
+    },
+    {
+      "path": "docs/adr/ADR-004-ranking.md",
+      "size": 645,
+      "sha256": "131074512b6c40dc4865a76d91b9094a8d11b708680d5d380d5aa3ce30909278"
+    },
+    {
+      "path": "docs/adr/ADR-002-demo-sem-integracao.md",
+      "size": 511,
+      "sha256": "933be004e6ec2af8e49d8d9b2850fe7d69c390eda62bfc1e21b6b5d8ea94add6"
+    }
+  ]
+}

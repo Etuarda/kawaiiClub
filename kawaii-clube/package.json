@@ -1,0 +1,12 @@
+{
+  "name": "kawaii-clube-desafio", "private": true, "version": "1.0.0",
+  "workspaces": ["apps/web", "apps/api"],
+  "scripts": {
+    "dev": "npm run dev --workspace @kawaii/web",
+    "dev:api": "npm run dev --workspace @kawaii/api",
+    "build": "npm run build --workspace @kawaii/web && npm run build --workspace @kawaii/api",
+    "typecheck": "npm run typecheck --workspace @kawaii/web && npm run typecheck --workspace @kawaii/api",
+    "test": "npm run test --workspace @kawaii/web"
+  },
+  "engines": {"node": ">=22"}
+}

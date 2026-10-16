@@ -1,0 +1,6 @@
+/* Ponto de entrada dos estilos: tokens → base → telas. */
+@import './tokens.css';
+@import './base.css';
+@import './auth.css';
+@import './user.css';
+@import './admin.css';

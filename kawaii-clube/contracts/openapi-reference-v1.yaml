@@ -1,0 +1,434 @@
+openapi: 3.0.3
+info:
+  title: Kawaii Clube - Contratos propostos de Matching e Propostas
+  version: 1.0.0-proposta
+  description: Especificação de referência NÃO validada contra o código. IDs inteiros conforme documentação;
+    matchRef é referência opaca. Rotas novas são propostas, sujeitas a adaptação após auditoria AS-IS.
+servers:
+- url: https://example.invalid
+  description: Substituir pelo ambiente autorizado após auditoria; não é endpoint executável
+security:
+- bearerAuth: []
+paths:
+  /partnerships/recommendations:
+    get:
+      summary: Listar recomendações para uma oportunidade autorizada
+      operationId: listRecommendations
+      parameters:
+      - in: query
+        name: opportunityId
+        required: true
+        schema: &id007
+          type: integer
+          format: int32
+          minimum: 1
+      - in: query
+        name: page
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 50
+          default: 10
+      responses:
+        '200':
+          description: Recomendações elegíveis da oportunidade (modelo proposto).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecommendationsResponse'
+        '401': &id001
+          description: Não autenticado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403': &id002
+          description: Sem permissão
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404': &id003
+          description: Oportunidade ou recurso não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409': &id004
+          description: Conflito de versão, chave ou estado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '422': &id005
+          description: Entrada inválida / match não elegível
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '503': &id006
+          description: Dependência temporariamente indisponível
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /partnerships/proposal-drafts:
+    post:
+      summary: Criar rascunho de proposta a partir de match revalidado
+      operationId: createProposalDraft
+      parameters:
+      - name: Idempotency-Key
+        in: header
+        required: true
+        description: Chave única por intenção lógica; mesma chave+mesmo payload retorna o mesmo resultado.
+        schema:
+          type: string
+          minLength: 8
+          maxLength: 128
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDraftInput'
+      responses:
+        '201':
+          description: Rascunho criado ou resultado original reproduzido por idempotência
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DraftResponse'
+        '202':
+          description: Rascunho pendente de geração externa; consultar pollUrl após intervalo razoável.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcceptedResponse'
+        '401': *id001
+        '403': *id002
+        '404': *id003
+        '409': *id004
+        '422': *id005
+        '503': *id006
+  /partnerships/proposal-drafts/{draftId}:
+    get:
+      summary: Consultar rascunho autorizado
+      operationId: getProposalDraft
+      parameters:
+      - name: draftId
+        in: path
+        required: true
+        schema: *id007
+      responses:
+        '200':
+          description: Rascunho
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DraftResponse'
+        '401': *id001
+        '403': *id002
+        '404': *id003
+        '409': *id004
+        '422': *id005
+        '503': *id006
+    patch:
+      summary: Editar campos do rascunho com controle de versão
+      operationId: updateProposalDraft
+      parameters:
+      - name: draftId
+        in: path
+        required: true
+        schema: *id007
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDraftInput'
+      responses:
+        '200':
+          description: Rascunho atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DraftResponse'
+        '401': *id001
+        '403': *id002
+        '404': *id003
+        '409': *id004
+        '422': *id005
+        '503': *id006
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Participant:
+      type: object
+      required:
+      - id
+      - type
+      - displayName
+      properties:
+        id: *id007
+        type:
+          type: string
+          enum:
+          - ENTREPRENEUR
+          - EXPERT
+          - COMPANY
+          - INSTITUTION
+        displayName: &id008
+          type: string
+    Evidence:
+      type: object
+      required:
+      - criterion
+      - sourceType
+      - sourceRef
+      - confirmed
+      properties:
+        criterion: *id008
+        sourceType:
+          type: string
+          enum:
+          - PROFILE
+          - OPPORTUNITY
+          - PLATFORM
+          - MANUAL_REVIEW
+        sourceRef:
+          type: string
+          description: Referência auditável sem incluir CPF, senha, bio completa ou dados sensíveis
+        confirmed:
+          type: boolean
+    Recommendation:
+      type: object
+      required:
+      - matchRef
+      - opportunityId
+      - candidate
+      - modality
+      - evidence
+      - explanation
+      - policyVersion
+      - evaluatedAt
+      properties:
+        matchRef:
+          type: string
+          description: Referência opaca derivada ou persistida, nunca prova suficiente de elegibilidade
+        opportunityId: *id007
+        candidate:
+          $ref: '#/components/schemas/Participant'
+        modality:
+          type: string
+          enum:
+          - SUPPORT
+          - EXCHANGE
+          - COLLAB
+          - COMMERCIAL
+        evidence:
+          type: array
+          items:
+            $ref: '#/components/schemas/Evidence'
+        explanation: *id008
+        policyVersion: *id008
+        evaluatedAt:
+          type: string
+          format: date-time
+    Pagination:
+      type: object
+      required:
+      - total
+      - page
+      - limit
+      - totalPages
+      properties:
+        total:
+          type: integer
+          minimum: 0
+        page:
+          type: integer
+          minimum: 1
+        limit:
+          type: integer
+          minimum: 1
+        totalPages:
+          type: integer
+          minimum: 0
+    RecommendationsResponse:
+      type: object
+      required:
+      - success
+      - data
+      - meta
+      properties:
+        success:
+          type: boolean
+          enum:
+          - true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Recommendation'
+        meta:
+          $ref: '#/components/schemas/Pagination'
+    DraftFields:
+      type: object
+      required:
+      - objective
+      - scope
+      properties:
+        objective:
+          type: string
+          minLength: 1
+          maxLength: 1000
+        scope:
+          type: string
+          minLength: 1
+          maxLength: 5000
+        consideration:
+          type: string
+          maxLength: 3000
+          nullable: true
+        notes:
+          type: string
+          maxLength: 3000
+          nullable: true
+    CreateDraftInput:
+      type: object
+      required:
+      - matchRef
+      - expectedPolicyVersion
+      properties:
+        matchRef:
+          type: string
+          minLength: 1
+        expectedPolicyVersion:
+          type: string
+          minLength: 1
+        overrides:
+          type: object
+          properties:
+            objective: *id008
+            scope: *id008
+            consideration: *id008
+            notes: *id008
+          additionalProperties: false
+      additionalProperties: false
+    UpdateDraftInput:
+      type: object
+      required:
+      - expectedVersion
+      - fields
+      properties:
+        expectedVersion:
+          type: integer
+          minimum: 1
+        fields:
+          $ref: '#/components/schemas/DraftFields'
+      additionalProperties: false
+    Draft:
+      type: object
+      required:
+      - id
+      - matchRef
+      - opportunityId
+      - status
+      - version
+      - generationMode
+      - createdAt
+      - updatedAt
+      properties:
+        id: *id007
+        matchRef: *id008
+        opportunityId: *id007
+        status:
+          type: string
+          enum:
+          - DRAFT
+          - READY_FOR_REVIEW
+          - PENDING_GENERATION
+          - GENERATION_FAILED
+        version:
+          type: integer
+          minimum: 1
+        fields:
+          $ref: '#/components/schemas/DraftFields'
+          description: Obrigatório quando status=DRAFT ou READY_FOR_REVIEW; pode faltar durante geração pendente/falha.
+        generationMode:
+          type: string
+          enum:
+          - EXISTING_GENERATOR
+          - MOCK_ADAPTER
+          - TEMPLATE
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    DraftResponse:
+      type: object
+      required:
+      - success
+      - data
+      properties:
+        success:
+          type: boolean
+          enum:
+          - true
+        data:
+          $ref: '#/components/schemas/Draft'
+    ApiError:
+      type: object
+      required:
+      - success
+      - message
+      - code
+      properties:
+        success:
+          type: boolean
+          enum:
+          - false
+        message: *id008
+        code:
+          type: string
+          pattern: ^[A-Z0-9_]+$
+        statusCode:
+          type: integer
+    AcceptedResponse:
+      type: object
+      required:
+      - success
+      - data
+      properties:
+        success:
+          type: boolean
+          enum:
+          - true
+        data:
+          type: object
+          required:
+          - draftId
+          - status
+          - pollUrl
+          properties:
+            draftId:
+              type: integer
+              minimum: 1
+            status:
+              type: string
+              enum:
+              - PENDING_GENERATION
+            pollUrl:
+              type: string
+              description: Caminho para GET do rascunho até geração ficar pronta

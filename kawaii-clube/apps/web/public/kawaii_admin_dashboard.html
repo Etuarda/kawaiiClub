@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Kawaii Clube — Painel Admin da Curadoria</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Playfair Display + Plus Jakarta Sans + Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        kawaii: {
+                            deep: '#4F0004',
+                            main: '#6A0004',
+                            soft: '#891C26',
+                            ivory: '#FFFDF7',
+                            creme: '#F7F3EC',
+                            rose: '#F4E8E6',
+                            gold: '#B18A57',
+                            taupe: '#756963',
+                            charcoal: '#282321',
+                            adminDark: '#1B1716',
+                            adminDeep: '#0A0707',
+                            adminCard: '#241F1E',
+                            adminBorder: '#3A3230',
+                            darkbg: '#120E0D',
+                            darkcard: '#1C1716'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', '"Inter"', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F7F3EC;
+            color: #282321;
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+        .dark body, html.dark body {
+            background-color: #120E0D;
+            color: #FFFDF7;
+        }
+        .font-editorial {
+            font-family: 'Playfair Display', serif;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #B18A57;
+            border-radius: 3px;
+        }
+        .fade-in {
+            animation: fadeIn 0.3s var(--ease-editorial) forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .bar-animate {
+            transform-origin: bottom;
+            animation: growBar 0.8s var(--ease-editorial) forwards;
+        }
+        @keyframes growBar {
+            from { transform: scaleY(0); }
+            to { transform: scaleY(1); }
+        }
+
+        /* High Contrast Dark Mode Red Accents (User Explicit Requirement) */
+        .dark .bg-kawaii-main, html.dark .bg-kawaii-main {
+            background-color: #800B13 !important;
+            border-color: rgba(177, 138, 87, 0.45) !important;
+            color: #FFFDF7 !important;
+            box-shadow: 0 0 14px rgba(128, 11, 19, 0.35);
+        }
+        .dark .text-kawaii-main, html.dark .text-kawaii-main {
+            color: #FF5E6C !important;
+        }
+        .dark .bg-kawaii-rose, html.dark .bg-kawaii-rose {
+            background-color: #380306 !important;
+            color: #FF7B86 !important;
+        }
+    </style>
+<style id="kw-sober-typography">
+/* Sem background em tipografia (badges, pills, status, tags) e maior contraste sóbrio */
+span[class*="rounded-full"][class*="text-[10px]"],
+span[class*="rounded-full"][class*="text-[11px]"],
+span[class*="rounded-md"][class*="text-[10px]"],
+span[class*="rounded-md"][class*="text-[11px]"],
+span[class*="rounded"][class*="px-2"][class*="py-0.5"],
+span[class*="rounded"][class*="px-2.5"][class*="py-1"] {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  box-shadow: none !important;
+}
+.text-emerald-700, .text-emerald-600, .text-green-700 { color: #282220 !important; font-weight: 700 !important; }
+.dark .text-emerald-400, .dark .text-emerald-300 { color: #E6DACB !important; }
+.text-amber-700, .text-amber-600, .text-yellow-700 { color: #8C6738 !important; font-weight: 700 !important; }
+.dark .text-amber-400, .dark .text-amber-300 { color: #D4AF7A !important; }
+.text-red-700, .text-red-600 { color: #6A0004 !important; font-weight: 700 !important; }
+.dark .text-red-400 { color: #E27D85 !important; }
+</style>
+</head>
+<body class="h-full flex flex-col xl:flex-row overflow-x-hidden selection:bg-kawaii-rose selection:text-kawaii-main">
+
+    <!-- ZARSS / CIRCLE / LUMA DARK SIDEBAR -->
+    <aside class="w-full xl:w-72 bg-kawaii-adminDark dark:bg-kawaii-adminDeep text-kawaii-ivory flex xl:flex-col justify-between p-4 xl:p-6 shrink-0 shadow-2xl z-30 transition-colors">
+        <div class="flex items-center xl:flex-col xl:items-start w-full justify-between xl:justify-start">
+            
+            <!-- Brand / Curadoria Monogram KS -->
+            <div class="mb-0 xl:mb-6 flex items-center gap-3">
+                <a href="kawaii_admin_dashboard.html" class="w-11 h-11 xl:w-12 xl:h-12 rounded-2xl bg-kawaii-main flex items-center justify-center border border-kawaii-gold/40 shadow-lg shrink-0">
+                    <span class="font-editorial text-xl xl:text-2xl text-kawaii-ivory font-bold tracking-wider">KS</span>
+                </a>
+                <div>
+                    <h1 class="font-editorial text-base xl:text-lg font-bold tracking-wide text-kawaii-ivory leading-tight">KAWAII CLUBE</h1>
+                    <p class="text-[9px] xl:text-[10px] text-kawaii-gold uppercase tracking-widest font-bold">Curadoria & Admin</p>
+                </div>
+            </div>
+
+            <!-- Admin Profile Quick Card (Desktop) -->
+            <div class="hidden xl:block bg-kawaii-adminCard border border-kawaii-adminBorder rounded-2xl p-3.5 mb-6 text-left w-full shadow-inner">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-full bg-kawaii-deep text-kawaii-gold border border-kawaii-gold/50 flex items-center justify-center font-bold text-xs">
+                        <i class="fa-solid fa-crown text-[11px]"></i>
+                    </div>
+                    <div class="overflow-hidden">
+                        <h4 class="text-xs font-bold text-kawaii-ivory truncate">Equipe Curadoria</h4>
+                        <p class="text-[10px] text-kawaii-rose/70 truncate">Nível Administrador</p>
+                    </div>
+                </div>
+                <div class="mt-2.5 pt-2 border-t border-kawaii-adminBorder flex justify-between items-center text-[11px]">
+                    <span class="text-kawaii-rose/70">Status</span>
+                    <span class="text-emerald-400 font-bold inline-flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Online
+                    </span>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="hidden xl:flex flex-col gap-1.5 w-full text-left">
+                <button onclick="switchAdminTab('indicadores')" id="admin-nav-indicadores" class="admin-nav-btn flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold transition-all bg-kawaii-main text-kawaii-ivory shadow-md">
+                    <i class="fa-solid fa-chart-line w-4 text-center text-kawaii-gold"></i> Dashboard & Indicadores
+                </button>
+                <button onclick="switchAdminTab('membros')" id="admin-nav-membros" class="admin-nav-btn flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold transition-all text-kawaii-rose/80 hover:bg-kawaii-adminCard hover:text-kawaii-ivory">
+                    <i class="fa-solid fa-users w-4 text-center"></i> Gestão de Membros
+                    <span class="ml-auto bg-kawaii-adminCard text-kawaii-gold text-[10px] px-2 py-0.5 rounded-full font-bold">142</span>
+                </button>
+                <button onclick="switchAdminTab('automacoes')" id="admin-nav-automacoes" class="admin-nav-btn flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold transition-all text-kawaii-rose/80 hover:bg-kawaii-adminCard hover:text-kawaii-ivory">
+                    <i class="fa-solid fa-bolt w-4 text-center"></i> Automações (Customer.io)
+                    <span class="ml-auto bg-emerald-950 text-emerald-400 text-[10px] px-2 py-0.5 rounded-full font-bold">5 Ativas</span>
+                </button>
+                <button onclick="switchAdminTab('inscricoes')" id="admin-nav-inscricoes" class="admin-nav-btn flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold transition-all text-kawaii-rose/80 hover:bg-kawaii-adminCard hover:text-kawaii-ivory">
+                    <i class="fa-solid fa-calendar-check w-4 text-center"></i> Inscrições & Luma
+                    <span class="ml-auto bg-kawaii-gold text-kawaii-deep text-[10px] px-2 py-0.5 rounded-full font-bold">3 Eventos</span>
+                </button>
+                <button onclick="switchAdminTab('comunicacoes')" id="admin-nav-comunicacoes" class="admin-nav-btn flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold transition-all text-kawaii-rose/80 hover:bg-kawaii-adminCard hover:text-kawaii-ivory">
+                    <i class="fa-solid fa-bullhorn w-4 text-center"></i> Comunicações & Fila
+                    <span class="ml-auto bg-kawaii-soft text-kawaii-ivory text-[10px] px-2 py-0.5 rounded-full font-bold">4 Fila</span>
+                </button>
+                <a href="kawaii_clube_app.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold transition-all text-kawaii-gold bg-kawaii-gold/10 hover:bg-kawaii-gold/20 border border-kawaii-gold/30 mt-2" title="Ir para a visão da empreendedora">
+                    <i class="fa-solid fa-wand-magic-sparkles w-4 text-center"></i> Jornadas de Parcerias
+                    <i class="fa-solid fa-arrow-up-right-from-square ml-auto text-[10px]"></i>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Mobile Navigation Row -->
+        <div class="flex xl:hidden items-center gap-2">
+            <button onclick="switchAdminTab('indicadores')" class="p-2 text-kawaii-ivory hover:text-kawaii-gold" title="Dashboard"><i class="fa-solid fa-chart-line text-base"></i></button>
+            <button onclick="switchAdminTab('membros')" class="p-2 text-kawaii-ivory hover:text-kawaii-gold" title="Membros"><i class="fa-solid fa-users text-base"></i></button>
+            <button onclick="switchAdminTab('automacoes')" class="p-2 text-kawaii-ivory hover:text-kawaii-gold" title="Automações"><i class="fa-solid fa-bolt text-base"></i></button>
+            <button onclick="switchAdminTab('inscricoes')" class="p-2 text-kawaii-ivory hover:text-kawaii-gold" title="Luma"><i class="fa-solid fa-calendar-check text-base"></i></button>
+            <button onclick="switchAdminTab('comunicacoes')" class="p-2 text-kawaii-ivory hover:text-kawaii-gold" title="Comunicações"><i class="fa-solid fa-bullhorn text-base"></i></button>
+            <a href="kawaii_clube_app.html" class="p-2 text-kawaii-gold hover:text-kawaii-ivory" title="Painel da Empreendedora"><i class="fa-solid fa-gem text-base"></i></a>
+        </div>
+
+        <!-- Footer / Dark Mode / App Link -->
+        <div class="hidden xl:block pt-4 border-t border-kawaii-adminBorder space-y-2.5">
+            <button onclick="toggleDarkMode()" class="w-full flex items-center justify-center gap-2 p-2 rounded-xl bg-kawaii-adminCard border border-kawaii-adminBorder text-xs font-semibold text-kawaii-rose/90 hover:text-kawaii-ivory hover:border-kawaii-gold transition-all">
+                <i id="theme-icon" class="fa-solid fa-moon text-kawaii-gold"></i>
+                <span id="theme-text">Modo Escuro</span>
+            </button>
+            <div class="flex items-center justify-between text-xs text-kawaii-rose/70 px-1">
+                <a href="kawaii_clube_app.html" class="hover:text-kawaii-gold flex items-center gap-1.5"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver App</a>
+                <button onclick="logoutAdmin()" class="hover:text-kawaii-gold flex items-center gap-1.5"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN VIEWPORT -->
+    <main class="flex-1 flex flex-col h-full overflow-y-auto bg-kawaii-creme dark:bg-kawaii-darkbg transition-colors pb-16 xl:pb-8">
+
+        <!-- TOP BAR (Live Search, CTAs, Mode Toggle) -->
+        <header class="bg-kawaii-ivory dark:bg-kawaii-darkcard border-b border-kawaii-gold/15 px-4 sm:px-6 py-3.5 flex items-center justify-between sticky top-0 z-20 shadow-sm transition-colors">
+            <div class="flex items-center gap-3">
+                <h2 id="admin-screen-title" class="font-editorial text-lg sm:text-xl font-bold text-kawaii-deep dark:text-kawaii-ivory">
+                    Dashboard & Indicadores
+                </h2>
+            </div>
+
+            <!-- Search & Actions -->
+            <div class="flex items-center gap-3">
+                <!-- Live Search Box -->
+                <div class="relative hidden md:block w-64 lg:w-80">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-kawaii-taupe text-xs"></i>
+                    <input id="admin-search" oninput="handleAdminGlobalSearch()" type="text" placeholder="Pesquisar integrantes, nicho ou tag..." class="w-full bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/30 rounded-xl pl-9 pr-3 py-2 text-xs text-kawaii-charcoal dark:text-kawaii-ivory focus:outline-none focus:border-kawaii-main">
+                </div>
+
+                <!-- Painel da Empreendedora Link -->
+                <a href="kawaii_clube_app.html" class="hidden sm:flex items-center gap-2 bg-kawaii-creme dark:bg-kawaii-darkbg hover:bg-kawaii-rose text-kawaii-deep dark:text-kawaii-ivory border border-kawaii-gold/30 px-3.5 py-2 rounded-xl text-xs font-bold transition-all shadow-sm">
+                    <i class="fa-solid fa-gem text-kawaii-gold"></i>
+                    <span>Painel da Empreendedora</span>
+                </a>
+
+                <!-- Global Broadcast CTA -->
+                <button onclick="openBroadcastModal()" class="bg-kawaii-main hover:bg-kawaii-soft text-kawaii-ivory px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold shadow-md transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-paper-plane text-xs"></i>
+                    <span class="hidden sm:inline">Novo</span> Comunicado
+                </button>
+            </div>
+        </header>
+
+        <!-- CONTENT VIEWPORT -->
+        <div class="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full flex-1 space-y-6">
+
+            <!-- ================= SECTION 1: DASHBOARD & INDICADORES ================= -->
+            <div id="admin-tab-indicadores" class="admin-tab-content fade-in space-y-6">
+                <!-- TOP 4 METRIC CARDS -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-kawaii-ivory dark:bg-kawaii-darkcard rounded-2xl p-5 border border-kawaii-gold/20 shadow-sm flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 uppercase tracking-wider font-bold">Integrantes Ativas</p>
+                            <h3 class="font-editorial text-3xl font-bold text-kawaii-deep dark:text-kawaii-ivory mt-1">142</h3>
+                            <span class="text-[11px] text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded font-semibold inline-flex items-center gap-1 mt-1">
+                                <i class="fa-solid fa-arrow-trend-up"></i> +12 este mês
+                            </span>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-kawaii-rose dark:bg-kawaii-adminCard text-kawaii-main dark:text-kawaii-gold flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                    </div>
+
+                    <div class="bg-kawaii-ivory dark:bg-kawaii-darkcard rounded-2xl p-5 border border-kawaii-gold/20 shadow-sm flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 uppercase tracking-wider font-bold">Matches Realizados</p>
+                            <h3 class="font-editorial text-3xl font-bold text-kawaii-deep dark:text-kawaii-ivory mt-1">384</h3>
+                            <span class="text-[11px] text-kawaii-main dark:text-kawaii-gold bg-kawaii-rose dark:bg-kawaii-adminCard px-2 py-0.5 rounded font-semibold inline-block mt-1">
+                                94.5% compatibilidade
+                            </span>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-kawaii-rose dark:bg-kawaii-adminCard text-kawaii-main dark:text-kawaii-gold flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-handshake"></i>
+                        </div>
+                    </div>
+
+                    <div class="bg-kawaii-ivory dark:bg-kawaii-darkcard rounded-2xl p-5 border border-kawaii-gold/20 shadow-sm flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 uppercase tracking-wider font-bold">Founder Gold</p>
+                            <h3 class="font-editorial text-3xl font-bold text-kawaii-deep dark:text-kawaii-ivory mt-1">68</h3>
+                            <span class="text-[11px] text-kawaii-gold bg-kawaii-gold/15 px-2 py-0.5 rounded font-bold inline-block mt-1">
+                                48% da comunidade
+                            </span>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-kawaii-rose dark:bg-kawaii-adminCard text-kawaii-main dark:text-kawaii-gold flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-crown"></i>
+                        </div>
+                    </div>
+
+                    <div class="bg-kawaii-ivory dark:bg-kawaii-darkcard rounded-2xl p-5 border border-kawaii-gold/20 shadow-sm flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 uppercase tracking-wider font-bold">Fila de Disparos</p>
+                            <h3 class="font-editorial text-3xl font-bold text-kawaii-deep dark:text-kawaii-ivory mt-1">4</h3>
+                            <span class="text-[11px] text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded font-semibold inline-block mt-1">
+                                0 falhas registradas
+                            </span>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-kawaii-rose dark:bg-kawaii-adminCard text-kawaii-main dark:text-kawaii-gold flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- WEEKLY ACTIVITY BAR CHART SIMULATION & RECENT ACTIVITY FEED -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Left 2 cols: Activity Bar Chart -->
+                    <div class="lg:col-span-2 bg-kawaii-ivory dark:bg-kawaii-darkcard rounded-3xl p-6 border border-kawaii-gold/20 shadow-sm">
+                        <div class="flex items-center justify-between mb-6">
+                            <div>
+                                <h3 class="font-editorial text-xl font-bold text-kawaii-deep dark:text-kawaii-ivory">Atividade da Comunidade na Semana</h3>
+                                <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 mt-0.5">Conexões, interações e aceites por dia</p>
+                            </div>
+                            <span class="text-xs font-bold text-kawaii-gold bg-kawaii-gold/10 px-3 py-1 rounded-full border border-kawaii-gold/20">
+                                7 Dias Anteriores
+                            </span>
+                        </div>
+
+                        <!-- CSS Bar Chart Simulation -->
+                        <div class="h-56 flex items-end justify-between gap-3 sm:gap-6 pt-8 pb-3 px-2 sm:px-6 border-b border-kawaii-gold/15">
+                            <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+                                <span class="text-[10px] font-bold text-kawaii-taupe opacity-0 group-hover:opacity-100 transition-opacity">28</span>
+                                <div class="w-full bg-kawaii-rose dark:bg-kawaii-adminCard hover:bg-kawaii-main dark:hover:bg-kawaii-gold rounded-t-xl transition-all bar-animate" style="height: 45%;"></div>
+                                <span class="text-xs font-bold text-kawaii-taupe">Seg</span>
+                            </div>
+                            <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+                                <span class="text-[10px] font-bold text-kawaii-taupe opacity-0 group-hover:opacity-100 transition-opacity">42</span>
+                                <div class="w-full bg-kawaii-rose dark:bg-kawaii-adminCard hover:bg-kawaii-main dark:hover:bg-kawaii-gold rounded-t-xl transition-all bar-animate" style="height: 65%;"></div>
+                                <span class="text-xs font-bold text-kawaii-taupe">Ter</span>
+                            </div>
+                            <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+                                <span class="text-[10px] font-bold text-kawaii-taupe opacity-0 group-hover:opacity-100 transition-opacity">64</span>
+                                <div class="w-full bg-kawaii-rose dark:bg-kawaii-adminCard hover:bg-kawaii-main dark:hover:bg-kawaii-gold rounded-t-xl transition-all bar-animate" style="height: 85%;"></div>
+                                <span class="text-xs font-bold text-kawaii-taupe">Qua</span>
+                            </div>
+                            <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+                                <span class="text-[10px] font-bold text-kawaii-main dark:text-kawaii-gold opacity-0 group-hover:opacity-100 transition-opacity">82 (Pico)</span>
+                                <div class="w-full bg-kawaii-main dark:bg-kawaii-gold rounded-t-xl transition-all shadow-md bar-animate" style="height: 98%;"></div>
+                                <span class="text-xs font-bold text-kawaii-main dark:text-kawaii-gold">Qui</span>
+                            </div>
+                            <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+                                <span class="text-[10px] font-bold text-kawaii-taupe opacity-0 group-hover:opacity-100 transition-opacity">55</span>
+                                <div class="w-full bg-kawaii-rose dark:bg-kawaii-adminCard hover:bg-kawaii-main dark:hover:bg-kawaii-gold rounded-t-xl transition-all bar-animate" style="height: 72%;"></div>
+                                <span class="text-xs font-bold text-kawaii-taupe">Sex</span>
+                            </div>
+                            <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+                                <span class="text-[10px] font-bold text-kawaii-taupe opacity-0 group-hover:opacity-100 transition-opacity">30</span>
+                                <div class="w-full bg-kawaii-rose dark:bg-kawaii-adminCard hover:bg-kawaii-main dark:hover:bg-kawaii-gold rounded-t-xl transition-all bar-animate" style="height: 48%;"></div>
+                                <span class="text-xs font-bold text-kawaii-taupe">Sáb</span>
+                            </div>
+                            <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+                                <span class="text-[10px] font-bold text-kawaii-taupe opacity-0 group-hover:opacity-100 transition-opacity">22</span>
+                                <div class="w-full bg-kawaii-rose dark:bg-kawaii-adminCard hover:bg-kawaii-main dark:hover:bg-kawaii-gold rounded-t-xl transition-all bar-animate" style="height: 35%;"></div>
+                                <span class="text-xs font-bold text-kawaii-taupe">Dom</span>
+                            </div>
+                        </div>
+                        <div class="pt-4 flex items-center justify-between text-xs text-kawaii-taupe dark:text-kawaii-rose/70">
+                            <span>Média diária: <strong>46 interações qualificadas</strong></span>
+                            <span class="text-emerald-700 dark:text-emerald-400 font-bold"><i class="fa-solid fa-arrow-trend-up mr-1"></i> +18% vs semana anterior</span>
+                        </div>
+                    </div>
+
+                    <!-- Right col: Recent Activity Feed -->
+                    <div class="bg-kawaii-ivory dark:bg-kawaii-darkcard rounded-3xl p-6 border border-kawaii-gold/20 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-editorial text-lg font-bold text-kawaii-deep dark:text-kawaii-ivory mb-4">Feed de Atividade Recente</h3>
+                            <div class="space-y-3.5 text-xs">
+                                <div class="flex items-start gap-3 p-2.5 rounded-xl bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/15">
+                                    <span class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-circle-check text-xs"></i>
+                                    </span>
+                                    <div>
+                                        <p class="font-bold text-kawaii-deep dark:text-kawaii-ivory">Parceria Confirmada</p>
+                                        <p class="text-kawaii-taupe dark:text-kawaii-rose/70">
+                                            <button onclick="openAdminMemberModal('camila')" class="font-bold text-kawaii-deep dark:text-kawaii-ivory hover:text-kawaii-main dark:hover:text-kawaii-gold underline">Camila Ribeiro</button> & 
+                                            <button onclick="openAdminMemberModal('mariana')" class="font-bold text-kawaii-deep dark:text-kawaii-ivory hover:text-kawaii-main dark:hover:text-kawaii-gold underline">Mariana Costa</button> fecharam collab de co-criação.
+                                        </p>
+                                        <span class="text-[10px] text-kawaii-gold font-bold">Há 15 min</span>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-3 p-2.5 rounded-xl bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/15">
+                                    <span class="w-8 h-8 rounded-full bg-kawaii-rose text-kawaii-main flex items-center justify-center shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-user-plus text-xs"></i>
+                                    </span>
+                                    <div>
+                                        <p class="font-bold text-kawaii-deep dark:text-kawaii-ivory">Nova Integrante Aprovada</p>
+                                        <p class="text-kawaii-taupe dark:text-kawaii-rose/70">
+                                            <button onclick="openAdminMemberModal('juliana')" class="font-bold text-kawaii-deep dark:text-kawaii-ivory hover:text-kawaii-main dark:hover:text-kawaii-gold underline">Juliana Castro</button> (Moda Sustentável) ativou o perfil Founder Gold.
+                                        </p>
+                                        <span class="text-[10px] text-kawaii-gold font-bold">Há 45 min</span>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-3 p-2.5 rounded-xl bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/15">
+                                    <span class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-envelope text-xs"></i>
+                                    </span>
+                                    <div>
+                                        <p class="font-bold text-kawaii-deep dark:text-kawaii-ivory">Disparo Onboarding D0</p>
+                                        <p class="text-kawaii-taupe dark:text-kawaii-rose/70">Mensagem de boas-vindas enviada para 12 novas inscritas.</p>
+                                        <span class="text-[10px] text-kawaii-gold font-bold">Há 2 horas</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="switchAdminTab('membros')" class="w-full mt-4 py-2 rounded-xl border border-kawaii-gold/30 text-xs font-bold text-kawaii-deep dark:text-kawaii-gold hover:bg-kawaii-creme dark:hover:bg-kawaii-darkbg">
+                            Ver Todas as Integrantes →
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= SECTION 2: GESTÃO DE MEMBROS ================= -->
+            <div id="admin-tab-membros" class="admin-tab-content fade-in space-y-6 hidden">
+                <div class="bg-kawaii-ivory dark:bg-kawaii-darkcard rounded-3xl p-6 border border-kawaii-gold/20 shadow-sm">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+                        <div>
+                            <h3 class="font-editorial text-2xl font-bold text-kawaii-deep dark:text-kawaii-ivory">Gestão de Membros & Segmentação</h3>
+                            <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 mt-0.5">Acompanhe planos, status de onboarding, canais autorizados e engajamento.</p>
+                        </div>
+                        <button onclick="openAddMemberModal()" class="bg-kawaii-main hover:bg-kawaii-soft text-kawaii-ivory px-4 py-2.5 rounded-xl text-xs font-bold shadow-md transition-all flex items-center gap-2">
+                            <i class="fa-solid fa-user-plus"></i> Adicionar Integrante
+                        </button>
+                    </div>
+
+                    <!-- Filter Chips -->
+                    <div class="flex flex-wrap items-center gap-2 mb-4">
+                        <button onclick="filterMembers('all', this)" class="mem-filter-btn bg-kawaii-main text-kawaii-ivory text-xs px-3.5 py-1.5 rounded-xl font-bold transition-all">Todas (142)</button>
+                        <button onclick="filterMembers('founder', this)" class="mem-filter-btn bg-kawaii-creme dark:bg-kawaii-darkbg text-kawaii-taupe dark:text-kawaii-rose/70 hover:text-kawaii-main text-xs px-3.5 py-1.5 rounded-xl font-bold border border-kawaii-gold/20 transition-all">Founder Gold (68)</button>
+                        <button onclick="filterMembers('active', this)" class="mem-filter-btn bg-kawaii-creme dark:bg-kawaii-darkbg text-kawaii-taupe dark:text-kawaii-rose/70 hover:text-kawaii-main text-xs px-3.5 py-1.5 rounded-xl font-bold border border-kawaii-gold/20 transition-all">Negociando (42)</button>
+                        <button onclick="filterMembers('onboarding', this)" class="mem-filter-btn bg-kawaii-creme dark:bg-kawaii-darkbg text-kawaii-taupe dark:text-kawaii-rose/70 hover:text-kawaii-main text-xs px-3.5 py-1.5 rounded-xl font-bold border border-kawaii-gold/20 transition-all">Onboarding D0-D7 (32)</button>
+                    </div>
+
+                    <!-- Members Table with Overflow Container (Zero viewport breaking) -->
+                    <div class="overflow-x-auto rounded-2xl border border-kawaii-gold/20">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-kawaii-gold/20 text-xs uppercase tracking-wider text-kawaii-taupe dark:text-kawaii-rose/60 bg-kawaii-creme/60 dark:bg-kawaii-darkbg/60">
+                                    <th class="p-4 font-bold">Integrante & Negócio</th>
+                                    <th class="p-4 font-bold">Plano</th>
+                                    <th class="p-4 font-bold">Etapa da Jornada</th>
+                                    <th class="p-4 font-bold">Canais Autorizados</th>
+                                    <th class="p-4 font-bold">Engajamento</th>
+                                    <th class="p-4 font-bold text-right">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-kawaii-gold/10 text-xs">
+                                <!-- Row 1: Camila Ribeiro -->
+                                <tr class="hover:bg-kawaii-creme/40 dark:hover:bg-kawaii-darkbg/40 transition-all member-row" data-type="founder active" data-search="camila ribeiro studio botanica sp">
+                                    <td class="p-4 flex items-center gap-3">
+                                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=80" onclick="openAdminMemberModal('camila')" class="w-10 h-10 rounded-full object-cover border border-kawaii-gold cursor-pointer hover:scale-105 transition-transform" title="Ver Perfil">
+                                        <div>
+                                            <button onclick="openAdminMemberModal('camila')" class="font-bold text-kawaii-deep dark:text-kawaii-ivory text-sm hover:text-kawaii-main dark:hover:text-kawaii-gold transition-colors text-left block">
+                                                Camila Ribeiro
+                                            </button>
+                                            <span class="text-[11px] text-kawaii-taupe dark:text-kawaii-rose/70">Studio Botanica & Co. • SP</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4"><span class="bg-kawaii-gold/20 text-kawaii-gold px-2.5 py-1 rounded-full font-bold text-[10px] border border-kawaii-gold/30">Founder Gold</span></td>
+                                    <td class="p-4"><span class="bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 px-2.5 py-1 rounded-full font-bold text-[10px]">Negociação Ativa</span></td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[10px]" title="WhatsApp Autorizado"><i class="fa-brands fa-whatsapp"></i></span>
+                                            <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-[10px]" title="E-mail Autorizado"><i class="fa-regular fa-envelope"></i></span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-20 bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
+                                                <div class="bg-emerald-600 h-full rounded-full" style="width: 92%;"></div>
+                                            </div>
+                                            <span class="font-bold text-emerald-700 dark:text-emerald-400">92 pts</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="openAdminMemberModal('camila')" class="bg-kawaii-main text-kawaii-ivory px-3 py-1.5 rounded-xl font-bold hover:bg-kawaii-soft text-xs shadow-sm transition-all flex items-center gap-1.5 ml-auto">
+                                            <i class="fa-solid fa-user-gear text-[10px]"></i> Gerenciar
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Row 2: Mariana Costa -->
+                                <tr class="hover:bg-kawaii-creme/40 dark:hover:bg-kawaii-darkbg/40 transition-all member-row" data-type="founder active" data-search="mariana costa aura cosmetica sp">
+                                    <td class="p-4 flex items-center gap-3">
+                                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80" onclick="openAdminMemberModal('mariana')" class="w-10 h-10 rounded-full object-cover border border-kawaii-gold cursor-pointer hover:scale-105 transition-transform" title="Ver Perfil">
+                                        <div>
+                                            <button onclick="openAdminMemberModal('mariana')" class="font-bold text-kawaii-deep dark:text-kawaii-ivory text-sm hover:text-kawaii-main dark:hover:text-kawaii-gold transition-colors text-left block">
+                                                Mariana Costa
+                                            </button>
+                                            <span class="text-[11px] text-kawaii-taupe dark:text-kawaii-rose/70">Aura Cosmética Natural • SP</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4"><span class="bg-kawaii-gold/20 text-kawaii-gold px-2.5 py-1 rounded-full font-bold text-[10px] border border-kawaii-gold/30">Founder Gold</span></td>
+                                    <td class="p-4"><span class="bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 px-2.5 py-1 rounded-full font-bold text-[10px]">Execução de Parceria</span></td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[10px]"><i class="fa-brands fa-whatsapp"></i></span>
+                                            <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-[10px]"><i class="fa-regular fa-envelope"></i></span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-20 bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
+                                                <div class="bg-emerald-600 h-full rounded-full" style="width: 95%;"></div>
+                                            </div>
+                                            <span class="font-bold text-emerald-700 dark:text-emerald-400">95 pts</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="openAdminMemberModal('mariana')" class="bg-kawaii-main text-kawaii-ivory px-3 py-1.5 rounded-xl font-bold hover:bg-kawaii-soft text-xs shadow-sm transition-all flex items-center gap-1.5 ml-auto">
+                                            <i class="fa-solid fa-user-gear text-[10px]"></i> Gerenciar
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Row 3: Juliana Castro -->
+                                <tr class="hover:bg-kawaii-creme/40 dark:hover:bg-kawaii-darkbg/40 transition-all member-row" data-type="onboarding" data-search="juliana castro flora moda sustentavel bh">
+                                    <td class="p-4 flex items-center gap-3">
+                                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=80" onclick="openAdminMemberModal('juliana')" class="w-10 h-10 rounded-full object-cover border border-kawaii-gold cursor-pointer hover:scale-105 transition-transform" title="Ver Perfil">
+                                        <div>
+                                            <button onclick="openAdminMemberModal('juliana')" class="font-bold text-kawaii-deep dark:text-kawaii-ivory text-sm hover:text-kawaii-main dark:hover:text-kawaii-gold transition-colors text-left block">
+                                                Juliana Castro
+                                            </button>
+                                            <span class="text-[11px] text-kawaii-taupe dark:text-kawaii-rose/70">Flora Moda Consciente • BH</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4"><span class="bg-kawaii-rose dark:bg-kawaii-adminCard text-kawaii-main dark:text-kawaii-gold px-2.5 py-1 rounded-full font-bold text-[10px]">Classic</span></td>
+                                    <td class="p-4"><span class="bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-400 px-2.5 py-1 rounded-full font-bold text-[10px]">Onboarding D3</span></td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[10px]"><i class="fa-brands fa-whatsapp"></i></span>
+                                            <span class="w-6 h-6 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center text-[10px]" title="Sem autorização"><i class="fa-regular fa-envelope"></i></span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-20 bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
+                                                <div class="bg-amber-500 h-full rounded-full" style="width: 58%;"></div>
+                                            </div>
+                                            <span class="font-bold text-amber-700 dark:text-amber-400">58 pts</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="openAdminMemberModal('juliana')" class="bg-kawaii-main text-kawaii-ivory px-3 py-1.5 rounded-xl font-bold hover:bg-kawaii-soft text-xs shadow-sm transition-all flex items-center gap-1.5 ml-auto">
+                                            <i class="fa-solid fa-user-gear text-[10px]"></i> Gerenciar
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Row 4: Beatriz Lima -->
+                                <tr class="hover:bg-kawaii-creme/40 dark:hover:bg-kawaii-darkbg/40 transition-all member-row" data-type="founder active" data-search="beatriz lima editora lumina pr curitiba">
+                                    <td class="p-4 flex items-center gap-3">
+                                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=80" onclick="openAdminMemberModal('beatriz')" class="w-10 h-10 rounded-full object-cover border border-kawaii-gold cursor-pointer hover:scale-105 transition-transform" title="Ver Perfil">
+                                        <div>
+                                            <button onclick="openAdminMemberModal('beatriz')" class="font-bold text-kawaii-deep dark:text-kawaii-ivory text-sm hover:text-kawaii-main dark:hover:text-kawaii-gold transition-colors text-left block">
+                                                Beatriz Lima
+                                            </button>
+                                            <span class="text-[11px] text-kawaii-taupe dark:text-kawaii-rose/70">Editora Lumina • PR</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4"><span class="bg-kawaii-gold/20 text-kawaii-gold px-2.5 py-1 rounded-full font-bold text-[10px] border border-kawaii-gold/30">Founder Gold</span></td>
+                                    <td class="p-4"><span class="bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 px-2.5 py-1 rounded-full font-bold text-[10px]">Parceria Aprovada</span></td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[10px]"><i class="fa-brands fa-whatsapp"></i></span>
+                                            <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-[10px]"><i class="fa-regular fa-envelope"></i></span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-20 bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
+                                                <div class="bg-emerald-600 h-full rounded-full" style="width: 96%;"></div>
+                                            </div>
+                                            <span class="font-bold text-emerald-700 dark:text-emerald-400">96 pts</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="openAdminMemberModal('beatriz')" class="bg-kawaii-main text-kawaii-ivory px-3 py-1.5 rounded-xl font-bold hover:bg-kawaii-soft text-xs shadow-sm transition-all flex items-center gap-1.5 ml-auto">
+                                            <i class="fa-solid fa-user-gear text-[10px]"></i> Gerenciar
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Row 5: Sofia Mendez -->
+                                <tr class="hover:bg-kawaii-creme/40 dark:hover:bg-kawaii-darkbg/40 transition-all member-row" data-type="active" data-search="sofia mendez studio alquimia sc florianopolis">
+                                    <td class="p-4 flex items-center gap-3">
+                                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=80" onclick="openAdminMemberModal('sofia')" class="w-10 h-10 rounded-full object-cover border border-kawaii-gold cursor-pointer hover:scale-105 transition-transform" title="Ver Perfil">
+                                        <div>
+                                            <button onclick="openAdminMemberModal('sofia')" class="font-bold text-kawaii-deep dark:text-kawaii-ivory text-sm hover:text-kawaii-main dark:hover:text-kawaii-gold transition-colors text-left block">
+                                                Sofia Mendez
+                                            </button>
+                                            <span class="text-[11px] text-kawaii-taupe dark:text-kawaii-rose/70">Studio Alquimia • SC</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4"><span class="bg-kawaii-rose dark:bg-kawaii-adminCard text-kawaii-main dark:text-kawaii-gold px-2.5 py-1 rounded-full font-bold text-[10px]">Classic</span></td>
+                                    <td class="p-4"><span class="bg-purple-50 dark:bg-purple-950/50 text-purple-700 dark:text-purple-400 px-2.5 py-1 rounded-full font-bold text-[10px]">Mentoria Ativa</span></td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[10px]"><i class="fa-brands fa-whatsapp"></i></span>
+                                            <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-[10px]"><i class="fa-regular fa-envelope"></i></span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-20 bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
+                                                <div class="bg-emerald-600 h-full rounded-full" style="width: 88%;"></div>
+                                            </div>
+                                            <span class="font-bold text-emerald-700 dark:text-emerald-400">88 pts</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="openAdminMemberModal('sofia')" class="bg-kawaii-main text-kawaii-ivory px-3 py-1.5 rounded-xl font-bold hover:bg-kawaii-soft text-xs shadow-sm transition-all flex items-center gap-1.5 ml-auto">
+                                            <i class="fa-solid fa-user-gear text-[10px]"></i> Gerenciar
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= SECTION 3: AUTOMAÇÕES (Customer.io & WhatsApp API Streams) ================= -->
+            <div id="admin-tab-automacoes" class="admin-tab-content fade-in space-y-6 hidden">
+                <div class="bg-kawaii-ivory dark:bg-kawaii-darkcard rounded-3xl p-6 border border-kawaii-gold/20 shadow-sm">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+                        <div>
+                            <span class="text-[10px] uppercase font-bold tracking-widest text-kawaii-gold">Régua de Relacionamento Automatizada</span>
+                            <h3 class="font-editorial text-2xl font-bold text-kawaii-deep dark:text-kawaii-ivory mt-0.5">Automações (Customer.io & WhatsApp API)</h3>
+                            <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 mt-1">Gatilhos automáticos de onboarding, ativação de perfil e reativação de matches.</p>
+                        </div>
+                        <button onclick="showAdminToast('Novo fluxo criado na esteira de automações!')" class="bg-kawaii-main hover:bg-kawaii-soft text-kawaii-ivory px-4 py-2.5 rounded-xl text-xs font-bold shadow-md transition-all flex items-center gap-2">
+                            <i class="fa-solid fa-plus"></i> Novo Fluxo
+                        </button>
+                    </div>
+
+                    <!-- Stream Cards Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                        <!-- Stream Card 1: D0 Boas-vindas -->
+                        <div class="bg-kawaii-creme dark:bg-kawaii-darkbg rounded-2xl p-5 border border-kawaii-gold/20 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full">
+                                        Ativa • D0
+                                    </span>
+                                    <span class="text-xs font-bold text-emerald-600"><i class="fa-brands fa-whatsapp mr-1"></i> WhatsApp API</span>
+                                </div>
+                                <h4 class="font-editorial text-lg font-bold text-kawaii-deep dark:text-kawaii-ivory">Boas-vindas Personalizadas</h4>
+                                <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 mt-1 leading-relaxed">
+                                    Disparada imediatamente após o cadastro validado, apresentando a curadoria do Clube e o passo a passo.
+                                </p>
+                            </div>
+                            <div class="pt-4 border-t border-kawaii-gold/15 mt-4 flex items-center justify-between text-xs">
+                                <span class="text-kawaii-taupe dark:text-kawaii-rose/70">142 enviadas • 98% entrega</span>
+                                <button onclick="toggleStreamState(this, 'Boas-vindas D0')" class="text-kawaii-main dark:text-kawaii-gold font-bold hover:underline">Pausar</button>
+                            </div>
+                        </div>
+
+                        <!-- Stream Card 2: D3 Completude -->
+                        <div class="bg-kawaii-creme dark:bg-kawaii-darkbg rounded-2xl p-5 border border-kawaii-gold/20 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-[10px] font-bold uppercase tracking-wider bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full">
+                                        Ativa • D3
+                                    </span>
+                                    <span class="text-xs font-bold text-blue-600"><i class="fa-solid fa-envelope mr-1"></i> Customer.io</span>
+                                </div>
+                                <h4 class="font-editorial text-lg font-bold text-kawaii-deep dark:text-kawaii-ivory">Lembrete de Perfil & Ofertas</h4>
+                                <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 mt-1 leading-relaxed">
+                                    Para integrantes com perfil abaixo de 70% de preenchimento, demonstrando o ganho em novos matches.
+                                </p>
+                            </div>
+                            <div class="pt-4 border-t border-kawaii-gold/15 mt-4 flex items-center justify-between text-xs">
+                                <span class="text-kawaii-taupe dark:text-kawaii-rose/70">89 enviadas • 42% conversão</span>
+                                <button onclick="toggleStreamState(this, 'Perfil D3')" class="text-kawaii-main dark:text-kawaii-gold font-bold hover:underline">Pausar</button>
+                            </div>
+                        </div>
+
+                        <!-- Stream Card 3: D5 Primeiro Match -->
+                        <div class="bg-kawaii-creme dark:bg-kawaii-darkbg rounded-2xl p-5 border border-kawaii-gold/20 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full">
+                                        Ativa • D5
+                                    </span>
+                                    <span class="text-xs font-bold text-emerald-600"><i class="fa-brands fa-whatsapp mr-1"></i> WhatsApp API</span>
+                                </div>
+                                <h4 class="font-editorial text-lg font-bold text-kawaii-deep dark:text-kawaii-ivory">Notificação de 1º Match Relevante</h4>
+                                <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 mt-1 leading-relaxed">
+                                    Dispara alerta de oportunidade com score acima de 90%, convidando a empreendedora a abrir o aplicativo.
+                                </p>
+                            </div>
+                            <div class="pt-4 border-t border-kawaii-gold/15 mt-4 flex items-center justify-between text-xs">
+                                <span class="text-kawaii-taupe dark:text-kawaii-rose/70">114 enviadas • 88% taxa de abertura</span>
+                                <button onclick="toggleStreamState(this, 'Match D5')" class="text-kawaii-main dark:text-kawaii-gold font-bold hover:underline">Pausar</button>
+                            </div>
+                        </div>
+
+                        <!-- Stream Card 4: D7 Rodada de Negócios -->
+                        <div class="bg-kawaii-creme dark:bg-kawaii-darkbg rounded-2xl p-5 border border-kawaii-gold/20 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-[10px] font-bold uppercase tracking-wider bg-purple-100 text-purple-800 px-2.5 py-0.5 rounded-full">
+                                        Ativa • D7
+                                    </span>
+                                    <span class="text-xs font-bold text-purple-600"><i class="fa-solid fa-calendar-check mr-1"></i> Luma Sync</span>
+                                </div>
+                                <h4 class="font-editorial text-lg font-bold text-kawaii-deep dark:text-kawaii-ivory">Convite Rodada Exclusiva Q2</h4>
+                                <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 mt-1 leading-relaxed">
+                                    Convite VIP com credencial digital no Luma para o encontro presencial de negócios entre fundadoras.
+                                </p>
+                            </div>
+                            <div class="pt-4 border-t border-kawaii-gold/15 mt-4 flex items-center justify-between text-xs">
+                                <span class="text-kawaii-taupe dark:text-kawaii-rose/70">65 inscritas • 12 restantes</span>
+                                <button onclick="toggleStreamState(this, 'Luma D7')" class="text-kawaii-main dark:text-kawaii-gold font-bold hover:underline">Pausar</button>
+                            </div>
+                        </div>
+
+                        <!-- Stream Card 5: Reativação -->
+                        <div class="bg-kawaii-creme dark:bg-kawaii-darkbg rounded-2xl p-5 border border-kawaii-gold/20 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full">
+                                        Ativa • 14 Dias
+                                    </span>
+                                    <span class="text-xs font-bold text-amber-600"><i class="fa-brands fa-whatsapp mr-1"></i> WhatsApp</span>
+                                </div>
+                                <h4 class="font-editorial text-lg font-bold text-kawaii-deep dark:text-kawaii-ivory">Reativação de Oportunidades</h4>
+                                <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 mt-1 leading-relaxed">
+                                    Reativação suave para integrantes sem login nos últimos 14 dias com resumo de propostas aguardando resposta.
+                                </p>
+                            </div>
+                            <div class="pt-4 border-t border-kawaii-gold/15 mt-4 flex items-center justify-between text-xs">
+                                <span class="text-kawaii-taupe dark:text-kawaii-rose/70">24 ativadas • 62% retorno</span>
+                                <button onclick="toggleStreamState(this, 'Reativação')" class="text-kawaii-main dark:text-kawaii-gold font-bold hover:underline">Pausar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= SECTION 4: INSCRIÇÕES & LUMA ================= -->
+            <div id="admin-tab-inscricoes" class="admin-tab-content fade-in space-y-6 hidden">
+                <div class="bg-kawaii-ivory dark:bg-kawaii-darkcard rounded-3xl p-6 border border-kawaii-gold/20 shadow-sm">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+                        <div>
+                            <span class="text-[10px] uppercase font-bold tracking-widest text-kawaii-gold">Integração Oficial de Eventos</span>
+                            <h3 class="font-editorial text-2xl font-bold text-kawaii-deep dark:text-kawaii-ivory mt-0.5">Inscrições & Eventos (Luma)</h3>
+                            <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 mt-1">Gerencie listas de presença, credenciais de check-in e exportação de inscritas.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="exportLumaRoster()" class="border border-kawaii-gold/40 text-kawaii-deep dark:text-kawaii-gold hover:bg-kawaii-creme dark:hover:bg-kawaii-darkbg px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2">
+                                <i class="fa-solid fa-file-export"></i> Exportar Lista (CSV / Luma)
+                            </button>
+                            <button onclick="showAdminToast('Formulário de novo evento aberto.')" class="bg-kawaii-main hover:bg-kawaii-soft text-kawaii-ivory px-4 py-2.5 rounded-xl text-xs font-bold shadow-md transition-all flex items-center gap-2">
+                                <i class="fa-solid fa-plus"></i> Novo Evento
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Event Cards -->
+                    <div class="space-y-4">
+                        <div class="p-5 rounded-2xl bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                            <div>
+                                <div class="flex items-center gap-2 mb-1.5">
+                                    <span class="bg-purple-100 text-purple-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full">Presencial • Jardins SP</span>
+                                    <span class="text-xs text-kawaii-gold font-bold">24 Out 2026</span>
+                                </div>
+                                <h4 class="font-editorial text-xl font-bold text-kawaii-deep dark:text-kawaii-ivory">Rodada de Negócios & Co-criação Q2</h4>
+                                <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 mt-0.5">60 inscritas • 52 confirmadas • 8 vagas restantes</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="openCheckinModal('Rodada de Negócios Q2')" class="bg-kawaii-main hover:bg-kawaii-soft text-kawaii-ivory px-4 py-2 rounded-xl text-xs font-bold shadow-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-qrcode"></i> Abrir Check-in
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="p-5 rounded-2xl bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                            <div>
+                                <div class="flex items-center gap-2 mb-1.5">
+                                    <span class="bg-blue-100 text-blue-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full">Online • Zoom VIP</span>
+                                    <span class="text-xs text-kawaii-gold font-bold">30 Out 2026</span>
+                                </div>
+                                <h4 class="font-editorial text-xl font-bold text-kawaii-deep dark:text-kawaii-ivory">Masterclass: Estruturação de Contratos de Permuta</h4>
+                                <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 mt-0.5">85 inscritas • Link de acesso transmitido via WhatsApp</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="openCheckinModal('Masterclass de Permuta')" class="bg-kawaii-main hover:bg-kawaii-soft text-kawaii-ivory px-4 py-2 rounded-xl text-xs font-bold shadow-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-qrcode"></i> Abrir Check-in
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= SECTION 5: COMUNICAÇÕES & GLOBAL BROADCAST ================= -->
+            <div id="admin-tab-comunicacoes" class="admin-tab-content fade-in space-y-6 hidden">
+                <div class="bg-kawaii-ivory dark:bg-kawaii-darkcard rounded-3xl p-6 border border-kawaii-gold/20 shadow-sm">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+                        <div>
+                            <span class="text-[10px] uppercase font-bold tracking-widest text-kawaii-gold">Transmissão Multicanal</span>
+                            <h3 class="font-editorial text-2xl font-bold text-kawaii-deep dark:text-kawaii-ivory mt-0.5">Comunicações Oficiais & Fila de Disparos</h3>
+                            <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 mt-1">Dispare comunicados no Circle e WhatsApp com consentimento prévio garantido.</p>
+                        </div>
+                        <button onclick="openBroadcastModal()" class="bg-kawaii-main hover:bg-kawaii-soft text-kawaii-ivory px-4 py-2.5 rounded-xl text-xs font-bold shadow-md transition-all flex items-center gap-2">
+                            <i class="fa-solid fa-bullhorn"></i> Transmissão Global
+                        </button>
+                    </div>
+
+                    <!-- Communication Queue Table -->
+                    <div class="overflow-x-auto rounded-2xl border border-kawaii-gold/20">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b border-kawaii-gold/20 uppercase tracking-wider text-kawaii-taupe dark:text-kawaii-rose/60 bg-kawaii-creme/60 dark:bg-kawaii-darkbg/60">
+                                    <th class="p-4 font-bold">Destinatária / Segmento</th>
+                                    <th class="p-4 font-bold">Template & Mensagem</th>
+                                    <th class="p-4 font-bold">Canal</th>
+                                    <th class="p-4 font-bold">Status</th>
+                                    <th class="p-4 font-bold">Atualização</th>
+                                    <th class="p-4 font-bold text-right">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-kawaii-gold/10">
+                                <tr>
+                                    <td class="p-4 font-bold text-kawaii-deep dark:text-kawaii-ivory">
+                                        <button onclick="openAdminMemberModal('camila')" class="font-bold text-left hover:text-kawaii-main dark:hover:text-kawaii-gold transition-colors">
+                                            Camila Ribeiro
+                                        </button>
+                                    </td>
+                                    <td class="p-4">Alerta de Nova Oportunidade com Aura Cosmética</td>
+                                    <td class="p-4 text-emerald-600 font-bold"><i class="fa-brands fa-whatsapp mr-1"></i> WhatsApp</td>
+                                    <td class="p-4"><span class="bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 px-2.5 py-1 rounded-full font-bold text-[10px]">DELIVERED</span></td>
+                                    <td class="p-4 text-kawaii-taupe dark:text-kawaii-rose/70">16 Out 11:24</td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="showAdminToast('Registro de entrega do WhatsApp auditado.')" class="text-kawaii-main dark:text-kawaii-gold font-bold hover:underline">Auditar</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 font-bold text-kawaii-deep dark:text-kawaii-ivory">
+                                        <button onclick="openAdminMemberModal('beatriz')" class="font-bold text-left hover:text-kawaii-main dark:hover:text-kawaii-gold transition-colors">
+                                            Beatriz Lima
+                                        </button>
+                                    </td>
+                                    <td class="p-4">Convite VIP para Encontro Presencial</td>
+                                    <td class="p-4 text-blue-600 font-bold"><i class="fa-regular fa-envelope mr-1"></i> E-mail</td>
+                                    <td class="p-4"><span class="bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-400 px-2.5 py-1 rounded-full font-bold text-[10px]">SENT</span></td>
+                                    <td class="p-4 text-kawaii-taupe dark:text-kawaii-rose/70">16 Out 10:15</td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="showAdminToast('E-mail reenviado com sucesso.')" class="text-kawaii-main dark:text-kawaii-gold font-bold hover:underline">Reenviar</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 font-bold text-kawaii-deep dark:text-kawaii-ivory">Todas Founder Gold (68)</td>
+                                    <td class="p-4">Abertura de Inscrições do Ciclo Q3</td>
+                                    <td class="p-4 text-purple-600 font-bold"><i class="fa-solid fa-users mr-1"></i> Circle + WhatsApp</td>
+                                    <td class="p-4"><span class="bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 px-2.5 py-1 rounded-full font-bold text-[10px]">SCHEDULED</span></td>
+                                    <td class="p-4 text-kawaii-taupe dark:text-kawaii-rose/70">Agendada p/ 18 Out</td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="processSingleMessage(this)" class="bg-kawaii-main text-kawaii-ivory px-2.5 py-1 rounded-lg font-bold hover:bg-kawaii-soft">Disparar Agora</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ================= GLOBAL BROADCAST MODAL (Circle & WhatsApp) ================= -->
+    <div id="broadcast-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-kawaii-ivory dark:bg-kawaii-darkcard w-full max-w-lg rounded-3xl border border-kawaii-gold/30 shadow-2xl p-6 sm:p-8 relative fade-in">
+            <button onclick="closeBroadcastModal()" class="absolute top-5 right-5 text-kawaii-taupe dark:text-kawaii-rose hover:text-kawaii-deep text-lg"><i class="fa-solid fa-xmark"></i></button>
+            <div class="mb-4 pb-3 border-b border-kawaii-gold/20">
+                <span class="text-[10px] uppercase font-bold tracking-widest text-kawaii-gold">Transmissão Multicanal</span>
+                <h3 class="font-editorial text-2xl font-bold text-kawaii-deep dark:text-kawaii-ivory mt-0.5">Novo Comunicado Global</h3>
+            </div>
+            <form onsubmit="handleSendBroadcast(event)" class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-bold text-kawaii-deep dark:text-kawaii-rose uppercase mb-1">Canais de Envio</label>
+                    <div class="flex gap-2">
+                        <label class="flex-1 flex items-center justify-center gap-2 p-2.5 rounded-xl border border-kawaii-gold/30 bg-kawaii-creme dark:bg-kawaii-darkbg cursor-pointer font-bold">
+                            <input type="checkbox" checked class="accent-kawaii-main"> Circle Community
+                        </label>
+                        <label class="flex-1 flex items-center justify-center gap-2 p-2.5 rounded-xl border border-kawaii-gold/30 bg-kawaii-creme dark:bg-kawaii-darkbg cursor-pointer font-bold">
+                            <input type="checkbox" checked class="accent-kawaii-main"> WhatsApp API
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-bold text-kawaii-deep dark:text-kawaii-rose uppercase mb-1">Segmento Alvo</label>
+                    <select class="w-full bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/30 rounded-xl p-2.5 text-kawaii-charcoal dark:text-kawaii-ivory font-medium">
+                        <option>Todas as Integrantes com Consentimento (138 membros)</option>
+                        <option>Apenas Plano Founder Gold (68 membros)</option>
+                        <option>Integrantes em Fase de Negociação Ativa (42 membros)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-bold text-kawaii-deep dark:text-kawaii-rose uppercase mb-1">Título do Comunicado</label>
+                    <input type="text" required value="Encontro de Co-criação Q2: Inscrições Abertas" class="w-full bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/30 rounded-xl p-2.5 text-kawaii-charcoal dark:text-kawaii-ivory">
+                </div>
+                <div>
+                    <label class="block font-bold text-kawaii-deep dark:text-kawaii-rose uppercase mb-1">Mensagem</label>
+                    <textarea rows="3" required class="w-full bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/30 rounded-xl p-2.5 text-kawaii-charcoal dark:text-kawaii-ivory">Olá fundadora! Convidamos você com exclusividade para o nosso próximo encontro presencial de negócios.</textarea>
+                </div>
+                <div class="pt-3 border-t border-kawaii-gold/20 flex items-center justify-end gap-2">
+                    <button type="button" onclick="closeBroadcastModal()" class="px-4 py-2 rounded-xl border border-kawaii-gold/30 text-kawaii-taupe font-bold">Cancelar</button>
+                    <button type="submit" class="bg-kawaii-main hover:bg-kawaii-soft text-kawaii-ivory px-5 py-2 rounded-xl font-bold shadow-md flex items-center gap-2">
+                        <i class="fa-solid fa-paper-plane"></i> Disparar Comunicado
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= MEMBER PROFILE & DOTTED TIMELINE MODAL ================= -->
+    <div id="admin-member-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-kawaii-ivory dark:bg-kawaii-darkcard w-full max-w-2xl rounded-3xl border border-kawaii-gold/30 shadow-2xl p-6 sm:p-8 relative max-h-[90vh] overflow-y-auto fade-in">
+            <!-- Close Button -->
+            <button onclick="closeAdminMemberModal()" class="absolute top-5 right-5 text-kawaii-taupe dark:text-kawaii-rose hover:text-kawaii-deep dark:hover:text-kawaii-ivory text-lg w-8 h-8 rounded-full border border-kawaii-gold/30 flex items-center justify-center hover:bg-kawaii-creme dark:hover:bg-kawaii-darkbg transition-all">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- Modal Header with Monogram KS -->
+            <div class="flex items-center gap-3.5 mb-5 pb-4 border-b border-kawaii-gold/20">
+                <div class="w-12 h-12 rounded-2xl bg-kawaii-main flex items-center justify-center border border-kawaii-gold/40 shadow-md shrink-0">
+                    <span class="font-editorial text-xl text-kawaii-ivory font-bold">KS</span>
+                </div>
+                <div>
+                    <span class="text-[10px] uppercase font-bold tracking-widest text-kawaii-gold bg-kawaii-gold/15 px-2.5 py-0.5 rounded-full border border-kawaii-gold/30">
+                        Ellen Kois • Gestão de Integrante
+                    </span>
+                    <h3 id="adm-modal-name" class="font-editorial text-2xl font-bold text-kawaii-deep dark:text-kawaii-ivory mt-0.5">
+                        Camila Ribeiro
+                    </h3>
+                    <p id="adm-modal-subtitle" class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70">
+                        Studio Botanica & Co. • São Paulo, SP
+                    </p>
+                </div>
+            </div>
+
+            <!-- Member Summary Card -->
+            <div class="bg-kawaii-creme dark:bg-kawaii-darkbg rounded-2xl p-4 border border-kawaii-gold/20 mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div class="flex items-center gap-3.5">
+                    <img id="adm-modal-avatar" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120" alt="Avatar" class="w-14 h-14 rounded-2xl object-cover border-2 border-kawaii-gold shadow-sm shrink-0">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span id="adm-modal-plan" class="bg-kawaii-gold/20 text-kawaii-gold px-2.5 py-0.5 rounded-full font-bold text-[10px] border border-kawaii-gold/30">Founder Gold</span>
+                            <span id="adm-modal-status" class="bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 px-2.5 py-0.5 rounded-full font-bold text-[10px] border border-amber-200 dark:border-amber-800">Negociação Ativa</span>
+                        </div>
+                        <p id="adm-modal-contact" class="text-xs text-kawaii-charcoal/80 dark:text-kawaii-rose/80 font-medium">
+                            <i class="fa-brands fa-whatsapp text-emerald-600 mr-1"></i> (11) 98765-4321 • <i class="fa-regular fa-envelope text-blue-600 ml-1 mr-1"></i> camila@studiobotanica.com.br
+                        </p>
+                    </div>
+                </div>
+                <div class="text-right sm:border-l sm:border-kawaii-gold/20 sm:pl-4 shrink-0">
+                    <span class="text-[10px] uppercase font-bold text-kawaii-taupe dark:text-kawaii-rose/60 block">Engajamento</span>
+                    <span id="adm-modal-score" class="font-editorial text-2xl font-bold text-emerald-700 dark:text-emerald-400">92 pts</span>
+                </div>
+            </div>
+
+            <!-- Offers & Needs Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5 text-xs">
+                <div class="p-3 bg-kawaii-creme dark:bg-kawaii-darkbg rounded-xl border border-kawaii-gold/20">
+                    <span class="text-[10px] uppercase font-bold text-kawaii-gold block mb-1">Competências & Ofertas</span>
+                    <p id="adm-modal-offers" class="text-kawaii-charcoal dark:text-kawaii-ivory font-medium">Design de embalagens sustentáveis, identidade botânica exclusiva e direção de arte conscious.</p>
+                </div>
+                <div class="p-3 bg-kawaii-creme dark:bg-kawaii-darkbg rounded-xl border border-kawaii-gold/20">
+                    <span class="text-[10px] uppercase font-bold text-kawaii-gold block mb-1">Necessidades & Busca de Parcerias</span>
+                    <p id="adm-modal-needs" class="text-kawaii-charcoal dark:text-kawaii-ivory font-medium">Parcerias de co-criação de aromas botânicos, divulgação com marcas de cosmética natural e permuta.</p>
+                </div>
+            </div>
+
+            <!-- ================= DOTTED MILESTONE TIMELINE (Histórico com Pontos) ================= -->
+            <div class="mb-5">
+                <div class="flex items-center justify-between mb-3">
+                    <h4 class="font-bold text-kawaii-deep dark:text-kawaii-rose uppercase tracking-wider text-xs">
+                        Histórico de Interações & Linha do Tempo com Pontos
+                    </h4>
+                    <span class="text-[10px] text-kawaii-gold font-bold">Auditoria de Jornada</span>
+                </div>
+                
+                <div id="adm-modal-timeline" class="relative pl-6 space-y-3.5 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-kawaii-gold/30">
+                    <!-- Populated dynamically by openAdminMemberModal(key) -->
+                </div>
+            </div>
+
+            <!-- Modal Footer Actions -->
+            <div class="pt-4 border-t border-kawaii-gold/20 flex flex-wrap items-center justify-between gap-3">
+                <button type="button" onclick="closeAdminMemberModal()" class="px-4 py-2.5 rounded-xl border border-kawaii-gold/30 text-kawaii-taupe dark:text-kawaii-rose font-bold text-xs hover:bg-kawaii-creme dark:hover:bg-kawaii-darkbg transition-all">
+                    Fechar
+                </button>
+                <div class="flex items-center gap-2.5">
+                    <button id="adm-modal-msg-btn" onclick="sendAdminDirectMsg()" class="bg-emerald-700 hover:bg-emerald-800 text-kawaii-ivory px-4 py-2.5 rounded-xl font-bold text-xs shadow-md flex items-center gap-1.5 transition-all">
+                        <i class="fa-brands fa-whatsapp"></i> Mensagem WhatsApp
+                    </button>
+                    <a href="kawaii_clube_app.html" class="bg-kawaii-main hover:bg-kawaii-soft text-kawaii-ivory px-4 py-2.5 rounded-xl font-bold text-xs shadow-md flex items-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> Abrir Visão da Empreendedora
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= CHECK-IN & CREDENCIAMENTO LUMA MODAL ================= -->
+    <div id="checkin-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-kawaii-ivory dark:bg-kawaii-darkcard w-full max-w-lg rounded-3xl border border-kawaii-gold/30 shadow-2xl p-6 sm:p-8 relative fade-in">
+            <button onclick="closeCheckinModal()" class="absolute top-5 right-5 text-kawaii-taupe dark:text-kawaii-rose hover:text-kawaii-deep text-lg w-8 h-8 rounded-full border border-kawaii-gold/30 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+            <div class="mb-4 pb-3 border-b border-kawaii-gold/20">
+                <span class="text-[10px] uppercase font-bold tracking-widest text-kawaii-gold">Eventos Presenciais • Luma & Clube</span>
+                <h3 id="checkin-event-title" class="font-editorial text-2xl font-bold text-kawaii-deep dark:text-kawaii-ivory mt-0.5">Credenciamento & Check-in</h3>
+                <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 mt-0.5">Validação de credenciais e entrada das participantes com sincronização instantânea.</p>
+            </div>
+            
+            <!-- Scanner Simulation -->
+            <div class="bg-kawaii-adminDark dark:bg-kawaii-adminDeep text-kawaii-ivory rounded-2xl p-5 border border-kawaii-gold/30 text-center mb-4 relative overflow-hidden">
+                <div class="w-28 h-28 mx-auto border-2 border-dashed border-kawaii-gold/60 rounded-2xl flex items-center justify-center relative">
+                    <i class="fa-solid fa-qrcode text-5xl text-kawaii-gold/80 animate-pulse"></i>
+                    <div class="absolute inset-x-2 top-0 h-1 bg-gradient-to-r from-transparent via-kawaii-gold to-transparent shadow-glow animate-bounce"></div>
+                </div>
+                <p class="text-xs text-kawaii-rose/90 mt-3 font-semibold">Leitor de QR Code ativo • Validação instantânea</p>
+            </div>
+
+            <!-- Quick Attendee Search & List -->
+            <div class="space-y-3 mb-5">
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-kawaii-taupe text-xs"></i>
+                    <input id="checkin-search" oninput="filterCheckinList()" type="text" placeholder="Buscar por nome da inscrita..." class="w-full bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/30 rounded-xl pl-9 pr-3 py-2 text-xs text-kawaii-charcoal dark:text-kawaii-ivory">
+                </div>
+                <div id="checkin-attendees-list" class="space-y-2 max-h-48 overflow-y-auto pr-1">
+                    <div class="flex items-center justify-between p-2.5 bg-kawaii-creme dark:bg-kawaii-darkbg rounded-xl border border-kawaii-gold/15 text-xs attendee-item">
+                        <div class="flex items-center gap-2.5">
+                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=80" class="w-7 h-7 rounded-full object-cover border border-kawaii-gold">
+                            <div>
+                                <p class="font-bold text-kawaii-deep dark:text-kawaii-ivory">Camila Ribeiro</p>
+                                <span class="text-[10px] text-kawaii-taupe dark:text-kawaii-rose/60">Studio Botanica</span>
+                            </div>
+                        </div>
+                        <button onclick="confirmCheckin(this, 'Camila Ribeiro')" class="bg-emerald-700 hover:bg-emerald-800 text-kawaii-ivory text-[10px] font-bold px-3 py-1 rounded-lg shadow-sm">
+                            Confirmar Entrada
+                        </button>
+                    </div>
+                    <div class="flex items-center justify-between p-2.5 bg-kawaii-creme dark:bg-kawaii-darkbg rounded-xl border border-kawaii-gold/15 text-xs attendee-item">
+                        <div class="flex items-center gap-2.5">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80" class="w-7 h-7 rounded-full object-cover border border-kawaii-gold">
+                            <div>
+                                <p class="font-bold text-kawaii-deep dark:text-kawaii-ivory">Mariana Costa</p>
+                                <span class="text-[10px] text-kawaii-taupe dark:text-kawaii-rose/60">Aura Cosmética</span>
+                            </div>
+                        </div>
+                        <button onclick="confirmCheckin(this, 'Mariana Costa')" class="bg-emerald-700 hover:bg-emerald-800 text-kawaii-ivory text-[10px] font-bold px-3 py-1 rounded-lg shadow-sm">
+                            Confirmar Entrada
+                        </button>
+                    </div>
+                    <div class="flex items-center justify-between p-2.5 bg-kawaii-creme dark:bg-kawaii-darkbg rounded-xl border border-kawaii-gold/15 text-xs attendee-item">
+                        <div class="flex items-center gap-2.5">
+                            <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=80" class="w-7 h-7 rounded-full object-cover border border-kawaii-gold">
+                            <div>
+                                <p class="font-bold text-kawaii-deep dark:text-kawaii-ivory">Beatriz Lima</p>
+                                <span class="text-[10px] text-kawaii-taupe dark:text-kawaii-rose/60">Editora Lumina</span>
+                            </div>
+                        </div>
+                        <button onclick="confirmCheckin(this, 'Beatriz Lima')" class="bg-emerald-700 hover:bg-emerald-800 text-kawaii-ivory text-[10px] font-bold px-3 py-1 rounded-lg shadow-sm">
+                            Confirmar Entrada
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-3 border-t border-kawaii-gold/20 flex items-center justify-end">
+                <button type="button" onclick="closeCheckinModal()" class="px-5 py-2.5 rounded-xl border border-kawaii-gold/30 text-kawaii-taupe dark:text-kawaii-rose font-bold text-xs hover:bg-kawaii-creme dark:hover:bg-kawaii-darkbg transition-all">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= ADD MEMBER MODAL ================= -->
+    <div id="add-member-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-kawaii-ivory dark:bg-kawaii-darkcard w-full max-w-lg rounded-3xl border border-kawaii-gold/30 shadow-2xl p-6 sm:p-8 relative fade-in">
+            <button onclick="closeAddMemberModal()" class="absolute top-5 right-5 text-kawaii-taupe dark:text-kawaii-rose hover:text-kawaii-deep text-lg w-8 h-8 rounded-full border border-kawaii-gold/30 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+            <div class="mb-4 pb-3 border-b border-kawaii-gold/20">
+                <span class="text-[10px] uppercase font-bold tracking-widest text-kawaii-gold">Comunidade Kawaii • Novo Cadastro</span>
+                <h3 class="font-editorial text-2xl font-bold text-kawaii-deep dark:text-kawaii-ivory mt-0.5">Cadastrar Nova Integrante</h3>
+                <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 mt-0.5">Adicione manualmente uma empreendedora aprovada no processo seletivo do Clube.</p>
+            </div>
+            <form onsubmit="handleAddMember(event)" class="space-y-3.5 text-xs">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-kawaii-deep dark:text-kawaii-rose uppercase mb-1">Nome Completo</label>
+                        <input id="new-mem-name" type="text" required placeholder="Ex: Clara Albuquerque" class="w-full bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/30 rounded-xl p-2.5 text-kawaii-charcoal dark:text-kawaii-ivory">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-kawaii-deep dark:text-kawaii-rose uppercase mb-1">Nome da Marca / Negócio</label>
+                        <input id="new-mem-biz" type="text" required placeholder="Ex: Studio Terra Cerâmica" class="w-full bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/30 rounded-xl p-2.5 text-kawaii-charcoal dark:text-kawaii-ivory">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-kawaii-deep dark:text-kawaii-rose uppercase mb-1">Cidade / UF</label>
+                        <input id="new-mem-city" type="text" required placeholder="Ex: São Paulo, SP" class="w-full bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/30 rounded-xl p-2.5 text-kawaii-charcoal dark:text-kawaii-ivory">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-kawaii-deep dark:text-kawaii-rose uppercase mb-1">Plano de Associação</label>
+                        <select id="new-mem-plan" class="w-full bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/30 rounded-xl p-2.5 text-kawaii-charcoal dark:text-kawaii-ivory">
+                            <option value="Founder Gold">Founder Gold</option>
+                            <option value="Classic">Classic</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-kawaii-deep dark:text-kawaii-rose uppercase mb-1">WhatsApp</label>
+                        <input id="new-mem-phone" type="tel" required placeholder="(11) 90000-0000" class="w-full bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/30 rounded-xl p-2.5 text-kawaii-charcoal dark:text-kawaii-ivory">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-kawaii-deep dark:text-kawaii-rose uppercase mb-1">E-mail Corporativo</label>
+                        <input id="new-mem-email" type="email" required placeholder="contato@marca.com.br" class="w-full bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/30 rounded-xl p-2.5 text-kawaii-charcoal dark:text-kawaii-ivory">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-bold text-kawaii-deep dark:text-kawaii-rose uppercase mb-1">Consentimento & Permissões LGPD</label>
+                    <div class="space-y-1.5 p-3 bg-kawaii-creme dark:bg-kawaii-darkbg rounded-xl border border-kawaii-gold/20">
+                        <label class="flex items-center gap-2 cursor-pointer font-medium">
+                            <input type="checkbox" checked required class="accent-kawaii-main"> Autorizo notificações via WhatsApp API
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer font-medium">
+                            <input type="checkbox" checked required class="accent-kawaii-main"> Termo de conduta e não-concorrência aceito
+                        </label>
+                    </div>
+                </div>
+                <div class="pt-3 border-t border-kawaii-gold/20 flex items-center justify-end gap-2">
+                    <button type="button" onclick="closeAddMemberModal()" class="px-4 py-2 rounded-xl border border-kawaii-gold/30 text-kawaii-taupe font-bold">Cancelar</button>
+                    <button type="submit" class="bg-kawaii-main hover:bg-kawaii-soft text-kawaii-ivory px-5 py-2 rounded-xl font-bold shadow-md flex items-center gap-2">
+                        <i class="fa-solid fa-user-plus"></i> Concluir Cadastro
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="admin-toast" class="fixed bottom-4 right-4 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-kawaii-adminDark text-kawaii-ivory border border-kawaii-gold/40 shadow-2xl rounded-2xl px-4 py-3 flex items-center gap-3 max-w-sm">
+            <span class="w-7 h-7 rounded-full bg-kawaii-gold/20 text-kawaii-gold flex items-center justify-center shrink-0 text-xs">
+                <i class="fa-solid fa-shield-check"></i>
+            </span>
+            <div>
+                <p id="admin-toast-title" class="text-xs font-bold text-kawaii-ivory">Ellen Kois</p>
+                <p id="admin-toast-message" class="text-[11px] text-kawaii-rose/90">Ação administrativa confirmada.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CLIENT SCRIPT -->
+    <script>
+        const SESSION_STORAGE_KEY = 'kawaii_session';
+        const DEMO_SESSION_KEY = 'kawaii-demo-session-v2';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initAdminSession();
+        });
+
+        function getActiveAdminSession() {
+            try {
+                const raw = localStorage.getItem(SESSION_STORAGE_KEY) || localStorage.getItem(DEMO_SESSION_KEY);
+                return raw ? JSON.parse(raw) : null;
+            } catch {
+                return null;
+            }
+        }
+
+        function setActiveAdminSession(session) {
+            try {
+                localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+                localStorage.setItem(DEMO_SESSION_KEY, JSON.stringify(session));
+            } catch {}
+        }
+
+        function initAdminSession() {
+            let session = getActiveAdminSession();
+            
+            // PREVENT SESSION BREAK: If admin dashboard opened directly, seed admin session
+            if (!session || !session.name) {
+                session = {
+                    id: 'demo-admin',
+                    name: 'Equipe Curadoria',
+                    email: 'curadoria@kawaiiclube.com.br',
+                    role: 'ADMIN',
+                    business: 'Kawaii Clube Curadoria',
+                    companyName: 'Kawaii Clube Curadoria',
+                    plan: 'Admin',
+                    matchScore: '94.5%',
+                    avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120',
+                    loggedAt: new Date().toISOString()
+                };
+                setActiveAdminSession(session);
+            }
+
+            // If a member session visits the Admin Dashboard, inform them gracefully
+            if (session.role === 'MEMBER') {
+                showAdminToast(`Acesso concedido em modo curadoria para ${session.name}.`, 'Sessão Conectada');
+            }
+        }
+
+        function logoutAdmin() {
+            try {
+                localStorage.removeItem(SESSION_STORAGE_KEY);
+                localStorage.removeItem(DEMO_SESSION_KEY);
+            } catch {}
+            showAdminToast('Sessão administrativa encerrada.');
+            setTimeout(() => {
+                window.location.href = 'kawaii_auth.html';
+            }, 500);
+        }
+
+        function switchAdminTab(tabId) {
+            document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById('admin-tab-' + tabId);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            document.querySelectorAll('.admin-nav-btn').forEach(btn => {
+                btn.className = "admin-nav-btn flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold transition-all text-kawaii-rose/80 hover:bg-kawaii-adminCard hover:text-kawaii-ivory";
+            });
+            const active = document.getElementById('admin-nav-' + tabId);
+            if (active) {
+                active.className = "admin-nav-btn flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold transition-all bg-kawaii-main text-kawaii-ivory shadow-md";
+            }
+
+            const titles = {
+                'indicadores': 'Dashboard & Indicadores',
+                'membros': 'Gestão de Membros & Segmentação',
+                'automacoes': 'Automações (Customer.io & WhatsApp)',
+                'inscricoes': 'Inscrições & Eventos (Luma)',
+                'comunicacoes': 'Comunicações Oficiais & Fila'
+            };
+            document.getElementById('admin-screen-title').innerText = titles[tabId] || 'Curadoria';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function filterMembers(type, btn) {
+            document.querySelectorAll('.mem-filter-btn').forEach(b => {
+                b.className = "mem-filter-btn bg-kawaii-creme dark:bg-kawaii-darkbg text-kawaii-taupe dark:text-kawaii-rose/70 hover:text-kawaii-main text-xs px-3.5 py-1.5 rounded-xl font-bold border border-kawaii-gold/20 transition-all";
+            });
+            btn.className = "mem-filter-btn bg-kawaii-main text-kawaii-ivory text-xs px-3.5 py-1.5 rounded-xl font-bold transition-all";
+
+            const rows = document.querySelectorAll('.member-row');
+            rows.forEach(r => {
+                if (type === 'all' || r.getAttribute('data-type').includes(type)) {
+                    r.classList.remove('hidden');
+                } else {
+                    r.classList.add('hidden');
+                }
+            });
+            showAdminToast(`Filtro de integrantes: ${type.toUpperCase()}`);
+        }
+
+        function handleAdminGlobalSearch() {
+            const query = document.getElementById('admin-search').value.toLowerCase();
+            const rows = document.querySelectorAll('.member-row');
+            rows.forEach(r => {
+                const text = r.getAttribute('data-search').toLowerCase();
+                if (text.includes(query)) {
+                    r.classList.remove('hidden');
+                } else {
+                    r.classList.add('hidden');
+                }
+            });
+        }
+
+        function toggleStreamState(btn, name) {
+            if (btn.innerText === 'Pausar') {
+                btn.innerText = 'Ativar';
+                btn.className = 'text-emerald-600 font-bold hover:underline';
+                showAdminToast(`Fluxo "${name}" pausado temporariamente.`);
+            } else {
+                btn.innerText = 'Pausar';
+                btn.className = 'text-kawaii-main dark:text-kawaii-gold font-bold hover:underline';
+                showAdminToast(`Fluxo "${name}" ativado com sucesso.`);
+            }
+        }
+
+        function exportLumaRoster() {
+            showAdminToast('Arquivo CSV formato Luma gerado e baixado com sucesso!');
+        }
+
+        const MEMBERS_DATA = {
+            camila: {
+                name: 'Camila Ribeiro',
+                business: 'Studio Botanica & Co.',
+                city: 'São Paulo, SP',
+                plan: 'Founder Gold',
+                status: 'Negociação Ativa',
+                score: '92 pts',
+                avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120',
+                whatsapp: '(11) 98765-4321',
+                email: 'camila@studiobotanica.com.br',
+                offers: 'Design de embalagens sustentáveis, identidade botânica exclusiva e direção de arte conscious.',
+                needs: 'Parcerias de co-criação de aromas botânicos, divulgação com marcas de cosmética natural e permuta.',
+                timeline: [
+                    { dotClass: 'bg-emerald-600', icon: 'fa-check', title: 'Ponto 1 • Onboarding & Boas-Vindas D0', time: '01 Out 2026 • 10:00', text: 'Mensagem de boas-vindas entregue e lida via WhatsApp API. Acesso ao Circle liberado.' },
+                    { dotClass: 'bg-emerald-600', icon: 'fa-check', title: 'Ponto 2 • Perfil & Competências Concluído', time: '03 Out 2026 • 15:30', text: 'Cadastro completo de portfólio, metas de faturamento e preferências de permuta validadas.' },
+                    { dotClass: 'bg-emerald-600', icon: 'fa-sparkles', title: 'Ponto 3 • Match de Alta Sinergia Curado', time: '06 Out 2026 • 11:20', text: 'Ellen Kois identificou 98% de compatibilidade mútua com Mariana Costa (Aura Cosmética).' },
+                    { dotClass: 'bg-kawaii-main dark:bg-[#800B13]', icon: 'fa-file-signature', title: 'Ponto 4 • Minuta de Proposta Enviada', time: '12 Out 2026 • 09:15', text: 'Proposta de co-criação de embalagens botânicas registrada e transmitida para a contraparte.' },
+                    { dotClass: 'bg-amber-500', icon: 'fa-handshake', title: 'Ponto 5 • Negociação Bilateral em Andamento', time: '16 Out 2026 • 14:10', text: 'Ajuste de cronograma para lançamento em Q3; contrapartida de newsletter para 45k assinantes.' }
+                ]
+            },
+            mariana: {
+                name: 'Mariana Costa',
+                business: 'Aura Cosmética Natural',
+                city: 'São Paulo, SP',
+                plan: 'Founder Gold',
+                status: 'Execução de Parceria',
+                score: '95 pts',
+                avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120',
+                whatsapp: '(11) 99123-4567',
+                email: 'mariana@auracosmetica.com.br',
+                offers: 'Linha de aromas e cosméticos naturais orgânicos, base ativa de 45k assinantes em newsletter semanal.',
+                needs: 'Embalagens botânicas biodegradáveis, direção criativa sustentável e parcerias de co-branding.',
+                timeline: [
+                    { dotClass: 'bg-emerald-600', icon: 'fa-check', title: 'Ponto 1 • Adesão ao Clube & Onboarding', time: '28 Set 2026 • 14:00', text: 'Entrada aprovada no comitê de curadoria Founder Gold e acolhimento presencial.' },
+                    { dotClass: 'bg-emerald-600', icon: 'fa-check', title: 'Ponto 2 • Catálogo e Ofertas Cadastrados', time: '01 Out 2026 • 18:20', text: 'Inclusão de produtos botânicos elegíveis para rodadas de permuta e eventos VIP.' },
+                    { dotClass: 'bg-emerald-600', icon: 'fa-handshake', title: 'Ponto 3 • Match 98% com Camila Ribeiro', time: '06 Out 2026 • 11:20', text: 'Aprovação mútua na Central de Oportunidades com base no público de beleza consciente.' },
+                    { dotClass: 'bg-emerald-600', icon: 'fa-circle-check', title: 'Ponto 4 • Acordo Bilateral Formalizado', time: '14 Out 2026 • 16:45', text: 'Termo de parceria e co-branding assinado digitalmente pelas duas fundadoras.' },
+                    { dotClass: 'bg-kawaii-main dark:bg-[#800B13]', icon: 'fa-rocket', title: 'Ponto 5 • Fase de Produção e Lançamento', time: '16 Out 2026 • 11:00', text: 'Primeiro lote de embalagens botânicas em produção para lançamento do Dia das Mães.' }
+                ]
+            },
+            juliana: {
+                name: 'Juliana Castro',
+                business: 'Flora Moda Consciente',
+                city: 'Belo Horizonte, MG',
+                plan: 'Classic',
+                status: 'Onboarding D3',
+                score: '58 pts',
+                avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=120',
+                whatsapp: '(31) 98456-7890',
+                email: 'juliana@floramoda.com.br',
+                offers: 'Moda feminina sustentável em algodão orgânico, tingimento natural e peças de upcycling têxtil.',
+                needs: 'Design de tags e embalagens botânicas biodegradáveis, apoio editorial e permuta de coleção.',
+                timeline: [
+                    { dotClass: 'bg-emerald-600', icon: 'fa-check', title: 'Ponto 1 • Cadastro Realizado no Portal', time: '13 Out 2026 • 08:30', text: 'Adesão formalizada via portal de autenticação com dados básicos validados.' },
+                    { dotClass: 'bg-emerald-600', icon: 'fa-check', title: 'Ponto 2 • Mensagem D0 Entregue', time: '13 Out 2026 • 08:35', text: 'Boas-vindas via WhatsApp API entregue com sucesso.' },
+                    { dotClass: 'bg-amber-500', icon: 'fa-clock', title: 'Ponto 3 • Régua D3: Lembrete de Portfólio', time: '16 Out 2026 • 09:00', text: 'Disparo automatizado de incentivo para preenchimento de fotos e tags de busca.' },
+                    { dotClass: 'bg-kawaii-taupe/50', icon: 'fa-sparkles', title: 'Ponto 4 • Curadoria de Matches', time: 'Previsão D5', text: 'Aguardando 100% de preenchimento para sugerir conexões com designers botânicos.' }
+                ]
+            },
+            beatriz: {
+                name: 'Beatriz Lima',
+                business: 'Editora Lumina',
+                city: 'Curitiba, PR',
+                plan: 'Founder Gold',
+                status: 'Parceria Aprovada',
+                score: '96 pts',
+                avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=120',
+                whatsapp: '(41) 99876-5432',
+                email: 'beatriz@editoralumina.com.br',
+                offers: 'Publicação editorial independente, curadoria literária de autoras e estande em feiras de negócios.',
+                needs: 'Design editorial de livros coletivos, ilustrações exclusivas e trocas de visibilidade.',
+                timeline: [
+                    { dotClass: 'bg-emerald-600', icon: 'fa-check', title: 'Ponto 1 • Ingresso no Clube Kawaii', time: '20 Set 2026 • 11:00', text: 'Aprovação de entrada e adesão ao programa Founder Gold com plano anual.' },
+                    { dotClass: 'bg-emerald-600', icon: 'fa-check', title: 'Ponto 2 • Curadoria de Afinidade 95%', time: '02 Out 2026 • 16:15', text: 'Sinergia com estúdios de arte e sustentabilidade identificada pela equipe.' },
+                    { dotClass: 'bg-emerald-600', icon: 'fa-file-signature', title: 'Ponto 3 • Proposta de Apoio Mútuo', time: '05 Out 2026 • 10:45', text: 'Acordo estruturado para diagramação de coletânea sobre liderança feminina.' },
+                    { dotClass: 'bg-emerald-600', icon: 'fa-circle-check', title: 'Ponto 4 • Contrato de Apoio Formalizado', time: '08 Out 2026 • 15:30', text: 'Cota de patrocínio e contrapartida de estande institucional concluídas.' }
+                ]
+            },
+            sofia: {
+                name: 'Sofia Mendez',
+                business: 'Studio Alquimia',
+                city: 'Florianópolis, SC',
+                plan: 'Classic',
+                status: 'Mentoria Ativa',
+                score: '88 pts',
+                avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=120',
+                whatsapp: '(48) 99765-4321',
+                email: 'sofia@alquimia.com.br',
+                offers: 'Branding estratégico high-ticket, consultoria de posicionamento e masterminds quinzenais.',
+                needs: 'Parcerias de mentoria cruzada, co-criação de cursos e produtos digitais co-branded.',
+                timeline: [
+                    { dotClass: 'bg-emerald-600', icon: 'fa-check', title: 'Ponto 1 • Boas-Vindas & Acolhimento D0', time: '05 Out 2026 • 14:30', text: 'Cadastro e validação de perfil inicial no Clube de Negócios.' },
+                    { dotClass: 'bg-emerald-600', icon: 'fa-check', title: 'Ponto 2 • Match 91% Sugerido', time: '10 Out 2026 • 17:00', text: 'Compatibilidade com Camila Ribeiro para projeto de mentoria cruzada e design.' },
+                    { dotClass: 'bg-amber-500', icon: 'fa-file-pen', title: 'Ponto 3 • Rascunho de Proposta em Revisão', time: '15 Out 2026 • 18:20', text: 'Minuta de mentoria registrada na plataforma, aguardando alinhamento final de agenda.' }
+                ]
+            }
+        };
+
+        let currentActiveMemberKey = 'camila';
+
+        function openAdminMemberModal(key) {
+            const mem = MEMBERS_DATA[key] || MEMBERS_DATA['camila'];
+            currentActiveMemberKey = key;
+            document.getElementById('adm-modal-name').innerText = mem.name;
+            document.getElementById('adm-modal-subtitle').innerText = `${mem.business} • ${mem.city}`;
+            document.getElementById('adm-modal-avatar').src = mem.avatar;
+            document.getElementById('adm-modal-plan').innerText = mem.plan;
+            document.getElementById('adm-modal-status').innerText = mem.status;
+            document.getElementById('adm-modal-contact').innerHTML = `<i class="fa-brands fa-whatsapp text-emerald-600 mr-1"></i> ${mem.whatsapp} • <i class="fa-regular fa-envelope text-blue-600 ml-1 mr-1"></i> ${mem.email}`;
+            document.getElementById('adm-modal-score').innerText = mem.score;
+            document.getElementById('adm-modal-offers').innerText = mem.offers;
+            document.getElementById('adm-modal-needs').innerText = mem.needs;
+
+            // Render Dotted Timeline Nodes
+            const timelineContainer = document.getElementById('adm-modal-timeline');
+            timelineContainer.innerHTML = mem.timeline.map((node) => `
+                <div class="relative">
+                    <div class="absolute -left-6 top-1 w-5 h-5 rounded-full ${node.dotClass} text-kawaii-ivory flex items-center justify-center text-[9px] shadow-sm ring-4 ring-kawaii-gold/30">
+                        <i class="fa-solid ${node.icon}"></i>
+                    </div>
+                    <div class="bg-kawaii-creme dark:bg-kawaii-darkbg p-3 rounded-xl border border-kawaii-gold/15">
+                        <div class="flex items-center justify-between mb-0.5">
+                            <span class="text-[10px] uppercase font-bold text-kawaii-deep dark:text-kawaii-gold">${node.title}</span>
+                            <span class="text-[10px] text-kawaii-taupe dark:text-kawaii-rose/60">${node.time}</span>
+                        </div>
+                        <p class="text-xs text-kawaii-charcoal dark:text-kawaii-ivory font-medium">${node.text}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('admin-member-modal').classList.remove('hidden');
+        }
+
+        function closeAdminMemberModal() {
+            document.getElementById('admin-member-modal').classList.add('hidden');
+        }
+
+        function sendAdminDirectMsg() {
+            const mem = MEMBERS_DATA[currentActiveMemberKey] || MEMBERS_DATA['camila'];
+            showAdminToast(`Canal oficial de WhatsApp aberto para ${mem.name} (${mem.whatsapp})!`);
+        }
+
+        function openCheckinModal(eventName) {
+            document.getElementById('checkin-event-title').innerText = `Credenciamento • ${eventName}`;
+            document.getElementById('checkin-modal').classList.remove('hidden');
+        }
+
+        function closeCheckinModal() {
+            document.getElementById('checkin-modal').classList.add('hidden');
+        }
+
+        function filterCheckinList() {
+            const q = document.getElementById('checkin-search').value.toLowerCase();
+            const items = document.querySelectorAll('.attendee-item');
+            items.forEach(it => {
+                const text = it.innerText.toLowerCase();
+                it.style.display = text.includes(q) ? 'flex' : 'none';
+            });
+        }
+
+        function confirmCheckin(btn, name) {
+            btn.className = 'bg-emerald-950 text-emerald-400 border border-emerald-600 text-[10px] font-bold px-3 py-1 rounded-lg cursor-default flex items-center gap-1';
+            btn.innerHTML = '<i class="fa-solid fa-check text-[9px]"></i> Confirmada';
+            btn.disabled = true;
+            showAdminToast(`Entrada de ${name} confirmada com sucesso!`);
+        }
+
+        function openAddMemberModal() {
+            document.getElementById('add-member-modal').classList.remove('hidden');
+        }
+
+        function closeAddMemberModal() {
+            document.getElementById('add-member-modal').classList.add('hidden');
+        }
+
+        function handleAddMember(e) {
+            e.preventDefault();
+            const name = document.getElementById('new-mem-name').value;
+            const biz = document.getElementById('new-mem-biz').value;
+            const city = document.getElementById('new-mem-city').value;
+            const plan = document.getElementById('new-mem-plan').value;
+            const phone = document.getElementById('new-mem-phone').value;
+            const email = document.getElementById('new-mem-email').value;
+
+            // Generate key
+            const key = 'mem_' + Date.now();
+            MEMBERS_DATA[key] = {
+                name,
+                business: biz,
+                city,
+                plan,
+                status: 'Ativação Recente',
+                score: '75 pts',
+                avatar: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=120',
+                whatsapp: phone,
+                email,
+                offers: 'Produtos e serviços exclusivos cadastrados pela fundadora.',
+                needs: 'Conexões e oportunidades mútuas no Clube Kawaii.',
+                timeline: [
+                    { dotClass: 'bg-emerald-600', icon: 'fa-check', title: 'Ponto 1 • Cadastro Manual Efetuado', time: 'Hoje', text: `Integrante ${name} adicionada pela curadoria Kawaii.` }
+                ]
+            };
+
+            // Prepend new row to table
+            const tbody = document.querySelector('#admin-tab-membros tbody');
+            if (tbody) {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-kawaii-creme/40 dark:hover:bg-kawaii-darkbg/40 transition-all member-row';
+                tr.setAttribute('data-type', 'founder active');
+                tr.setAttribute('data-search', `${name} ${biz} ${city}`.toLowerCase());
+                tr.innerHTML = `
+                    <td class="p-4 flex items-center gap-3">
+                        <img src="${MEMBERS_DATA[key].avatar}" onclick="openAdminMemberModal('${key}')" class="w-10 h-10 rounded-full object-cover border border-kawaii-gold cursor-pointer hover:scale-105 transition-transform" title="Ver Perfil">
+                        <div>
+                            <button onclick="openAdminMemberModal('${key}')" class="font-bold text-kawaii-deep dark:text-kawaii-ivory text-sm hover:text-kawaii-main dark:hover:text-kawaii-gold transition-colors text-left block">
+                                ${name}
+                            </button>
+                            <span class="text-[11px] text-kawaii-taupe dark:text-kawaii-rose/70">${biz} • ${city}</span>
+                        </div>
+                    </td>
+                    <td class="p-4"><span class="bg-kawaii-gold/20 text-kawaii-gold px-2.5 py-1 rounded-full font-bold text-[10px] border border-kawaii-gold/30">${plan}</span></td>
+                    <td class="p-4"><span class="bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-400 px-2.5 py-1 rounded-full font-bold text-[10px]">Ativação Recente</span></td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[10px]"><i class="fa-brands fa-whatsapp"></i></span>
+                            <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-[10px]"><i class="fa-regular fa-envelope"></i></span>
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-20 bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
+                                <div class="bg-emerald-600 h-full rounded-full" style="width: 75%;"></div>
+                            </div>
+                            <span class="font-bold text-emerald-700 dark:text-emerald-400">75 pts</span>
+                        </div>
+                    </td>
+                    <td class="p-4 text-right">
+                        <button onclick="openAdminMemberModal('${key}')" class="bg-kawaii-main text-kawaii-ivory px-3 py-1.5 rounded-xl font-bold hover:bg-kawaii-soft text-xs shadow-sm transition-all flex items-center gap-1.5 ml-auto">
+                            <i class="fa-solid fa-user-gear text-[10px]"></i> Gerenciar
+                        </button>
+                    </td>
+                `;
+                tbody.insertBefore(tr, tbody.firstChild);
+            }
+
+            closeAddMemberModal();
+            showAdminToast(`Integrante ${name} (${biz}) cadastrada com sucesso!`);
+        }
+
+        function openBroadcastModal() {
+            document.getElementById('broadcast-modal').classList.remove('hidden');
+        }
+
+        function closeBroadcastModal() {
+            document.getElementById('broadcast-modal').classList.add('hidden');
+        }
+
+        function handleSendBroadcast(e) {
+            e.preventDefault();
+            closeBroadcastModal();
+            showAdminToast('Comunicado disparado com sucesso via Circle & WhatsApp API!');
+        }
+
+        function processSingleMessage(btn) {
+            btn.innerText = 'Processado';
+            btn.disabled = true;
+            btn.className = 'bg-emerald-700 text-kawaii-ivory px-2.5 py-1 rounded-lg font-bold cursor-default';
+            showAdminToast('Disparo da mensagem executado no simulador.');
+        }
+
+        function showAdminToast(message, title = 'Ellen Kois') {
+            const toast = document.getElementById('admin-toast');
+            document.getElementById('admin-toast-title').innerText = title;
+            document.getElementById('admin-toast-message').innerText = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3200);
+        }
+
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            const text = document.getElementById('theme-text');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                if (icon) icon.className = 'fa-solid fa-moon text-kawaii-gold';
+                if (text) text.innerText = 'Modo Escuro';
+                showAdminToast('Modo Claro ativado.');
+            } else {
+                html.classList.add('dark');
+                if (icon) icon.className = 'fa-solid fa-sun text-kawaii-gold';
+                if (text) text.innerText = 'Modo Claro';
+                showAdminToast('Modo Escuro ativado.');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+import test from 'node:test'; import assert from 'node:assert/strict';
+import { OPPORTUNITIES, MEMBERS } from '../src/infrastructure/fixtures.ts';
+import { validateEligibility, selectChannel, confirmedCount } from '../src/domain/policies.ts';
+import { draftFromOpportunity, validateProposalFields } from '../src/domain/proposal.ts';
+import { scheduleCommunication, transitionMessage } from '../src/domain/communication.ts';
+const now = '2026-10-16T10:00:00.000Z';
+test('permuta tem campos de ambas as contrapartidas', () => { const p = draftFromOpportunity(OPPORTUNITIES[0]); assert.ok(p.contribution); assert.ok(p.counterpart); validateProposalFields(p); });
+test('apoio não obriga troca simétrica', () => { const p = draftFromOpportunity(OPPORTUNITIES[1]); assert.match(p.terms, /Não exige contrapartida simétrica/); });
+test('empresa usa demanda comercial sem tratá-la como modalidade separada', () => { const op = OPPORTUNITIES[3]; assert.equal(op.relation, 'COMPANY'); assert.equal(op.modality, 'COLLAB'); assert.match(draftFromOpportunity(op).objective, /comercial/); });
+test('oportunidade encerrada é bloqueada', () => { assert.throws(() => validateEligibility({ ...OPPORTUNITIES[0], status: 'CLOSED' }, 14), /não está mais ativa/); });
+test('bloqueia relação consigo mesma', () => { assert.throws(() => validateEligibility({ ...OPPORTUNITIES[0], candidate: { ...OPPORTUNITIES[0].candidate, id: 14 } }, 14), /consigo mesma/); });
+test('sinais inferidos não contam como confirmados', () => { assert.equal(confirmedCount(OPPORTUNITIES[2].evidence), 2); });
+test('canal preferido não ignora permissões', () => { const m = MEMBERS.find(m => m.id === 22)!; assert.equal(selectChannel(m, 'WHATSAPP'), 'EMAIL'); });
+test('sem consentimento bloqueia agendamento', () => { const m = MEMBERS.find(m => m.id === 26)!; assert.throws(() => scheduleCommunication({ member: m, messages: [], template: 'Boas-vindas', id: 'x', now }), /não autorizou/); });
+test('janela de frequência impede excesso', () => { const m = MEMBERS[0]; const messages = [1, 2].map(i => ({ id: String(i), memberId: m.id, channel: 'WHATSAPP' as const, template: `m${i}`, status: 'SENT' as const, scheduledAt: now, updatedAt: now, attempt: 1 })); assert.throws(() => scheduleCommunication({ member: m, messages, template: 'Nova', now, id: 'x' }), /Limite/); });
+test('impede template duplicado em aberto', () => { const m = MEMBERS[0]; const messages = [{ id: '1', memberId: m.id, channel: 'WHATSAPP' as const, template: 'Boas-vindas', status: 'SCHEDULED' as const, scheduledAt: now, updatedAt: now, attempt: 0 }]; assert.throws(() => scheduleCommunication({ member: m, messages, template: 'Boas-vindas', now, id: 'x' }), /Já existe/); });
+test('processamento de mensagem distingue enviada de entregue', () => { const m = { id: '1', memberId: 14, channel: 'EMAIL' as const, template: 'Teste', status: 'SCHEDULED' as const, scheduledAt: now, updatedAt: now, attempt: 0 }; const p = transitionMessage(m, 'PROCESSING', now); const sent = transitionMessage(p, 'SENT', now); assert.equal(sent.status, 'SENT'); assert.notEqual(sent.status, 'DELIVERED'); });
+test('não permite concluir mensagem sem processamento', () => { const m = { id: '1', memberId: 14, channel: 'WHATSAPP' as const, template: 'Teste', status: 'SCHEDULED' as const, scheduledAt: now, updatedAt: now, attempt: 0 }; assert.throws(() => transitionMessage(m, 'DELIVERED', now), /não permitida/); });
+test('campos obrigatórios são validados', () => { const fields = draftFromOpportunity(OPPORTUNITIES[0]); assert.throws(() => validateProposalFields({ ...fields, objective: '' }), /Objetivo/); });
+
+test('template antigo não bloqueia comunicação para sempre', () => { const m = MEMBERS[0]; const old = '2026-09-01T10:00:00.000Z'; const messages = [{ id: 'old', memberId: m.id, channel: 'WHATSAPP' as const, template: 'Convite para evento', status: 'SENT' as const, scheduledAt: old, updatedAt: old, attempt: 1 }]; const next = scheduleCommunication({ member: m, messages, template: 'Convite para evento', now, id: 'fresh' }); assert.equal(next.status, 'SCHEDULED'); });

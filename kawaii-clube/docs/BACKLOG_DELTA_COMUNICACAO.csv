@@ -1,0 +1,8 @@
+id,prioridade_no_desafio_01,requisito,criterio_de_aceite,estado_neste_zip
+RF-C09,P0,Enviar via WhatsApp oficial,Status registrado por webhook de provedor autorizado,Simulado apenas
+RF-C10,P0,Enviar via email,Status separado por provedor de email autorizado,Simulado apenas
+RF-C11,P0,Preferencias por canal,Valida canal e finalidade antes de enviar,Implementado na regra mock
+RF-C12,P0,Rastreio de comunicacao,Agendado enviado entregue falhou distintos,Implementado na regra mock
+RF-C13,P0,Idempotencia e frequencia,Sem duplicidade de template nem excesso,Implementado na regra mock
+RF-C14,P0,Consentimento e opt-out,Origem finalidade e revogacao auditaveis,Somente booleanos ficticios
+RF-C15,P1,Templates por canal,Templates revisaveis e aprovados quando exigidos,Selecao demonstrativa

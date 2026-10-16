@@ -1,0 +1,36 @@
+// ESQUEMA CONCEITUAL APENAS: não executar migrações contra o banco Kawaii real.
+// Reconciliar models/IDs/chats/posts existentes antes de adicionar entidades.
+generator client { provider = "prisma-client-js" }
+datasource db { provider = "postgresql" url = env("DATABASE_URL") }
+model ProposedPartnershipDraft {
+  id Int @id @default(autoincrement())
+  matchRef String
+  opportunityId Int
+  authorId Int
+  recipientId Int
+  status String @default("DRAFT")
+  version Int @default(1)
+  fields Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([opportunityId, status])
+}
+model ProposedIdempotency {
+  id Int @id @default(autoincrement())
+  actorId Int
+  key String
+  requestHash String
+  draftId Int
+  createdAt DateTime @default(now())
+  @@unique([actorId,key])
+}
+model ProposedBusinessEvent {
+  id Int @id @default(autoincrement())
+  actorId Int?
+  entityType String
+  entityId String
+  type String
+  metadata Json?
+  occurredAt DateTime @default(now())
+  @@index([entityType,entityId,occurredAt])
+}

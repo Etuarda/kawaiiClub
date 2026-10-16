@@ -1,0 +1,40 @@
+/* Tokens do padrão unificado (referência Kawaii Clube): Playfair Display + Plus Jakarta Sans / Inter.
+   Paleta de alto contraste e tons sóbrios e elegantes */
+:root{
+  --font-serif:'Playfair Display',Georgia,'Times New Roman',serif;
+  --font-body:'Plus Jakarta Sans','Inter','Segoe UI','Helvetica Neue',system-ui,sans-serif;
+  --k-deep:#4A0003;--k-main:#6A0004;--k-soft:#891C26;--k-ivory:#FFFDF9;--k-creme:#F2ECE1;--k-rose:#EFE3DF;--k-gold:#8C6738;--k-gold-bright:#C8A26A;--k-taupe:#463C37;--k-charcoal:#161211;
+  --color-bg-page:var(--k-creme);--color-bg-card:var(--k-ivory);--color-bg-alt:#E6DECFE6;
+  --color-side:var(--k-deep);--color-side-admin:#161211;--color-side-card:#221C1A;--color-side-border:#382E2B;
+  --color-brand:var(--k-main);--color-brand-soft:var(--k-soft);--color-brand-surface:var(--k-rose);--color-brand-text:var(--k-main);
+  --color-gold:var(--k-gold);
+  --color-text-heading:#380002;--color-text-primary:var(--k-charcoal);--color-text-secondary:var(--k-taupe);--color-text-muted:#5C504A;--color-label:#380002;
+  --color-border:rgba(74,0,3,.22);--color-border-canvas:#BFAEA0;--color-divider:rgba(74,0,3,.15);
+  /* Tons sóbrios, elegantes e padronizados (sem verde/amarelo/vermelho gritantes) */
+  --color-success:#282220;--color-success-bg:#EBE4DA;--color-success-on-deep:#D8B788;
+  --color-warning:#7A5628;--color-warning-bg:#F2EAE0;
+  --color-error:#6A0004;--color-error-bg:#F2E4E2;
+  --color-info:#463C37;--color-info-bg:#EDE7DF;
+  --color-skel:#E4DBD0;
+  --shadow-sm:0 1px 3px rgba(74,0,3,.06),0 8px 24px rgba(74,0,3,.04);--shadow-md:0 12px 32px rgba(74,0,3,.11);--shadow-lg:0 24px 64px rgba(24,18,17,.2);
+  --radius-xs:4px;--radius-btn:12px;--radius-md:12px;--radius-card:16px;--radius-lg:24px;--radius-full:999px;
+  --dur-hover:160ms;--dur-chip:200ms;--dur-swap:240ms;--dur-card:300ms;--dur-step:320ms;--dur-panel:340ms;
+  --ease-editorial:cubic-bezier(.22,1,.36,1);--ease-functional:cubic-bezier(.4,0,.2,1);--ease-exit:cubic-bezier(.4,0,1,1);
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --color-bg-page:#0E0A0A;--color-bg-card:#181212;--color-bg-alt:#221A19;
+  --color-side:var(--k-deep);--color-side-admin:#0B0808;--color-side-card:#221A19;--color-side-border:#382B29;
+  /* mesmo vermelho do modo claro em fundos e destaques; texto vermelho clareado só para contraste */
+  --color-brand:var(--k-main);--color-brand-soft:var(--k-soft);--color-brand-surface:#341A1C;--color-brand-text:#E26B76;
+  --color-gold:#D4AF7A;
+  --color-text-heading:#FFFDF9;--color-text-primary:#F7F2EB;--color-text-secondary:#D6C8BC;--color-text-muted:#A8988B;--color-label:#FFFDF9;
+  --color-border:#3A2C2A;--color-border-canvas:#4D3B38;--color-divider:#2E2321;
+  --color-success:#E6DACB;--color-success-bg:#241E1C;--color-success-on-deep:#D4AF7A;
+  --color-warning:#D4AF7A;--color-warning-bg:#2A2118;
+  --color-error:#E27D85;--color-error-bg:#33181A;
+  --color-info:#C5B5A8;--color-info-bg:#221C1A;
+  --color-skel:#28201E;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.4);--shadow-md:0 6px 18px rgba(0,0,0,.45);--shadow-lg:0 24px 56px rgba(0,0,0,.65);
+  color-scheme:dark;
+}

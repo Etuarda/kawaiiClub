@@ -1,0 +1,1642 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Kawaii Clube — App de Parcerias & Minha Jornada</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Playfair Display + Plus Jakarta Sans + Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        kawaii: {
+                            deep: '#4F0004',
+                            main: '#6A0004',
+                            soft: '#891C26',
+                            ivory: '#FFFDF7',
+                            creme: '#F7F3EC',
+                            rose: '#F4E8E6',
+                            gold: '#B18A57',
+                            taupe: '#756963',
+                            charcoal: '#282321',
+                            darkbg: '#120E0D',
+                            darkcard: '#1C1716',
+                            darkalt: '#241F1E'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', '"Inter"', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F7F3EC;
+            color: #282321;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .dark body, html.dark body {
+            background-color: #120E0D;
+            color: #FFFDF7;
+        }
+        .font-editorial {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #B18A57;
+            border-radius: 3px;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .fade-in {
+            animation: fadeIn 0.3s var(--ease-editorial) forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Red highlight contrast preservation in Dark Mode */
+        .dark .bg-kawaii-main {
+            background-color: #800B13 !important;
+            border-color: rgba(177, 138, 87, 0.45) !important;
+            color: #FFFDF7 !important;
+            box-shadow: 0 4px 14px rgba(128, 11, 19, 0.35) !important;
+        }
+        .dark .bg-kawaii-main:hover {
+            background-color: #9C131D !important;
+        }
+        .dark .text-kawaii-main {
+            color: #FF5E6C !important;
+        }
+        .dark .border-kawaii-main {
+            border-color: #FF5E6C !important;
+        }
+        .dark .bg-kawaii-rose {
+            background-color: #2F070A !important;
+            color: #FF8F98 !important;
+            border: 1px solid rgba(128, 11, 19, 0.5) !important;
+        }
+        .timeline-step.active .timeline-dot {
+            background-color: #6A0004;
+            color: #FFFDF7;
+            border-color: #B18A57;
+            box-shadow: 0 0 0 3px rgba(177,138,87,0.3);
+        }
+        .timeline-step.completed .timeline-dot {
+            background-color: #047857;
+            color: #FFFDF7;
+            border-color: #34D399;
+        }
+    </style>
+<style id="kw-sober-typography">
+/* Sem background em tipografia (badges, pills, status, tags) e maior contraste sóbrio */
+span[class*="rounded-full"][class*="text-[10px]"],
+span[class*="rounded-full"][class*="text-[11px]"],
+span[class*="rounded-md"][class*="text-[10px]"],
+span[class*="rounded-md"][class*="text-[11px]"],
+span[class*="rounded"][class*="px-2"][class*="py-0.5"],
+span[class*="rounded"][class*="px-2.5"][class*="py-1"] {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  box-shadow: none !important;
+}
+.text-emerald-700, .text-emerald-600, .text-green-700 { color: #282220 !important; font-weight: 700 !important; }
+.dark .text-emerald-400, .dark .text-emerald-300 { color: #E6DACB !important; }
+.text-amber-700, .text-amber-600, .text-yellow-700 { color: #8C6738 !important; font-weight: 700 !important; }
+.dark .text-amber-400, .dark .text-amber-300 { color: #D4AF7A !important; }
+.text-red-700, .text-red-600 { color: #6A0004 !important; font-weight: 700 !important; }
+.dark .text-red-400 { color: #E27D85 !important; }
+</style>
+</head>
+<body class="h-full flex flex-col xl:flex-row overflow-x-hidden selection:bg-kawaii-rose selection:text-kawaii-main">
+
+    <!-- SIDEBAR NAVIGATION (Desktop) -->
+    <aside class="w-full xl:w-72 bg-kawaii-deep dark:bg-black text-kawaii-ivory flex xl:flex-col justify-between p-4 xl:p-6 shrink-0 shadow-2xl z-30 transition-colors">
+        <div class="flex items-center xl:flex-col xl:items-start w-full justify-between xl:justify-start">
+            
+            <!-- Brand / Logo Monogram KS -->
+            <div class="mb-0 xl:mb-8 flex items-center gap-3">
+                <a href="kawaii_clube_app.html" class="w-11 h-11 xl:w-16 xl:h-16 rounded-2xl bg-kawaii-main flex items-center justify-center border border-kawaii-gold/30 shadow-lg relative overflow-hidden group shrink-0">
+                    <span class="font-editorial text-xl xl:text-3xl text-kawaii-ivory font-bold tracking-wider">KS</span>
+                    <div class="absolute inset-0 bg-gradient-to-t from-kawaii-deep/80 to-transparent opacity-40"></div>
+                </a>
+                <div>
+                    <h1 class="font-editorial text-base xl:text-lg font-bold tracking-wide text-kawaii-ivory leading-tight">KAWAII CLUBE</h1>
+                    <p class="text-[9px] xl:text-[10px] text-kawaii-gold uppercase tracking-widest font-sans font-bold mt-0.5">Parcerias para Mulheres</p>
+                </div>
+            </div>
+
+            <!-- User Status Card (Desktop) -->
+            <div onclick="switchTab('perfil')" class="hidden xl:block bg-kawaii-main/40 dark:bg-kawaii-darkcard/80 border border-kawaii-gold/25 rounded-2xl p-4 mb-6 text-left w-full shadow-inner cursor-pointer hover:border-kawaii-gold transition-all" title="Ver Meu Perfil">
+                <div class="flex items-center gap-3">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120" alt="Avatar" class="w-11 h-11 rounded-full object-cover border-2 border-kawaii-gold">
+                    <div class="overflow-hidden">
+                        <h4 class="user-display-name text-xs font-bold text-kawaii-ivory truncate">Camila Ribeiro</h4>
+                        <p class="user-display-biz text-[10px] text-kawaii-rose/80 truncate">Studio Botanica & Co.</p>
+                        <span class="user-display-plan inline-block mt-0.5 text-[9px] uppercase tracking-wider font-bold bg-kawaii-gold/20 text-kawaii-gold px-2 py-0.5 rounded-full border border-kawaii-gold/30">Founder Gold</span>
+                    </div>
+                </div>
+                <div class="mt-3 pt-2.5 border-t border-kawaii-gold/15 flex justify-between text-[11px] text-kawaii-rose">
+                    <span>Compatibilidade Média</span>
+                    <span class="text-kawaii-gold font-bold">94.5%</span>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="hidden xl:flex flex-col gap-1.5 w-full text-left">
+                <button onclick="switchTab('inicio')" id="nav-inicio" class="nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-kawaii-main text-kawaii-ivory shadow-md">
+                    <i class="fa-solid fa-compass w-5 text-center text-kawaii-gold"></i> Início / Minha Jornada
+                </button>
+                <button onclick="switchTab('perfil')" id="nav-perfil" class="nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all text-kawaii-rose hover:bg-kawaii-main/40 hover:text-kawaii-ivory">
+                    <i class="fa-solid fa-user-gear w-5 text-center"></i> Meu Perfil Profissional
+                </button>
+                <button onclick="switchTab('oportunidades')" id="nav-oportunidades" class="nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all text-kawaii-rose hover:bg-kawaii-main/40 hover:text-kawaii-ivory">
+                    <i class="fa-solid fa-handshake-angle w-5 text-center"></i> Central de Oportunidades
+                    <span class="ml-auto bg-kawaii-gold text-kawaii-deep text-[10px] px-2 py-0.5 rounded-full font-bold">4</span>
+                </button>
+                <button onclick="switchTab('propostas')" id="nav-propostas" class="nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all text-kawaii-rose hover:bg-kawaii-main/40 hover:text-kawaii-ivory">
+                    <i class="fa-solid fa-file-contract w-5 text-center"></i> Minhas Propostas
+                    <span class="ml-auto bg-kawaii-soft text-kawaii-ivory text-[10px] px-2 py-0.5 rounded-full font-bold">3</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Mobile Header Controls -->
+        <div class="flex xl:hidden items-center gap-2">
+            <button onclick="toggleDarkMode()" aria-label="Tema" class="p-2 text-kawaii-ivory hover:text-kawaii-gold text-sm"><i class="fa-solid fa-moon"></i></button>
+            <a href="kawaii_admin_dashboard.html" aria-label="Admin" class="p-2 text-kawaii-ivory hover:text-kawaii-gold text-sm"><i class="fa-solid fa-shield-halved"></i></a>
+            <button onclick="logoutUser()" aria-label="Sair" class="p-2 text-kawaii-rose/80 hover:text-kawaii-gold text-sm"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+        </div>
+
+        <!-- Desktop Footer System Actions -->
+        <div class="hidden xl:block pt-6 border-t border-kawaii-gold/20 space-y-3">
+            <button onclick="toggleDarkMode()" class="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl bg-kawaii-main/30 border border-kawaii-gold/20 text-xs font-semibold text-kawaii-rose hover:text-kawaii-ivory hover:border-kawaii-gold transition-all">
+                <i id="theme-icon" class="fa-solid fa-moon text-kawaii-gold"></i>
+                <span id="theme-text">Modo Escuro</span>
+            </button>
+            <div class="flex items-center justify-between text-xs text-kawaii-rose/70 px-1">
+                <button onclick="logoutUser()" class="hover:text-kawaii-gold flex items-center gap-1.5"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</button>
+                <a href="kawaii_admin_dashboard.html" class="hover:text-kawaii-gold flex items-center gap-1.5"><i class="fa-solid fa-shield-halved"></i> Painel Admin</a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN VIEWPORT -->
+    <main class="flex-1 flex flex-col h-full overflow-y-auto bg-kawaii-creme dark:bg-kawaii-darkbg transition-colors pb-24 xl:pb-8">
+
+        <!-- STICKY TOP HEADER -->
+        <header class="bg-kawaii-ivory dark:bg-kawaii-darkcard border-b border-kawaii-gold/15 px-4 sm:px-6 py-3.5 flex items-center justify-between sticky top-0 z-20 shadow-sm transition-colors">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <span class="text-[10px] sm:text-xs uppercase tracking-widest text-kawaii-gold font-bold">Área da Empreendedora</span>
+                <span class="text-kawaii-taupe">/</span>
+                <h2 id="current-screen-title" class="font-editorial text-base sm:text-lg font-bold text-kawaii-deep dark:text-kawaii-ivory truncate">Início & Jornada de Parcerias</h2>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="openNotificationModal()" class="relative p-2 sm:p-2.5 rounded-full bg-kawaii-creme dark:bg-kawaii-darkbg text-kawaii-main dark:text-kawaii-gold hover:bg-kawaii-rose dark:hover:bg-kawaii-deep/50 transition-all" title="Notificações">
+                    <i class="fa-regular fa-bell text-xs sm:text-sm"></i>
+                    <span class="absolute top-1 sm:top-1.5 right-1 sm:right-1.5 w-2 h-2 rounded-full bg-kawaii-main dark:bg-kawaii-gold"></span>
+                </button>
+                <div onclick="switchTab('perfil')" class="hidden sm:flex items-center gap-3 pl-3 border-l border-kawaii-gold/20 cursor-pointer group" title="Ver Meu Perfil">
+                    <div class="text-right">
+                        <p class="user-display-name text-xs font-bold text-kawaii-deep dark:text-kawaii-ivory group-hover:text-kawaii-main dark:group-hover:text-kawaii-gold transition-colors">Camila Ribeiro</p>
+                        <p class="user-display-biz text-[10px] text-kawaii-taupe dark:text-kawaii-rose/70">Studio Botanica</p>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120" alt="Avatar" class="w-9 h-9 rounded-full object-cover border-2 border-kawaii-gold group-hover:scale-105 transition-transform">
+                </div>
+            </div>
+        </header>
+
+        <!-- DYNAMIC CONTENT CONTAINER -->
+        <div class="p-6 md:p-8 max-w-7xl mx-auto w-full flex-1">
+
+            <!-- ================= TAB 1: INÍCIO / MINHA JORNADA ================= -->
+            <div id="tab-inicio" class="tab-content fade-in space-y-8">
+                <!-- Welcome Banner -->
+                <div class="bg-gradient-to-r from-kawaii-deep via-kawaii-main to-kawaii-soft text-kawaii-ivory rounded-3xl p-8 sm:p-10 shadow-xl relative overflow-hidden">
+                    <div class="absolute right-0 top-0 translate-x-12 -translate-y-12 w-72 h-72 bg-kawaii-gold/15 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="relative z-10 max-w-2xl">
+                        <span class="bg-kawaii-gold/20 text-kawaii-gold text-xs font-semibold px-3 py-1 rounded-full border border-kawaii-gold/30">
+                            Jornada Ativa • Ciclo Q2
+                        </span>
+                        <h2 class="font-editorial text-3xl sm:text-4xl font-bold mt-4 mb-2 text-kawaii-ivory leading-tight">
+                            Bom dia, <span onclick="switchTab('perfil')" class="cursor-pointer hover:underline text-kawaii-gold" title="Ver Meu Perfil">Camila</span>. Suas conexões estão prósperas.
+                        </h2>
+                        <p class="text-kawaii-rose/90 text-sm leading-relaxed mb-6">
+                            Você possui <strong>4 novas oportunidades de parceria</strong> com evidências validadas de sinergia com o seu estúdio de design botânico e sustentabilidade.
+                        </p>
+                        <div class="flex flex-wrap gap-3">
+                            <button onclick="switchTab('oportunidades')" class="bg-kawaii-ivory text-kawaii-deep hover:bg-kawaii-rose font-bold px-5 py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-md flex items-center gap-2">
+                                <i class="fa-solid fa-sparkles text-kawaii-main"></i> Explorar Matches (4)
+                            </button>
+                            <button onclick="switchTab('propostas')" class="bg-kawaii-main/60 hover:bg-kawaii-main text-kawaii-ivory border border-kawaii-gold/40 font-bold px-5 py-2.5 rounded-xl text-xs sm:text-sm transition-all flex items-center gap-2">
+                                <i class="fa-solid fa-file-contract"></i> Ver Propostas (3)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4 METRIC CARDS -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-kawaii-ivory dark:bg-kawaii-darkcard rounded-2xl p-5 border border-kawaii-gold/20 shadow-sm flex items-center justify-between transition-colors">
+                        <div>
+                            <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 uppercase tracking-wider font-bold">Compatibilidade Média</p>
+                            <h3 class="font-editorial text-2xl font-bold text-kawaii-deep dark:text-kawaii-ivory mt-1">94.5%</h3>
+                            <span class="text-[11px] text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded font-semibold inline-flex items-center gap-1 mt-1">
+                                <i class="fa-solid fa-arrow-trend-up"></i> +4.2% este mês
+                            </span>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-kawaii-rose dark:bg-kawaii-darkalt text-kawaii-main dark:text-kawaii-gold flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-chart-pie"></i>
+                        </div>
+                    </div>
+
+                    <div class="bg-kawaii-ivory dark:bg-kawaii-darkcard rounded-2xl p-5 border border-kawaii-gold/20 shadow-sm flex items-center justify-between transition-colors">
+                        <div>
+                            <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 uppercase tracking-wider font-bold">Oportunidades</p>
+                            <h3 class="font-editorial text-2xl font-bold text-kawaii-deep dark:text-kawaii-ivory mt-1">12 Total</h3>
+                            <span class="text-[11px] text-kawaii-main dark:text-kawaii-gold bg-kawaii-rose dark:bg-kawaii-darkalt px-2 py-0.5 rounded font-semibold inline-block mt-1">
+                                4 novos matches
+                            </span>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-kawaii-rose dark:bg-kawaii-darkalt text-kawaii-main dark:text-kawaii-gold flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-bullseye"></i>
+                        </div>
+                    </div>
+
+                    <div class="bg-kawaii-ivory dark:bg-kawaii-darkcard rounded-2xl p-5 border border-kawaii-gold/20 shadow-sm flex items-center justify-between transition-colors">
+                        <div>
+                            <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 uppercase tracking-wider font-bold">Propostas Ativas</p>
+                            <h3 class="font-editorial text-2xl font-bold text-kawaii-deep dark:text-kawaii-ivory mt-1">2 Em Negociação</h3>
+                            <span class="text-[11px] text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded font-semibold inline-block mt-1">
+                                Aguardando resposta
+                            </span>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-kawaii-rose dark:bg-kawaii-darkalt text-kawaii-main dark:text-kawaii-gold flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-file-pen"></i>
+                        </div>
+                    </div>
+
+                    <div class="bg-kawaii-ivory dark:bg-kawaii-darkcard rounded-2xl p-5 border border-kawaii-gold/20 shadow-sm flex items-center justify-between transition-colors">
+                        <div>
+                            <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 uppercase tracking-wider font-bold">Parcerias Concluídas</p>
+                            <h3 class="font-editorial text-2xl font-bold text-kawaii-deep dark:text-kawaii-ivory mt-1">8 Ativas</h3>
+                            <span class="text-[11px] text-kawaii-gold bg-kawaii-gold/10 px-2 py-0.5 rounded font-semibold inline-block mt-1">
+                                Rede validada
+                            </span>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-kawaii-rose dark:bg-kawaii-darkalt text-kawaii-main dark:text-kawaii-gold flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-handshake"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= CARROSSEL DE PARCERIAS & MATCHES EM DESTAQUE ================= -->
+                <div class="bg-kawaii-ivory dark:bg-kawaii-darkcard border border-kawaii-gold/25 rounded-3xl p-5 sm:p-7 shadow-md transition-colors relative overflow-hidden">
+                    <!-- Carousel Header -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 pb-4 border-b border-kawaii-gold/15">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] uppercase font-bold tracking-widest text-kawaii-gold bg-kawaii-gold/15 px-2.5 py-0.5 rounded-full border border-kawaii-gold/30">
+                                    Curadoria Inteligente Kawaii
+                                </span>
+                                <span class="text-xs text-kawaii-taupe dark:text-kawaii-rose/60">• 4 Recomendações Elegíveis</span>
+                            </div>
+                            <h3 class="font-editorial text-xl sm:text-2xl font-bold text-kawaii-deep dark:text-kawaii-ivory mt-1">
+                                Carrossel de Oportunidades & Matches Selecionados
+                            </h3>
+                            <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 mt-0.5">
+                                Conexões avaliadas com evidências confirmadas de sinergia entre público, serviços e valores.
+                            </p>
+                        </div>
+                        <!-- Carousel Nav Controls -->
+                        <div class="flex items-center gap-2 self-end sm:self-center">
+                            <span id="carousel-counter" class="text-xs font-bold text-kawaii-gold px-2.5 py-1 rounded-lg bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/20">
+                                1 / 4
+                            </span>
+                            <button onclick="prevPartnerSlide()" aria-label="Slide anterior" class="w-9 h-9 rounded-xl border border-kawaii-gold/30 bg-kawaii-creme dark:bg-kawaii-darkbg text-kawaii-deep dark:text-kawaii-ivory hover:bg-kawaii-main hover:text-kawaii-ivory transition-all shadow-sm flex items-center justify-center">
+                                <i class="fa-solid fa-chevron-left text-xs"></i>
+                            </button>
+                            <button onclick="nextPartnerSlide()" aria-label="Próximo slide" class="w-9 h-9 rounded-xl border border-kawaii-gold/30 bg-kawaii-creme dark:bg-kawaii-darkbg text-kawaii-deep dark:text-kawaii-ivory hover:bg-kawaii-main hover:text-kawaii-ivory transition-all shadow-sm flex items-center justify-center">
+                                <i class="fa-solid fa-chevron-right text-xs"></i>
+                            </button>
+                            <button onclick="switchTab('oportunidades')" class="text-xs font-bold text-kawaii-main dark:text-kawaii-gold hover:underline ml-2 hidden md:inline">
+                                Ver todas (12) →
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Carousel Track (Horizontal snap scroll with 4 rich cards) -->
+                    <div id="partnership-carousel" class="flex gap-4 sm:gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar pb-2">
+                        <!-- Slide 1: Mariana Costa (98%) -->
+                        <div class="min-w-[290px] sm:min-w-[340px] md:min-w-[380px] lg:min-w-[400px] flex-1 snap-start bg-kawaii-creme/60 dark:bg-kawaii-darkbg rounded-2xl border border-kawaii-gold/25 p-5 flex flex-col justify-between hover:border-kawaii-main dark:hover:border-kawaii-gold transition-all shadow-sm group">
+                            <div>
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center gap-3">
+                                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120" alt="Mariana Costa" class="w-12 h-12 rounded-2xl object-cover border-2 border-kawaii-gold shadow-sm">
+                                        <div>
+                                            <button onclick="openMatchDetails('Mariana Costa', 'Aura Cosmética Natural', '98%', 'Busca parceria de co-criação para linha sensorial de embalagens ecológicas e aromas botânicos exclusivos.', 'Permuta & Collab', '94%')" class="font-editorial font-bold text-kawaii-deep dark:text-kawaii-ivory text-left text-base hover:text-kawaii-main dark:hover:text-kawaii-gold transition-colors">
+                                                Mariana Costa
+                                            </button>
+                                            <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70">Aura Cosmética Natural • SP</p>
+                                        </div>
+                                    </div>
+                                    <span class="bg-emerald-50 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-400 text-xs font-bold px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-800 shrink-0">
+                                        98% Match
+                                    </span>
+                                </div>
+                                <div class="mb-3">
+                                    <span class="text-[9px] uppercase tracking-wider font-bold text-kawaii-gold block mb-1">Por que foi sugerido</span>
+                                    <p class="text-xs text-kawaii-charcoal/85 dark:text-kawaii-rose/85 leading-relaxed">
+                                        Co-criação de embalagens botânicas biodegradáveis e linha sensorial de aromas para consumidoras conscientes.
+                                    </p>
+                                </div>
+                                <div class="flex flex-wrap gap-1.5 mb-3">
+                                    <span class="text-[10px] bg-kawaii-rose dark:bg-[#380306] text-kawaii-main dark:text-[#FF6B75] px-2.5 py-1 rounded-md font-bold">Permuta</span>
+                                    <span class="text-[10px] bg-kawaii-rose dark:bg-[#380306] text-kawaii-main dark:text-[#FF6B75] px-2.5 py-1 rounded-md font-bold">Collab</span>
+                                    <span class="text-[10px] bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 px-2 py-1 rounded-md font-bold flex items-center gap-1">
+                                        <i class="fa-solid fa-circle-check text-[9px]"></i> 94% Público Compartilhado
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="pt-3 border-t border-kawaii-gold/15 flex items-center justify-between gap-2 mt-2">
+                                <button onclick="openMatchDetails('Mariana Costa', 'Aura Cosmética Natural', '98%', 'Busca parceria de co-criação para linha sensorial de embalagens ecológicas e aromas botânicos exclusivos.', 'Permuta & Collab', '94%')" class="text-xs text-kawaii-deep dark:text-kawaii-gold font-bold hover:underline">
+                                    Ver Detalhes →
+                                </button>
+                                <button onclick="openProposalModal('Aura Cosmética Natural')" class="bg-kawaii-main hover:bg-kawaii-soft text-kawaii-ivory text-xs px-3.5 py-1.5 rounded-xl font-bold transition-all shadow-sm flex items-center gap-1.5">
+                                    <i class="fa-solid fa-file-pen text-[10px]"></i> Criar Proposta
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Slide 2: Beatriz Lima (95%) -->
+                        <div class="min-w-[290px] sm:min-w-[340px] md:min-w-[380px] lg:min-w-[400px] flex-1 snap-start bg-kawaii-creme/60 dark:bg-kawaii-darkbg rounded-2xl border border-kawaii-gold/25 p-5 flex flex-col justify-between hover:border-kawaii-main dark:hover:border-kawaii-gold transition-all shadow-sm group">
+                            <div>
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center gap-3">
+                                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=120" alt="Beatriz Lima" class="w-12 h-12 rounded-2xl object-cover border-2 border-kawaii-gold shadow-sm">
+                                        <div>
+                                            <button onclick="openMatchDetails('Beatriz Lima', 'Editora Lumina', '95%', 'Interessada em apoio de design editorial para lançamento de livro sobre empreendedorismo feminino sustentável.', 'Apoio Mútuo', '91%')" class="font-editorial font-bold text-kawaii-deep dark:text-kawaii-ivory text-left text-base hover:text-kawaii-main dark:hover:text-kawaii-gold transition-colors">
+                                                Beatriz Lima
+                                            </button>
+                                            <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70">Editora Lumina • PR</p>
+                                        </div>
+                                    </div>
+                                    <span class="bg-emerald-50 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-400 text-xs font-bold px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-800 shrink-0">
+                                        95% Match
+                                    </span>
+                                </div>
+                                <div class="mb-3">
+                                    <span class="text-[9px] uppercase tracking-wider font-bold text-kawaii-gold block mb-1">Por que foi sugerido</span>
+                                    <p class="text-xs text-kawaii-charcoal/85 dark:text-kawaii-rose/85 leading-relaxed">
+                                        Apoio mútuo e direção de arte para publicação de livro sobre liderança feminina e inovação sustentável.
+                                    </p>
+                                </div>
+                                <div class="flex flex-wrap gap-1.5 mb-3">
+                                    <span class="text-[10px] bg-kawaii-rose dark:bg-[#380306] text-kawaii-main dark:text-[#FF6B75] px-2.5 py-1 rounded-md font-bold">Apoio Mútuo</span>
+                                    <span class="text-[10px] bg-kawaii-rose dark:bg-[#380306] text-kawaii-main dark:text-[#FF6B75] px-2.5 py-1 rounded-md font-bold">Editorial</span>
+                                    <span class="text-[10px] bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 px-2 py-1 rounded-md font-bold flex items-center gap-1">
+                                        <i class="fa-solid fa-circle-check text-[9px]"></i> 91% Público Compartilhado
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="pt-3 border-t border-kawaii-gold/15 flex items-center justify-between gap-2 mt-2">
+                                <button onclick="openMatchDetails('Beatriz Lima', 'Editora Lumina', '95%', 'Interessada em apoio de design editorial para lançamento de livro sobre empreendedorismo feminino sustentável.', 'Apoio Mútuo', '91%')" class="text-xs text-kawaii-deep dark:text-kawaii-gold font-bold hover:underline">
+                                    Ver Detalhes →
+                                </button>
+                                <button onclick="openProposalModal('Editora Lumina')" class="bg-kawaii-main hover:bg-kawaii-soft text-kawaii-ivory text-xs px-3.5 py-1.5 rounded-xl font-bold transition-all shadow-sm flex items-center gap-1.5">
+                                    <i class="fa-solid fa-file-pen text-[10px]"></i> Criar Proposta
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Slide 3: Sofia Meirelles (93%) -->
+                        <div class="min-w-[290px] sm:min-w-[340px] md:min-w-[380px] lg:min-w-[400px] flex-1 snap-start bg-kawaii-creme/60 dark:bg-kawaii-darkbg rounded-2xl border border-kawaii-gold/25 p-5 flex flex-col justify-between hover:border-kawaii-main dark:hover:border-kawaii-gold transition-all shadow-sm group">
+                            <div>
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center gap-3">
+                                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=120" alt="Sofia Meirelles" class="w-12 h-12 rounded-2xl object-cover border-2 border-kawaii-gold shadow-sm">
+                                        <div>
+                                            <button onclick="openMatchDetails('Sofia Meirelles', 'Casa Verde Arquitetura', '93%', 'Cenografia viva e paisagismo biofílico para estandes de conferências femininas.', 'Collab de Espaços', '89%')" class="font-editorial font-bold text-kawaii-deep dark:text-kawaii-ivory text-left text-base hover:text-kawaii-main dark:hover:text-kawaii-gold transition-colors">
+                                                Sofia Meirelles
+                                            </button>
+                                            <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70">Casa Verde Arquitetura • SP</p>
+                                        </div>
+                                    </div>
+                                    <span class="bg-emerald-50 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-400 text-xs font-bold px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-800 shrink-0">
+                                        93% Match
+                                    </span>
+                                </div>
+                                <div class="mb-3">
+                                    <span class="text-[9px] uppercase tracking-wider font-bold text-kawaii-gold block mb-1">Por que foi sugerido</span>
+                                    <p class="text-xs text-kawaii-charcoal/85 dark:text-kawaii-rose/85 leading-relaxed">
+                                        Sinergia entre identidade botânica e ambientação biofílica para espaços corporativos de alto padrão.
+                                    </p>
+                                </div>
+                                <div class="flex flex-wrap gap-1.5 mb-3">
+                                    <span class="text-[10px] bg-kawaii-rose dark:bg-[#380306] text-kawaii-main dark:text-[#FF6B75] px-2.5 py-1 rounded-md font-bold">Collab</span>
+                                    <span class="text-[10px] bg-kawaii-rose dark:bg-[#380306] text-kawaii-main dark:text-[#FF6B75] px-2.5 py-1 rounded-md font-bold">Biofilia</span>
+                                    <span class="text-[10px] bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 px-2 py-1 rounded-md font-bold flex items-center gap-1">
+                                        <i class="fa-solid fa-circle-check text-[9px]"></i> 89% Público Compartilhado
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="pt-3 border-t border-kawaii-gold/15 flex items-center justify-between gap-2 mt-2">
+                                <button onclick="openMatchDetails('Sofia Meirelles', 'Casa Verde Arquitetura', '93%', 'Cenografia viva e paisagismo biofílico para estandes de conferências femininas.', 'Collab de Espaços', '89%')" class="text-xs text-kawaii-deep dark:text-kawaii-gold font-bold hover:underline">
+                                    Ver Detalhes →
+                                </button>
+                                <button onclick="openProposalModal('Casa Verde Arquitetura')" class="bg-kawaii-main hover:bg-kawaii-soft text-kawaii-ivory text-xs px-3.5 py-1.5 rounded-xl font-bold transition-all shadow-sm flex items-center gap-1.5">
+                                    <i class="fa-solid fa-file-pen text-[10px]"></i> Criar Proposta
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Slide 4: Helena Ramos (91%) -->
+                        <div class="min-w-[290px] sm:min-w-[340px] md:min-w-[380px] lg:min-w-[400px] flex-1 snap-start bg-kawaii-creme/60 dark:bg-kawaii-darkbg rounded-2xl border border-kawaii-gold/25 p-5 flex flex-col justify-between hover:border-kawaii-main dark:hover:border-kawaii-gold transition-all shadow-sm group">
+                            <div>
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center gap-3">
+                                        <img src="https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?auto=format&fit=crop&q=80&w=120" alt="Helena Ramos" class="w-12 h-12 rounded-2xl object-cover border-2 border-kawaii-gold shadow-sm">
+                                        <div>
+                                            <button onclick="openMatchDetails('Helena Ramos', 'Verve Café & Torrefação', '91%', 'Troca de rebranding visual e materiais de ponto de venda por fornecimento de café em lançamentos.', 'Permuta de Marca', '88%')" class="font-editorial font-bold text-kawaii-deep dark:text-kawaii-ivory text-left text-base hover:text-kawaii-main dark:hover:text-kawaii-gold transition-colors">
+                                                Helena Ramos
+                                            </button>
+                                            <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70">Verve Café & Torrefação • MG</p>
+                                        </div>
+                                    </div>
+                                    <span class="bg-emerald-50 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-400 text-xs font-bold px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-800 shrink-0">
+                                        91% Match
+                                    </span>
+                                </div>
+                                <div class="mb-3">
+                                    <span class="text-[9px] uppercase tracking-wider font-bold text-kawaii-gold block mb-1">Por que foi sugerido</span>
+                                    <p class="text-xs text-kawaii-charcoal/85 dark:text-kawaii-rose/85 leading-relaxed">
+                                        Troca bilateral viável: rebranding de embalagens de café especial por coffee catering e kits de presentes corporativos.
+                                    </p>
+                                </div>
+                                <div class="flex flex-wrap gap-1.5 mb-3">
+                                    <span class="text-[10px] bg-kawaii-rose dark:bg-[#380306] text-kawaii-main dark:text-[#FF6B75] px-2.5 py-1 rounded-md font-bold">Permuta</span>
+                                    <span class="text-[10px] bg-kawaii-rose dark:bg-[#380306] text-kawaii-main dark:text-[#FF6B75] px-2.5 py-1 rounded-md font-bold">Experiência</span>
+                                    <span class="text-[10px] bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 px-2 py-1 rounded-md font-bold flex items-center gap-1">
+                                        <i class="fa-solid fa-circle-check text-[9px]"></i> 88% Público Compartilhado
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="pt-3 border-t border-kawaii-gold/15 flex items-center justify-between gap-2 mt-2">
+                                <button onclick="openMatchDetails('Helena Ramos', 'Verve Café & Torrefação', '91%', 'Troca de rebranding visual e materiais de ponto de venda por fornecimento de café em lançamentos.', 'Permuta de Marca', '88%')" class="text-xs text-kawaii-deep dark:text-kawaii-gold font-bold hover:underline">
+                                    Ver Detalhes →
+                                </button>
+                                <button onclick="openProposalModal('Verve Café & Torrefação')" class="bg-kawaii-main hover:bg-kawaii-soft text-kawaii-ivory text-xs px-3.5 py-1.5 rounded-xl font-bold transition-all shadow-sm flex items-center gap-1.5">
+                                    <i class="fa-solid fa-file-pen text-[10px]"></i> Criar Proposta
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Carousel Dots Indicator Bar -->
+                    <div class="flex items-center justify-center gap-2 pt-4 mt-1 border-t border-kawaii-gold/15">
+                        <button onclick="goToPartnerSlide(0)" class="carousel-dot w-8 h-2 rounded-full bg-kawaii-main dark:bg-kawaii-gold transition-all" aria-label="Ir para card 1"></button>
+                        <button onclick="goToPartnerSlide(1)" class="carousel-dot w-2 h-2 rounded-full bg-kawaii-gold/30 hover:bg-kawaii-gold transition-all" aria-label="Ir para card 2"></button>
+                        <button onclick="goToPartnerSlide(2)" class="carousel-dot w-2 h-2 rounded-full bg-kawaii-gold/30 hover:bg-kawaii-gold transition-all" aria-label="Ir para card 3"></button>
+                        <button onclick="goToPartnerSlide(3)" class="carousel-dot w-2 h-2 rounded-full bg-kawaii-gold/30 hover:bg-kawaii-gold transition-all" aria-label="Ir para card 4"></button>
+                    </div>
+                </div>
+
+                <!-- ================= ROW: AÇÕES PENDENTES & ETAPA NO CLUBE ================= -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Ações Pendentes -->
+                    <div class="bg-kawaii-ivory dark:bg-kawaii-darkcard border border-kawaii-gold/20 rounded-3xl p-6 shadow-sm transition-colors">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-editorial text-lg font-bold text-kawaii-deep dark:text-kawaii-ivory">Ações Pendentes na Sua Jornada</h3>
+                            <span class="text-xs font-bold text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2.5 py-0.5 rounded-full border border-amber-200 dark:border-amber-800">2 Requerem Atenção</span>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="p-3.5 bg-kawaii-creme dark:bg-kawaii-darkalt rounded-2xl border border-kawaii-gold/15 flex items-start gap-3">
+                                <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
+                                    <i class="fa-solid fa-pen-nib text-xs"></i>
+                                </div>
+                                <div class="flex-1 text-xs">
+                                    <div class="flex items-center justify-between">
+                                        <p class="font-bold text-kawaii-deep dark:text-kawaii-ivory">Revisar proposta ativa</p>
+                                        <span class="text-[10px] text-kawaii-gold font-bold">Prazo: 2 dias</span>
+                                    </div>
+                                    <p class="text-kawaii-taupe dark:text-kawaii-rose/70 mt-0.5">Aura Cosmética aguarda sua confirmação de escopo para avançar para aceite bilateral.</p>
+                                    <button onclick="switchTab('propostas')" class="mt-2 text-kawaii-main dark:text-kawaii-gold font-bold hover:underline flex items-center gap-1">
+                                        Acompanhar Negociação →
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-3.5 bg-kawaii-creme dark:bg-kawaii-darkalt rounded-2xl border border-kawaii-gold/15 flex items-start gap-3">
+                                <div class="w-8 h-8 rounded-full bg-kawaii-rose dark:bg-kawaii-darkbg text-kawaii-main dark:text-kawaii-gold flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
+                                    <i class="fa-solid fa-id-card text-xs"></i>
+                                </div>
+                                <div class="flex-1 text-xs">
+                                    <div class="flex items-center justify-between">
+                                        <p class="font-bold text-kawaii-deep dark:text-kawaii-ivory">Atualizar necessidades de Q3</p>
+                                        <span class="text-[10px] text-emerald-700 dark:text-emerald-400 font-bold">+25% Matches</span>
+                                    </div>
+                                    <p class="text-kawaii-taupe dark:text-kawaii-rose/70 mt-0.5">Perfis com disponibilidade e público-alvo atualizados recebem prioridade no ranking.</p>
+                                    <button onclick="switchTab('perfil')" class="mt-2 text-kawaii-main dark:text-kawaii-gold font-bold hover:underline flex items-center gap-1">
+                                        Editar Perfil Profissional →
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sua Etapa no Clube -->
+                    <div class="bg-gradient-to-br from-kawaii-deep via-kawaii-main to-kawaii-deep text-kawaii-ivory rounded-3xl p-6 shadow-md border border-kawaii-gold/30 relative overflow-hidden flex flex-col justify-between">
+                        <div class="absolute -right-12 -top-12 w-48 h-48 bg-kawaii-gold/15 rounded-full blur-2xl pointer-events-none"></div>
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[10px] uppercase font-bold tracking-widest text-kawaii-gold bg-black/25 px-2.5 py-0.5 rounded-full border border-kawaii-gold/30">
+                                    Sua Etapa no Clube
+                                </span>
+                                <span class="text-xs text-kawaii-rose/80 font-bold">Fase 3 de 5</span>
+                            </div>
+                            <h3 class="font-editorial text-2xl font-bold mt-1 text-kawaii-ivory">Conexão & Propostas Ativas</h3>
+                            <p class="text-xs text-kawaii-rose/90 mt-1 mb-4">
+                                Você já validou seu perfil profissional e está na fase mais importante: transformar matches em propostas revisáveis.
+                            </p>
+                            <!-- Visual step list -->
+                            <ol class="space-y-2 text-xs">
+                                <li class="flex items-center gap-2.5 text-kawaii-ivory">
+                                    <i class="fa-solid fa-circle-check text-kawaii-gold text-sm"></i>
+                                    <span>1. Cadastro & Verificação Inicial</span>
+                                </li>
+                                <li class="flex items-center gap-2.5 text-kawaii-ivory">
+                                    <i class="fa-solid fa-circle-check text-kawaii-gold text-sm"></i>
+                                    <span>2. Perfil Profissional Completo</span>
+                                </li>
+                                <li class="flex items-center gap-2.5 text-kawaii-gold font-bold bg-white/10 p-1.5 rounded-xl border border-kawaii-gold/40">
+                                    <i class="fa-solid fa-circle-dot text-sm animate-pulse"></i>
+                                    <span>3. Descoberta de Matches & Criação de Proposta (Atual)</span>
+                                </li>
+                                <li class="flex items-center gap-2.5 opacity-65 text-kawaii-rose/80">
+                                    <i class="fa-regular fa-circle text-sm"></i>
+                                    <span>4. Negociação & Aceite Bilateral Formal</span>
+                                </li>
+                                <li class="flex items-center gap-2.5 opacity-65 text-kawaii-rose/80">
+                                    <i class="fa-regular fa-circle text-sm"></i>
+                                    <span>5. Execução Bilateral & Lançamento</span>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= TAB 2: MEU PERFIL PROFISSIONAL ================= -->
+            <div id="tab-perfil" class="tab-content fade-in space-y-8 hidden">
+                <div class="bg-kawaii-ivory dark:bg-kawaii-darkcard border border-kawaii-gold/20 rounded-3xl p-6 sm:p-8 shadow-sm transition-colors">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-6 border-b border-kawaii-gold/15">
+                        <div class="flex items-center gap-4">
+                            <div class="relative">
+                                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=180" alt="Camila Ribeiro" class="w-20 h-20 rounded-2xl object-cover border-2 border-kawaii-gold shadow-md">
+                                <button onclick="showToast('Foto do perfil pronta para atualização!')" class="absolute -bottom-2 -right-2 bg-kawaii-main text-kawaii-ivory w-7 h-7 rounded-full flex items-center justify-center shadow-md hover:bg-kawaii-soft text-xs">
+                                    <i class="fa-solid fa-camera"></i>
+                                </button>
+                            </div>
+                            <div>
+                                <h3 class="font-editorial text-2xl font-bold text-kawaii-deep dark:text-kawaii-ivory">Camila Ribeiro</h3>
+                                <p class="text-xs text-kawaii-gold font-bold uppercase tracking-wider mt-0.5">Fundadora & Diretora Criativa — Studio Botanica</p>
+                                <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 mt-1"><i class="fa-solid fa-location-dot mr-1"></i> São Paulo, SP • Atendimento Nacional e Remoto</p>
+                            </div>
+                        </div>
+                        <button onclick="saveProfileChanges()" class="bg-kawaii-main hover:bg-kawaii-soft text-kawaii-ivory px-6 py-3 rounded-xl text-xs font-bold shadow-md transition-all flex items-center gap-2">
+                            <i class="fa-solid fa-floppy-disk"></i> Salvar Alterações
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                        <div>
+                            <label class="block text-xs font-bold text-kawaii-deep dark:text-kawaii-rose uppercase tracking-wider mb-2">Serviços Oferecidos</label>
+                            <textarea id="prof-services" rows="3" class="w-full bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/30 rounded-xl p-3 text-xs text-kawaii-charcoal dark:text-kawaii-ivory focus:outline-none focus:border-kawaii-main">Design de identidade visual para marcas de bem-estar, consultoria em direção de arte sustentável e criação de embalagens botânicas.</textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-kawaii-deep dark:text-kawaii-rose uppercase tracking-wider mb-2">Necessidades Atuais</label>
+                            <textarea id="prof-needs" rows="3" class="w-full bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/30 rounded-xl p-3 text-xs text-kawaii-charcoal dark:text-kawaii-ivory focus:outline-none focus:border-kawaii-main">Busco parcerias com produtoras de cosméticos naturais, criadoras de conteúdo de lifestyle consciente e especialistas em marketing orgânico.</textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-kawaii-deep dark:text-kawaii-rose uppercase tracking-wider mb-2">Objetivos de Parceria</label>
+                            <input id="prof-goals" type="text" value="Expansão de portfólio co-branded e campanhas conjuntas de lançamento no Q3/Q4." class="w-full bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/30 rounded-xl p-3 text-xs text-kawaii-charcoal dark:text-kawaii-ivory focus:outline-none focus:border-kawaii-main">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-kawaii-deep dark:text-kawaii-rose uppercase tracking-wider mb-2">Público-Alvo</label>
+                            <input id="prof-audience" type="text" value="Mulheres empreendedoras B2B, consumidoras conscientes classe A/B (25-45 anos)." class="w-full bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/30 rounded-xl p-3 text-xs text-kawaii-charcoal dark:text-kawaii-ivory focus:outline-none focus:border-kawaii-main">
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-6 border-t border-kawaii-gold/15 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-bold text-kawaii-deep dark:text-kawaii-rose uppercase tracking-wider mb-3">Critérios de Matching & Modalidades</label>
+                            <div class="flex flex-wrap gap-2.5">
+                                <label class="flex items-center gap-2 bg-kawaii-creme dark:bg-kawaii-darkbg px-3 py-2 rounded-xl border border-kawaii-gold/20 text-xs font-medium cursor-pointer">
+                                    <input type="checkbox" checked class="accent-kawaii-main"> Permuta de Serviços
+                                </label>
+                                <label class="flex items-center gap-2 bg-kawaii-creme dark:bg-kawaii-darkbg px-3 py-2 rounded-xl border border-kawaii-gold/20 text-xs font-medium cursor-pointer">
+                                    <input type="checkbox" checked class="accent-kawaii-main"> Collab de Produtos
+                                </label>
+                                <label class="flex items-center gap-2 bg-kawaii-creme dark:bg-kawaii-darkbg px-3 py-2 rounded-xl border border-kawaii-gold/20 text-xs font-medium cursor-pointer">
+                                    <input type="checkbox" checked class="accent-kawaii-main"> Apoio Mútuo em Divulgação
+                                </label>
+                                <label class="flex items-center gap-2 bg-kawaii-creme dark:bg-kawaii-darkbg px-3 py-2 rounded-xl border border-kawaii-gold/20 text-xs font-medium cursor-pointer">
+                                    <input type="checkbox" class="accent-kawaii-main"> Oportunidades com Empresas
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-kawaii-deep dark:text-kawaii-rose uppercase tracking-wider mb-3">Disponibilidade de Dedicação</label>
+                            <select class="w-full bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/30 rounded-xl p-3 text-xs text-kawaii-charcoal dark:text-kawaii-ivory focus:outline-none focus:border-kawaii-main">
+                                <option>Alta (10 a 15 horas semanais)</option>
+                                <option selected>Moderada (5 a 10 horas semanais)</option>
+                                <option>Pontual (Projetos específicos de co-criação)</option>
+                            </select>
+                            <p class="text-[10px] text-kawaii-taupe dark:text-kawaii-rose/60 mt-2">Esta informação calibra o algoritmo de compatibilidade mútua.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= TAB 3: CENTRAL DE OPORTUNIDADES ================= -->
+            <div id="tab-oportunidades" class="tab-content fade-in space-y-6 hidden">
+                <!-- Filter Bar -->
+                <div class="bg-kawaii-ivory dark:bg-kawaii-darkcard border border-kawaii-gold/20 rounded-2xl p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4 transition-colors">
+                    <div class="relative w-full md:w-96">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-kawaii-taupe text-xs"></i>
+                        <input id="opp-search" oninput="handleOppSearch()" type="text" placeholder="Buscar por nome, nicho ou palavra-chave..." class="w-full bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/30 rounded-xl pl-9 pr-4 py-2.5 text-xs text-kawaii-charcoal dark:text-kawaii-ivory focus:outline-none focus:border-kawaii-main">
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                        <button onclick="filterOpportunities('all', this)" class="opp-filter-btn bg-kawaii-main text-kawaii-ivory text-xs px-3.5 py-2 rounded-xl font-bold transition-all">Todos (4)</button>
+                        <button onclick="filterOpportunities('apoio', this)" class="opp-filter-btn bg-kawaii-creme dark:bg-kawaii-darkbg text-kawaii-taupe dark:text-kawaii-rose/70 hover:text-kawaii-main text-xs px-3.5 py-2 rounded-xl font-bold border border-kawaii-gold/20 transition-all">Apoio</button>
+                        <button onclick="filterOpportunities('permuta', this)" class="opp-filter-btn bg-kawaii-creme dark:bg-kawaii-darkbg text-kawaii-taupe dark:text-kawaii-rose/70 hover:text-kawaii-main text-xs px-3.5 py-2 rounded-xl font-bold border border-kawaii-gold/20 transition-all">Permuta</button>
+                        <button onclick="filterOpportunities('collab', this)" class="opp-filter-btn bg-kawaii-creme dark:bg-kawaii-darkbg text-kawaii-taupe dark:text-kawaii-rose/70 hover:text-kawaii-main text-xs px-3.5 py-2 rounded-xl font-bold border border-kawaii-gold/20 transition-all">Collab</button>
+                    </div>
+                </div>
+
+                <!-- Opps Grid -->
+                <div id="opps-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Card 1 -->
+                    <div class="opp-card bg-kawaii-ivory dark:bg-kawaii-darkcard border border-kawaii-gold/20 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between" data-category="permuta collab" data-text="mariana costa aura cosmetica natural co-criacao embalagens aromaterapia">
+                        <div>
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120" alt="Mariana Costa" class="w-14 h-14 rounded-2xl object-cover border-2 border-kawaii-gold">
+                                    <div>
+                                        <button onclick="openMatchDetails('Mariana Costa', 'Aura Cosmética Natural', '98%', 'Busca parceria de co-criação para linha sensorial de embalagens ecológicas e aromas botânicos exclusivos.', 'Permuta & Collab', '94%')" class="font-editorial text-lg font-bold text-kawaii-deep dark:text-kawaii-ivory text-left hover:text-kawaii-main dark:hover:text-kawaii-gold transition-colors">Mariana Costa</button>
+                                        <p class="text-xs text-kawaii-gold font-bold uppercase tracking-wider">Aura Cosmética Natural</p>
+                                    </div>
+                                </div>
+                                <span class="bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 text-xs font-bold px-3 py-1 rounded-full border border-emerald-200 dark:border-emerald-800">
+                                    98% Match
+                                </span>
+                            </div>
+                            <p class="text-xs text-kawaii-charcoal/80 dark:text-kawaii-rose/80 leading-relaxed mb-4">
+                                Busca co-criação de embalagens botânicas ecológicas e coleção sensorial exclusiva para o Dia das Mães.
+                            </p>
+                            <div class="bg-kawaii-creme dark:bg-kawaii-darkbg rounded-xl p-3 border border-kawaii-gold/15 mb-4 text-xs space-y-1">
+                                <p class="text-kawaii-taupe dark:text-kawaii-rose/70 font-bold">Oferta Complementar:</p>
+                                <p class="text-kawaii-deep dark:text-kawaii-ivory font-medium">Divulgação em newsletter para 45k assinantes + Kit exclusivo de aromaterapia.</p>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 mb-4">
+                                <span class="text-[10px] bg-kawaii-rose dark:bg-kawaii-darkalt text-kawaii-main dark:text-kawaii-gold px-2.5 py-1 rounded-md font-bold">Permuta</span>
+                                <span class="text-[10px] bg-kawaii-rose dark:bg-kawaii-darkalt text-kawaii-main dark:text-kawaii-gold px-2.5 py-1 rounded-md font-bold">Collab</span>
+                            </div>
+                        </div>
+                        <div class="pt-4 border-t border-kawaii-gold/15 flex items-center justify-between">
+                            <span class="text-xs text-kawaii-taupe dark:text-kawaii-rose/60"><i class="fa-solid fa-location-dot text-kawaii-main dark:text-kawaii-gold mr-1"></i> São Paulo, SP</span>
+                            <button onclick="openMatchDetails('Mariana Costa', 'Aura Cosmética Natural', '98%', 'Busca parceria de co-criação para linha sensorial de embalagens ecológicas e aromas botânicos exclusivos.', 'Permuta & Collab', '94%')" class="bg-kawaii-main hover:bg-kawaii-soft text-kawaii-ivory text-xs px-4 py-2.5 rounded-xl font-bold transition-all shadow-sm">
+                                Visualizar Detalhes →
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="opp-card bg-kawaii-ivory dark:bg-kawaii-darkcard border border-kawaii-gold/20 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between" data-category="apoio" data-text="beatriz lima editora lumina apoio mutuo design editorial livro">
+                        <div>
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=120" alt="Beatriz Lima" class="w-14 h-14 rounded-2xl object-cover border-2 border-kawaii-gold">
+                                    <div>
+                                        <button onclick="openMatchDetails('Beatriz Lima', 'Editora Lumina', '95%', 'Interessada em apoio de design editorial para lançamento de livro sobre empreendedorismo feminino sustentável.', 'Apoio Mútuo', '91%')" class="font-editorial text-lg font-bold text-kawaii-deep dark:text-kawaii-ivory text-left hover:text-kawaii-main dark:hover:text-kawaii-gold transition-colors">Beatriz Lima</button>
+                                        <p class="text-xs text-kawaii-gold font-bold uppercase tracking-wider">Editora Lumina</p>
+                                    </div>
+                                </div>
+                                <span class="bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 text-xs font-bold px-3 py-1 rounded-full border border-emerald-200 dark:border-emerald-800">
+                                    95% Match
+                                </span>
+                            </div>
+                            <p class="text-xs text-kawaii-charcoal/80 dark:text-kawaii-rose/80 leading-relaxed mb-4">
+                                Apoio mútuo de design editorial para lançamento de antologia sobre empoderamento econômico feminino.
+                            </p>
+                            <div class="bg-kawaii-creme dark:bg-kawaii-darkbg rounded-xl p-3 border border-kawaii-gold/15 mb-4 text-xs space-y-1">
+                                <p class="text-kawaii-taupe dark:text-kawaii-rose/70 font-bold">Oferta Complementar:</p>
+                                <p class="text-kawaii-deep dark:text-kawaii-ivory font-medium">Cota de patrocínio e estande institucional em rodada literária.</p>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 mb-4">
+                                <span class="text-[10px] bg-kawaii-rose dark:bg-kawaii-darkalt text-kawaii-main dark:text-kawaii-gold px-2.5 py-1 rounded-md font-bold">Apoio Mútuo</span>
+                                <span class="text-[10px] bg-kawaii-rose dark:bg-kawaii-darkalt text-kawaii-main dark:text-kawaii-gold px-2.5 py-1 rounded-md font-bold">Editorial</span>
+                            </div>
+                        </div>
+                        <div class="pt-4 border-t border-kawaii-gold/15 flex items-center justify-between">
+                            <span class="text-xs text-kawaii-taupe dark:text-kawaii-rose/60"><i class="fa-solid fa-location-dot text-kawaii-main dark:text-kawaii-gold mr-1"></i> Curitiba, PR</span>
+                            <button onclick="openMatchDetails('Beatriz Lima', 'Editora Lumina', '95%', 'Interessada em apoio de design editorial para lançamento de livro sobre empreendedorismo feminino sustentável.', 'Apoio Mútuo', '91%')" class="bg-kawaii-main hover:bg-kawaii-soft text-kawaii-ivory text-xs px-4 py-2.5 rounded-xl font-bold transition-all shadow-sm">
+                                Visualizar Detalhes →
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="opp-card bg-kawaii-ivory dark:bg-kawaii-darkcard border border-kawaii-gold/20 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between" data-category="collab" data-text="sofia mendez studio alquimia mentoria branding digital clientes">
+                        <div>
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=120" alt="Sofia Mendez" class="w-14 h-14 rounded-2xl object-cover border-2 border-kawaii-gold">
+                                    <div>
+                                        <button onclick="openMatchDetails('Sofia Mendez', 'Studio Alquimia', '91%', 'Busca parceria de mentoria cruzada em branding digital e estratégias de captação de clientes high-ticket.', 'Mentoria & Collab', '88%')" class="font-editorial text-lg font-bold text-kawaii-deep dark:text-kawaii-ivory text-left hover:text-kawaii-main dark:hover:text-kawaii-gold transition-colors">Sofia Mendez</button>
+                                        <p class="text-xs text-kawaii-gold font-bold uppercase tracking-wider">Studio Alquimia</p>
+                                    </div>
+                                </div>
+                                <span class="bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 text-xs font-bold px-3 py-1 rounded-full border border-emerald-200 dark:border-emerald-800">
+                                    91% Match
+                                </span>
+                            </div>
+                            <p class="text-xs text-kawaii-charcoal/80 dark:text-kawaii-rose/80 leading-relaxed mb-4">
+                                Mentoria cruzada em branding digital e estratégias de conversão para clientes de alto padrão.
+                            </p>
+                            <div class="bg-kawaii-creme dark:bg-kawaii-darkbg rounded-xl p-3 border border-kawaii-gold/15 mb-4 text-xs space-y-1">
+                                <p class="text-kawaii-taupe dark:text-kawaii-rose/70 font-bold">Oferta Complementar:</p>
+                                <p class="text-kawaii-deep dark:text-kawaii-ivory font-medium">Acesso a masterclass exclusiva e masterminds quinzenais.</p>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 mb-4">
+                                <span class="text-[10px] bg-kawaii-rose dark:bg-kawaii-darkalt text-kawaii-main dark:text-kawaii-gold px-2.5 py-1 rounded-md font-bold">Mentoria</span>
+                                <span class="text-[10px] bg-kawaii-rose dark:bg-kawaii-darkalt text-kawaii-main dark:text-kawaii-gold px-2.5 py-1 rounded-md font-bold">Collab</span>
+                            </div>
+                        </div>
+                        <div class="pt-4 border-t border-kawaii-gold/15 flex items-center justify-between">
+                            <span class="text-xs text-kawaii-taupe dark:text-kawaii-rose/60"><i class="fa-solid fa-location-dot text-kawaii-main dark:text-kawaii-gold mr-1"></i> Florianópolis, SC</span>
+                            <button onclick="openMatchDetails('Sofia Mendez', 'Studio Alquimia', '91%', 'Busca parceria de mentoria cruzada em branding digital e estratégias de captação de clientes high-ticket.', 'Mentoria & Collab', '88%')" class="bg-kawaii-main hover:bg-kawaii-soft text-kawaii-ivory text-xs px-4 py-2.5 rounded-xl font-bold transition-all shadow-sm">
+                                Visualizar Detalhes →
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="opp-card bg-kawaii-ivory dark:bg-kawaii-darkcard border border-kawaii-gold/20 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between" data-category="permuta" data-text="juliana castro moda consciente flora sustentabilidade algodao">
+                        <div>
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=120" alt="Juliana Castro" class="w-14 h-14 rounded-2xl object-cover border-2 border-kawaii-gold">
+                                    <div>
+                                        <button onclick="openMatchDetails('Juliana Castro', 'Moda Consciente Flora', '89%', 'Procura estúdio de design para criação de tags botânicas biodegradáveis e embalagens de algodão orgânico.', 'Permuta', '85%')" class="font-editorial text-lg font-bold text-kawaii-deep dark:text-kawaii-ivory text-left hover:text-kawaii-main dark:hover:text-kawaii-gold transition-colors">Juliana Castro</button>
+                                        <p class="text-xs text-kawaii-gold font-bold uppercase tracking-wider">Moda Consciente Flora</p>
+                                    </div>
+                                </div>
+                                <span class="bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 text-xs font-bold px-3 py-1 rounded-full border border-emerald-200 dark:border-emerald-800">
+                                    89% Match
+                                </span>
+                            </div>
+                            <p class="text-xs text-kawaii-charcoal/80 dark:text-kawaii-rose/80 leading-relaxed mb-4">
+                                Procura criação de tags botânicas biodegradáveis e embalagens de algodão orgânico para nova coleção.
+                            </p>
+                            <div class="bg-kawaii-creme dark:bg-kawaii-darkbg rounded-xl p-3 border border-kawaii-gold/15 mb-4 text-xs space-y-1">
+                                <p class="text-kawaii-taupe dark:text-kawaii-rose/70 font-bold">Oferta Complementar:</p>
+                                <p class="text-kawaii-deep dark:text-kawaii-ivory font-medium">Permuta em peças da coleção sustentável + post patrocinado.</p>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 mb-4">
+                                <span class="text-[10px] bg-kawaii-rose dark:bg-kawaii-darkalt text-kawaii-main dark:text-kawaii-gold px-2.5 py-1 rounded-md font-bold">Permuta</span>
+                                <span class="text-[10px] bg-kawaii-rose dark:bg-kawaii-darkalt text-kawaii-main dark:text-kawaii-gold px-2.5 py-1 rounded-md font-bold">Sustentabilidade</span>
+                            </div>
+                        </div>
+                        <div class="pt-4 border-t border-kawaii-gold/15 flex items-center justify-between">
+                            <span class="text-xs text-kawaii-taupe dark:text-kawaii-rose/60"><i class="fa-solid fa-location-dot text-kawaii-main dark:text-kawaii-gold mr-1"></i> Belo Horizonte, MG</span>
+                            <button onclick="openMatchDetails('Juliana Castro', 'Moda Consciente Flora', '89%', 'Procura estúdio de design para criação de tags botânicas biodegradáveis e embalagens de algodão orgânico.', 'Permuta', '85%')" class="bg-kawaii-main hover:bg-kawaii-soft text-kawaii-ivory text-xs px-4 py-2.5 rounded-xl font-bold transition-all shadow-sm">
+                                Visualizar Detalhes →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= TAB 6: MINHAS PROPOSTAS ================= -->
+            <div id="tab-propostas" class="tab-content fade-in space-y-6 hidden">
+                <div class="bg-kawaii-ivory dark:bg-kawaii-darkcard border border-kawaii-gold/20 rounded-3xl p-6 sm:p-8 shadow-sm transition-colors">
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
+                        <div>
+                            <h3 class="font-editorial text-2xl font-bold text-kawaii-deep dark:text-kawaii-ivory">Minhas Propostas & Negociações</h3>
+                            <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 mt-1">Acompanhe rascunhos, negociações ativas e parcerias em execução.</p>
+                        </div>
+                        <button onclick="openProposalModal('Nova Parceria Estratégica')" class="bg-kawaii-main hover:bg-kawaii-soft text-kawaii-ivory px-5 py-2.5 rounded-xl text-xs font-bold shadow-md transition-all flex items-center gap-2">
+                            <i class="fa-solid fa-plus"></i> Criar Nova Proposta
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-kawaii-gold/20 text-xs uppercase tracking-wider text-kawaii-taupe dark:text-kawaii-rose/60 bg-kawaii-creme/50 dark:bg-kawaii-darkbg/50">
+                                    <th class="p-4 font-bold">Parceira</th>
+                                    <th class="p-4 font-bold">Objetivo Principal</th>
+                                    <th class="p-4 font-bold">Modalidade</th>
+                                    <th class="p-4 font-bold">Status</th>
+                                    <th class="p-4 font-bold">Data</th>
+                                    <th class="p-4 font-bold text-right">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-kawaii-gold/10 text-xs">
+                                <!-- Row 1: Em Negociação -->
+                                <tr class="hover:bg-kawaii-creme/40 dark:hover:bg-kawaii-darkalt/40 transition-all">
+                                    <td class="p-4 font-bold text-kawaii-deep dark:text-kawaii-ivory flex items-center gap-3">
+                                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80" onclick="openPartnershipDetails('Mariana Costa', 'Aura Cosmética Natural', 'Co-criação Coleção Sensorial Botânica', 'Em Negociação')" class="w-9 h-9 rounded-full object-cover border border-kawaii-gold/50 cursor-pointer hover:scale-105 transition-transform" title="Ver Detalhes">
+                                        <div>
+                                            <button onclick="openPartnershipDetails('Mariana Costa', 'Aura Cosmética Natural', 'Co-criação Coleção Sensorial Botânica', 'Em Negociação')" class="font-bold text-left hover:text-kawaii-main dark:hover:text-kawaii-gold transition-colors block">Mariana Costa</button>
+                                            <span class="text-[10px] text-kawaii-taupe dark:text-kawaii-rose/60 font-normal">Aura Cosmética</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-kawaii-charcoal dark:text-kawaii-ivory font-medium">Co-criação Coleção Sensorial Botânica</td>
+                                    <td class="p-4"><span class="bg-kawaii-rose dark:bg-kawaii-darkalt text-kawaii-main dark:text-kawaii-gold px-2.5 py-1 rounded-md font-bold text-[10px]">Permuta / Collab</span></td>
+                                    <td class="p-4"><span class="bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 px-3 py-1 rounded-full font-bold text-[10px] border border-amber-200 dark:border-amber-800">Em Negociação</span></td>
+                                    <td class="p-4 text-kawaii-taupe dark:text-kawaii-rose/60">12 Out 2026</td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="openPartnershipDetails('Mariana Costa', 'Aura Cosmética Natural', 'Co-criação Coleção Sensorial Botânica', 'Em Negociação')" class="bg-kawaii-main hover:bg-kawaii-soft text-kawaii-ivory px-3.5 py-1.5 rounded-xl font-bold transition-all shadow-sm">
+                                            Acompanhar
+                                        </button>
+                                    </td>
+                                </tr>
+                                <!-- Row 2: Aprovada -->
+                                <tr class="hover:bg-kawaii-creme/40 dark:hover:bg-kawaii-darkalt/40 transition-all">
+                                    <td class="p-4 font-bold text-kawaii-deep dark:text-kawaii-ivory flex items-center gap-3">
+                                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=80" onclick="openPartnershipDetails('Beatriz Lima', 'Editora Lumina', 'Design Editorial de Livro Coletivo', 'Aprovada')" class="w-9 h-9 rounded-full object-cover border border-kawaii-gold/50 cursor-pointer hover:scale-105 transition-transform" title="Ver Acordo">
+                                        <div>
+                                            <button onclick="openPartnershipDetails('Beatriz Lima', 'Editora Lumina', 'Design Editorial de Livro Coletivo', 'Aprovada')" class="font-bold text-left hover:text-kawaii-main dark:hover:text-kawaii-gold transition-colors block">Beatriz Lima</button>
+                                            <span class="text-[10px] text-kawaii-taupe dark:text-kawaii-rose/60 font-normal">Editora Lumina</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-kawaii-charcoal dark:text-kawaii-ivory font-medium">Design Editorial de Livro Coletivo</td>
+                                    <td class="p-4"><span class="bg-kawaii-rose dark:bg-kawaii-darkalt text-kawaii-main dark:text-kawaii-gold px-2.5 py-1 rounded-md font-bold text-[10px]">Apoio Mútuo</span></td>
+                                    <td class="p-4"><span class="bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 px-3 py-1 rounded-full font-bold text-[10px] border border-emerald-200 dark:border-emerald-800">Aprovada</span></td>
+                                    <td class="p-4 text-kawaii-taupe dark:text-kawaii-rose/60">08 Out 2026</td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="openPartnershipDetails('Beatriz Lima', 'Editora Lumina', 'Design Editorial de Livro Coletivo', 'Aprovada')" class="bg-emerald-700 hover:bg-emerald-800 text-kawaii-ivory px-3.5 py-1.5 rounded-xl font-bold transition-all shadow-sm">
+                                            Ver Acordo
+                                        </button>
+                                    </td>
+                                </tr>
+                                <!-- Row 3: Rascunho -->
+                                <tr class="hover:bg-kawaii-creme/40 dark:hover:bg-kawaii-darkalt/40 transition-all">
+                                    <td class="p-4 font-bold text-kawaii-deep dark:text-kawaii-ivory flex items-center gap-3">
+                                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=80" onclick="openProposalModal('Studio Alquimia')" class="w-9 h-9 rounded-full object-cover border border-kawaii-gold/50 cursor-pointer hover:scale-105 transition-transform" title="Editar Proposta">
+                                        <div>
+                                            <button onclick="openProposalModal('Studio Alquimia')" class="font-bold text-left hover:text-kawaii-main dark:hover:text-kawaii-gold transition-colors block">Sofia Mendez</button>
+                                            <span class="text-[10px] text-kawaii-taupe dark:text-kawaii-rose/60 font-normal">Studio Alquimia</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-kawaii-charcoal dark:text-kawaii-ivory font-medium">Mastermind & Troca de Mentorias Q4</td>
+                                    <td class="p-4"><span class="bg-kawaii-rose dark:bg-kawaii-darkalt text-kawaii-main dark:text-kawaii-gold px-2.5 py-1 rounded-md font-bold text-[10px]">Mentoria</span></td>
+                                    <td class="p-4"><span class="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full font-bold text-[10px] border border-gray-300 dark:border-gray-700">Rascunho</span></td>
+                                    <td class="p-4 text-kawaii-taupe dark:text-kawaii-rose/60">15 Out 2026</td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="openProposalModal('Studio Alquimia')" class="border border-kawaii-gold/40 text-kawaii-main dark:text-kawaii-gold hover:bg-kawaii-rose dark:hover:bg-kawaii-darkalt px-3.5 py-1.5 rounded-xl font-bold transition-all">
+                                            Editar
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ================= GENERIC APP MODAL (Immersive Match Details, Criar Proposta, Detalhes da Parceria) ================= -->
+    <div id="app-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div id="modal-card" class="bg-kawaii-ivory dark:bg-kawaii-darkcard w-full max-w-2xl rounded-3xl border border-kawaii-gold/30 shadow-2xl p-6 sm:p-8 relative max-h-[90vh] overflow-y-auto fade-in transition-colors">
+            <!-- Modal dynamic content injected here -->
+            <div id="modal-content-wrapper"></div>
+        </div>
+    </div>
+
+    <!-- FLOATING TOAST ALERT -->
+    <div id="toast-notification" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-kawaii-deep text-kawaii-ivory border border-kawaii-gold/40 shadow-2xl rounded-2xl px-5 py-3.5 flex items-center gap-3 max-w-sm">
+            <span class="w-8 h-8 rounded-full bg-kawaii-gold/20 text-kawaii-gold flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-circle-check"></i>
+            </span>
+            <div>
+                <p id="toast-title" class="text-xs font-bold text-kawaii-ivory">Aviso Kawaii Clube</p>
+                <p id="toast-message" class="text-[11px] text-kawaii-rose/90">Ação confirmada com sucesso.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOBILE BOTTOM NAVIGATION (Fixed, zero session breaking, high touch targets) -->
+    <nav class="xl:hidden fixed bottom-0 left-0 right-0 z-40 bg-kawaii-deep/95 dark:bg-black/95 backdrop-blur-md border-t border-kawaii-gold/20 flex items-center justify-around py-2 px-1 shadow-2xl">
+        <button onclick="switchTab('inicio')" id="mob-nav-inicio" class="flex flex-col items-center gap-1 py-1 px-3 rounded-xl text-[10px] font-bold text-kawaii-gold transition-all">
+            <i class="fa-solid fa-compass text-base"></i>
+            <span>Início</span>
+        </button>
+        <button onclick="switchTab('perfil')" id="mob-nav-perfil" class="flex flex-col items-center gap-1 py-1 px-3 rounded-xl text-[10px] font-bold text-kawaii-rose/70 hover:text-kawaii-ivory transition-all">
+            <i class="fa-solid fa-user-gear text-base"></i>
+            <span>Perfil</span>
+        </button>
+        <button onclick="switchTab('oportunidades')" id="mob-nav-oportunidades" class="relative flex flex-col items-center gap-1 py-1 px-3 rounded-xl text-[10px] font-bold text-kawaii-rose/70 hover:text-kawaii-ivory transition-all">
+            <i class="fa-solid fa-handshake-angle text-base"></i>
+            <span>Matches</span>
+            <span class="absolute top-0 right-1.5 w-3.5 h-3.5 bg-kawaii-gold text-kawaii-deep rounded-full text-[8px] flex items-center justify-center font-bold">4</span>
+        </button>
+        <button onclick="switchTab('propostas')" id="mob-nav-propostas" class="relative flex flex-col items-center gap-1 py-1 px-3 rounded-xl text-[10px] font-bold text-kawaii-rose/70 hover:text-kawaii-ivory transition-all">
+            <i class="fa-solid fa-file-contract text-base"></i>
+            <span>Propostas</span>
+            <span class="absolute top-0 right-1.5 w-3.5 h-3.5 bg-kawaii-soft text-kawaii-ivory rounded-full text-[8px] flex items-center justify-center font-bold">3</span>
+        </button>
+        <button onclick="logoutUser()" class="flex flex-col items-center gap-1 py-1 px-3 rounded-xl text-[10px] font-bold text-kawaii-rose/70 hover:text-kawaii-gold transition-all" title="Encerrar Sessão">
+            <i class="fa-solid fa-arrow-right-from-bracket text-base"></i>
+            <span>Sair</span>
+        </button>
+    </nav>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        const SESSION_STORAGE_KEY = 'kawaii_session';
+        const DEMO_SESSION_KEY = 'kawaii-demo-session-v2';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initUserSession();
+        });
+
+        function getActiveSession() {
+            try {
+                const raw = localStorage.getItem(SESSION_STORAGE_KEY) || localStorage.getItem(DEMO_SESSION_KEY);
+                return raw ? JSON.parse(raw) : null;
+            } catch {
+                return null;
+            }
+        }
+
+        function setActiveSession(session) {
+            try {
+                localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+                localStorage.setItem(DEMO_SESSION_KEY, JSON.stringify(session));
+            } catch {}
+        }
+
+        function initUserSession() {
+            let session = getActiveSession();
+            
+            // PREVENT SESSION BREAK: If user opens app directly without session, seed default member session
+            if (!session || !session.name) {
+                session = {
+                    id: 'demo-camila',
+                    name: 'Camila Ribeiro',
+                    email: 'camila@botanica.com.br',
+                    role: 'MEMBER',
+                    business: 'Studio Botanica & Co.',
+                    companyName: 'Studio Botanica & Co.',
+                    plan: 'Founder Gold',
+                    matchScore: '94.5%',
+                    avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120',
+                    loggedAt: new Date().toISOString()
+                };
+                setActiveSession(session);
+            }
+
+            // Sync user UI across sidebar, header, and welcome banner
+            document.querySelectorAll('.user-display-name').forEach(el => el.innerText = session.name);
+            document.querySelectorAll('.user-display-biz').forEach(el => el.innerText = session.business || session.companyName || 'Studio Botanica & Co.');
+            document.querySelectorAll('.user-display-plan').forEach(el => el.innerText = session.plan || 'Founder Gold');
+            document.querySelectorAll('.user-first-name').forEach(el => el.innerText = session.name.split(' ')[0]);
+
+            // If an Admin session visits the App, render an indicator
+            if (session.role === 'ADMIN') {
+                const adminNotice = document.getElementById('admin-session-notice');
+                if (adminNotice) {
+                    adminNotice.classList.remove('hidden');
+                }
+            }
+        }
+
+        function logoutUser() {
+            try {
+                localStorage.removeItem(SESSION_STORAGE_KEY);
+                localStorage.removeItem(DEMO_SESSION_KEY);
+            } catch {}
+            showToast('Sessão encerrada com sucesso.');
+            setTimeout(() => {
+                window.location.href = 'kawaii_auth.html';
+            }, 500);
+        }
+
+        // Tab Switcher (Updates Desktop and Mobile bottom bar active styles)
+        function switchTab(tabId) {
+            // Hide all tab content
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            
+            // Show target tab
+            const target = document.getElementById('tab-' + tabId);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            // Update Desktop Sidebar Buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.className = "nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all text-kawaii-rose hover:bg-kawaii-main/40 hover:text-kawaii-ivory";
+            });
+            const activeBtn = document.getElementById('nav-' + tabId);
+            if (activeBtn) {
+                activeBtn.className = "nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-kawaii-main text-kawaii-ivory shadow-md";
+            }
+
+            // Update Mobile Bottom Nav Buttons
+            ['inicio', 'perfil', 'oportunidades', 'propostas'].forEach(id => {
+                const mBtn = document.getElementById('mob-nav-' + id);
+                if (mBtn) {
+                    if (id === tabId) {
+                        mBtn.className = "relative flex flex-col items-center gap-1 py-1 px-3 rounded-xl text-[10px] font-bold text-kawaii-gold transition-all";
+                    } else {
+                        mBtn.className = "relative flex flex-col items-center gap-1 py-1 px-3 rounded-xl text-[10px] font-bold text-kawaii-rose/70 hover:text-kawaii-ivory transition-all";
+                    }
+                }
+            });
+
+            // Update Screen Title
+            const titles = {
+                'inicio': 'Início & Jornada de Parcerias',
+                'perfil': 'Meu Perfil Profissional',
+                'oportunidades': 'Central de Oportunidades & Matches',
+                'propostas': 'Minhas Propostas & Negociações'
+            };
+            document.getElementById('current-screen-title').innerText = titles[tabId] || 'Kawaii Clube';
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Screen 4: Detalhes do Match Modal (Consistent Luxury Editorial Design)
+        function openMatchDetails(name, company, score, description, modalType, audienceOverlap = '92%') {
+            const modal = document.getElementById('app-modal');
+            const wrapper = document.getElementById('modal-content-wrapper');
+            
+            wrapper.innerHTML = `
+                <!-- Modal Header -->
+                <div class="flex items-start justify-between pb-4 border-b border-kawaii-gold/20 mb-5">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-kawaii-main dark:bg-[#800B13] text-kawaii-ivory font-editorial font-bold text-lg flex items-center justify-center border border-kawaii-gold/40 shadow-sm shrink-0">
+                            KS
+                        </div>
+                        <div>
+                            <span class="text-[10px] uppercase font-bold tracking-widest text-kawaii-gold">Tela 04 • Detalhes do Match</span>
+                            <h3 class="font-editorial text-2xl font-bold text-kawaii-deep dark:text-kawaii-ivory leading-tight mt-0.5">Compatibilidade Estratégica</h3>
+                        </div>
+                    </div>
+                    <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-kawaii-creme dark:bg-kawaii-darkalt border border-kawaii-gold/30 text-kawaii-taupe dark:text-kawaii-rose hover:text-kawaii-main flex items-center justify-center transition-all" aria-label="Fechar">
+                        <i class="fa-solid fa-xmark text-sm"></i>
+                    </button>
+                </div>
+
+                <!-- Partner Profile Bar -->
+                <div class="flex items-center justify-between p-4 bg-kawaii-creme dark:bg-kawaii-darkbg rounded-2xl border border-kawaii-gold/20 mb-5">
+                    <div class="flex items-center gap-3.5">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=140" class="w-14 h-14 rounded-2xl object-cover border-2 border-kawaii-gold shadow-md shrink-0">
+                        <div>
+                            <h4 class="font-editorial text-xl font-bold text-kawaii-deep dark:text-kawaii-ivory">${name}</h4>
+                            <p class="text-xs text-kawaii-gold font-bold uppercase tracking-wider">${company} • São Paulo, SP</p>
+                            <span class="text-[11px] text-kawaii-taupe dark:text-kawaii-rose/70">Atendimento Nacional • Parcerias Verificadas</span>
+                        </div>
+                    </div>
+                    <div class="text-right shrink-0">
+                        <span class="bg-emerald-50 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-400 text-xs font-bold px-3 py-1.5 rounded-full border border-emerald-300 dark:border-emerald-800 inline-block shadow-sm">
+                            <i class="fa-solid fa-sparkles text-[10px] mr-1"></i> ${score} Match
+                        </span>
+                        <p class="text-[10px] text-kawaii-taupe dark:text-kawaii-rose/60 mt-1">Afinidade Curada</p>
+                    </div>
+                </div>
+
+                <!-- Body Content -->
+                <div class="space-y-4 text-xs">
+                    <div>
+                        <h4 class="font-bold text-kawaii-deep dark:text-kawaii-rose uppercase tracking-wider text-[11px] mb-1.5">Necessidade Identificada</h4>
+                        <p class="bg-kawaii-creme dark:bg-kawaii-darkbg p-3.5 rounded-xl border border-kawaii-gold/15 leading-relaxed text-kawaii-charcoal dark:text-kawaii-ivory">${description}</p>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-kawaii-deep dark:text-kawaii-rose uppercase tracking-wider text-[11px] mb-1.5">Evidências de Compatibilidade & Afinidade Confirmada</h4>
+                        <ul class="space-y-2 bg-kawaii-creme dark:bg-kawaii-darkbg p-3.5 rounded-xl border border-kawaii-gold/15 text-kawaii-charcoal dark:text-kawaii-rose/90">
+                            <li class="flex items-center gap-2">
+                                <i class="fa-solid fa-circle-check text-emerald-600 dark:text-emerald-400 shrink-0"></i>
+                                <span><strong>Público Compartilhado:</strong> ${audienceOverlap} de afinidade de consumidoras conscientes classe A/B.</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i class="fa-solid fa-circle-check text-emerald-600 dark:text-emerald-400 shrink-0"></i>
+                                <span><strong>Sinergia de Serviços:</strong> Direção de arte e embalagens botânicas complementam a linha de cosméticos naturais.</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i class="fa-solid fa-circle-check text-kawaii-gold shrink-0"></i>
+                                <span><strong>Valores & Propósito:</strong> Liderança feminina, sustentabilidade comprovada e co-criação bilateral.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-kawaii-creme dark:bg-kawaii-darkbg p-3 rounded-xl border border-kawaii-gold/15">
+                            <span class="text-[10px] uppercase font-bold text-kawaii-taupe dark:text-kawaii-rose/60">Modalidade Proposta</span>
+                            <p class="font-bold text-kawaii-main dark:text-kawaii-gold text-xs mt-0.5">${modalType}</p>
+                        </div>
+                        <div class="bg-kawaii-creme dark:bg-kawaii-darkbg p-3 rounded-xl border border-kawaii-gold/15">
+                            <span class="text-[10px] uppercase font-bold text-kawaii-taupe dark:text-kawaii-rose/60">Disponibilidade</span>
+                            <p class="font-bold text-emerald-700 dark:text-emerald-400 text-xs mt-0.5"><i class="fa-solid fa-circle-check mr-1"></i> Imediata para Q3</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="mt-6 pt-4 border-t border-kawaii-gold/20 flex items-center justify-between">
+                    <button onclick="closeModal(); showToast('Oportunidade arquivada para consulta posterior.');" class="text-xs text-kawaii-taupe dark:text-kawaii-rose/70 font-semibold hover:underline">
+                        Arquivar Oportunidade
+                    </button>
+                    <div class="flex gap-2">
+                        <button onclick="closeModal()" class="px-4 py-2.5 rounded-xl border border-kawaii-gold/30 text-kawaii-taupe dark:text-kawaii-rose font-bold text-xs hover:bg-kawaii-creme dark:hover:bg-kawaii-darkbg transition-all">Fechar</button>
+                        <button onclick="openProposalModal('${company}')" class="bg-kawaii-main hover:bg-kawaii-soft dark:bg-[#800B13] dark:hover:bg-[#96121C] text-kawaii-ivory px-5 py-2.5 rounded-xl font-bold text-xs shadow-md transition-all flex items-center gap-2">
+                            <i class="fa-solid fa-file-pen text-xs"></i> Criar Proposta Oficial →
+                        </button>
+                    </div>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+        }
+
+        // Screen 5: Criar Proposta (Strategic Alignment Form - Standard Modal Shell)
+        function openProposalModal(targetCompany) {
+            const modal = document.getElementById('app-modal');
+            const wrapper = document.getElementById('modal-content-wrapper');
+
+            const currentSession = getActiveSession() || {};
+            const userName = currentSession.name || 'Camila Ribeiro';
+
+            wrapper.innerHTML = `
+                <!-- Modal Header -->
+                <div class="flex items-start justify-between pb-4 border-b border-kawaii-gold/20 mb-5">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-kawaii-main dark:bg-[#800B13] text-kawaii-ivory font-editorial font-bold text-lg flex items-center justify-center border border-kawaii-gold/40 shadow-sm shrink-0">
+                            KS
+                        </div>
+                        <div>
+                            <span class="text-[10px] uppercase font-bold tracking-widest text-kawaii-gold">Tela 05 • Criar Proposta de Parceria</span>
+                            <h3 class="font-editorial text-2xl font-bold text-kawaii-deep dark:text-kawaii-ivory leading-tight mt-0.5">Formulário de Alinhamento Estratégico</h3>
+                        </div>
+                    </div>
+                    <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-kawaii-creme dark:bg-kawaii-darkalt border border-kawaii-gold/30 text-kawaii-taupe dark:text-kawaii-rose hover:text-kawaii-main flex items-center justify-center transition-all" aria-label="Fechar">
+                        <i class="fa-solid fa-xmark text-sm"></i>
+                    </button>
+                </div>
+
+                <p class="text-xs text-kawaii-taupe dark:text-kawaii-rose/80 -mt-2 mb-4">
+                    Documento bilateral pré-preenchido com as evidências de matching com <strong>${targetCompany}</strong>.
+                </p>
+
+                <!-- Form Inputs -->
+                <div class="space-y-4 text-xs">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block font-bold text-kawaii-deep dark:text-kawaii-rose mb-1">Participantes da Parceria</label>
+                            <input type="text" value="${userName} & ${targetCompany}" class="w-full bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/30 rounded-xl p-2.5 font-medium text-kawaii-charcoal dark:text-kawaii-ivory" readonly>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-kawaii-deep dark:text-kawaii-rose mb-1">Objetivo Principal do Projeto</label>
+                            <input id="prop-goal" type="text" value="Co-criação e Lançamento de Coleção Sensorial Q3" class="w-full bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/30 rounded-xl p-2.5 text-kawaii-charcoal dark:text-kawaii-ivory focus:outline-none focus:border-kawaii-main">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-kawaii-deep dark:text-kawaii-rose mb-1">Escopo da Parceria & Entregáveis</label>
+                        <textarea id="prop-scope" rows="3" class="w-full bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/30 rounded-xl p-2.5 text-kawaii-charcoal dark:text-kawaii-ivory focus:outline-none focus:border-kawaii-main">Desenvolvimento conjunto de embalagens botânicas com aromaterapia integrada e campanha de divulgação cruzada em canais digitais.</textarea>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block font-bold text-kawaii-deep dark:text-kawaii-rose mb-1">Minhas Contribuições (Sua Parte)</label>
+                            <textarea id="prop-contrib" rows="2" class="w-full bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/30 rounded-xl p-2.5 text-kawaii-charcoal dark:text-kawaii-ivory focus:outline-none focus:border-kawaii-main">Direção de arte completa, design das tags sustentáveis e assessoria visual de lançamento.</textarea>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-kawaii-deep dark:text-kawaii-rose mb-1">Contrapartidas Esperadas (Outra Parte)</label>
+                            <textarea id="prop-counter" rows="2" class="w-full bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/30 rounded-xl p-2.5 text-kawaii-charcoal dark:text-kawaii-ivory focus:outline-none focus:border-kawaii-main">Divulgação destacada para base de 45k assinantes e fornecimento de kits da linha natural.</textarea>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-kawaii-deep dark:text-kawaii-rose mb-1">Condições, Prazos e Vigência</label>
+                        <input id="prop-terms" type="text" value="Vigência inicial de 90 dias com cronograma de entregas quinzenais." class="w-full bg-kawaii-creme dark:bg-kawaii-darkbg border border-kawaii-gold/30 rounded-xl p-2.5 text-kawaii-charcoal dark:text-kawaii-ivory focus:outline-none focus:border-kawaii-main">
+                    </div>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="mt-6 pt-4 border-t border-kawaii-gold/20 flex items-center justify-between">
+                    <button onclick="saveProposalDraft(); closeModal();" class="px-4 py-2.5 rounded-xl border border-kawaii-gold/30 text-kawaii-deep dark:text-kawaii-ivory font-bold text-xs hover:bg-kawaii-creme dark:hover:bg-kawaii-darkbg flex items-center gap-2 transition-all">
+                        <i class="fa-solid fa-floppy-disk text-kawaii-gold"></i> Salvar Rascunho
+                    </button>
+                    <div class="flex gap-2">
+                        <button onclick="closeModal()" class="px-4 py-2.5 rounded-xl border border-kawaii-gold/30 text-kawaii-taupe dark:text-kawaii-rose font-bold text-xs hover:bg-kawaii-creme dark:hover:bg-kawaii-darkbg transition-all">Cancelar</button>
+                        <button onclick="sendOfficialProposal(); closeModal();" class="bg-kawaii-main hover:bg-kawaii-soft dark:bg-[#800B13] dark:hover:bg-[#96121C] text-kawaii-ivory px-5 py-2.5 rounded-xl font-bold text-xs shadow-md transition-all flex items-center gap-2">
+                            <i class="fa-solid fa-paper-plane text-xs"></i> Enviar Proposta Oficial
+                        </button>
+                    </div>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+        }
+
+        // Screen 7: Detalhes da Parceria (Com Timeline com Pontos de Histórico)
+        function openPartnershipDetails(partner, company, objective, status) {
+            const modal = document.getElementById('app-modal');
+            const wrapper = document.getElementById('modal-content-wrapper');
+
+            const isApproved = status === 'Aprovada';
+            const currentSession = getActiveSession() || {};
+            const userName = currentSession.name || 'Camila Ribeiro';
+
+            wrapper.innerHTML = `
+                <!-- Modal Header -->
+                <div class="flex items-start justify-between pb-4 border-b border-kawaii-gold/20 mb-5">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-kawaii-main dark:bg-[#800B13] text-kawaii-ivory font-editorial font-bold text-lg flex items-center justify-center border border-kawaii-gold/40 shadow-sm shrink-0">
+                            KS
+                        </div>
+                        <div>
+                            <span class="text-[10px] uppercase font-bold tracking-widest text-kawaii-gold">Tela 07 • Detalhes da Parceria & Histórico</span>
+                            <h3 class="font-editorial text-2xl font-bold text-kawaii-deep dark:text-kawaii-ivory leading-tight mt-0.5">${company}</h3>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="${isApproved ? 'bg-emerald-50 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-400 border-emerald-300 dark:border-emerald-800' : 'bg-amber-50 dark:bg-amber-950/70 text-amber-700 dark:text-amber-400 border-amber-300 dark:border-amber-800'} text-xs font-bold px-3 py-1 rounded-full border">
+                            ${status}
+                        </span>
+                        <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-kawaii-creme dark:bg-kawaii-darkalt border border-kawaii-gold/30 text-kawaii-taupe dark:text-kawaii-rose hover:text-kawaii-main flex items-center justify-center transition-all" aria-label="Fechar">
+                            <i class="fa-solid fa-xmark text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 5-Stage Step Bar Overview -->
+                <div class="mb-5 p-3.5 bg-kawaii-creme dark:bg-kawaii-darkbg rounded-2xl border border-kawaii-gold/20">
+                    <span class="text-[10px] uppercase font-bold tracking-wider text-kawaii-gold block mb-2">Visão Geral das Etapas</span>
+                    <div class="grid grid-cols-5 gap-1.5 text-center text-[10px]">
+                        <div class="p-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 font-bold">
+                            <i class="fa-solid fa-circle-check block text-xs mb-0.5"></i> 1. Match
+                        </div>
+                        <div class="p-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 font-bold">
+                            <i class="fa-solid fa-circle-check block text-xs mb-0.5"></i> 2. Proposta
+                        </div>
+                        <div class="p-1.5 rounded-xl ${isApproved ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border-emerald-300 dark:border-emerald-800' : 'bg-kawaii-main dark:bg-[#800B13] text-kawaii-ivory border border-kawaii-gold/40'} font-bold">
+                            <i class="fa-solid ${isApproved ? 'fa-circle-check' : 'fa-hourglass-half'} block text-xs mb-0.5"></i> 3. Negociação
+                        </div>
+                        <div class="p-1.5 rounded-xl ${isApproved ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border-emerald-300 dark:border-emerald-800' : 'bg-kawaii-creme dark:bg-kawaii-darkalt text-kawaii-taupe border border-kawaii-gold/20'} font-bold">
+                            <i class="fa-solid ${isApproved ? 'fa-circle-check' : 'fa-circle'} block text-xs mb-0.5"></i> 4. Aceite
+                        </div>
+                        <div class="p-1.5 rounded-xl ${isApproved ? 'bg-kawaii-rose dark:bg-[#380306] text-kawaii-main dark:text-[#FF6B75] border border-kawaii-gold/30' : 'bg-kawaii-creme dark:bg-kawaii-darkalt text-kawaii-taupe border border-kawaii-gold/20'} font-bold">
+                            <i class="fa-solid fa-rocket block text-xs mb-0.5"></i> 5. Execução
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scope & Bilateral Acceptance -->
+                <div class="space-y-4 text-xs mb-5">
+                    <div class="bg-kawaii-creme dark:bg-kawaii-darkbg p-4 rounded-2xl border border-kawaii-gold/15 space-y-1.5">
+                        <p class="font-bold text-kawaii-deep dark:text-kawaii-rose">Objetivo: <span class="font-normal text-kawaii-charcoal dark:text-kawaii-ivory">${objective}</span></p>
+                        <p class="font-bold text-kawaii-deep dark:text-kawaii-rose">Participantes: <span class="font-normal text-kawaii-charcoal dark:text-kawaii-ivory">${userName} & ${partner}</span></p>
+                        <p class="font-bold text-kawaii-deep dark:text-kawaii-rose">Modalidade: <span class="font-normal text-kawaii-charcoal dark:text-kawaii-ivory">Permuta e Collab de Produtos</span></p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="p-3 bg-kawaii-creme dark:bg-kawaii-darkbg rounded-xl border border-kawaii-gold/20">
+                            <span class="text-[10px] uppercase font-bold text-kawaii-taupe dark:text-kawaii-rose/60">Seu Aceite (${userName.split(' ')[0]})</span>
+                            <p class="font-bold text-emerald-700 dark:text-emerald-400 mt-0.5"><i class="fa-solid fa-circle-check"></i> Confirmado</p>
+                        </div>
+                        <div class="p-3 bg-kawaii-creme dark:bg-kawaii-darkbg rounded-xl border border-kawaii-gold/20">
+                            <span class="text-[10px] uppercase font-bold text-kawaii-taupe dark:text-kawaii-rose/60">Aceite da Parceira (${partner.split(' ')[0]})</span>
+                            <p class="font-bold ${isApproved ? 'text-emerald-700 dark:text-emerald-400' : 'text-amber-700 dark:text-amber-400'} mt-0.5">
+                                <i class="fa-solid ${isApproved ? 'fa-circle-check' : 'fa-clock'}"></i> ${isApproved ? 'Confirmado' : 'Aguardando validação'}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= HISTÓRICO COM PONTOS (DOTTED TIMELINE) ================= -->
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="font-bold text-kawaii-deep dark:text-kawaii-rose uppercase tracking-wider text-xs">
+                            Histórico de Atualizações & Linha do Tempo com Pontos
+                        </h4>
+                        <span class="text-[10px] text-kawaii-gold font-bold">5 Registros Auditados</span>
+                    </div>
+                    
+                    <div class="relative pl-6 space-y-3.5 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-kawaii-gold/30">
+                        <!-- Node 1: Match -->
+                        <div class="relative">
+                            <div class="absolute -left-6 top-1 w-5 h-5 rounded-full bg-emerald-600 text-kawaii-ivory flex items-center justify-center text-[9px] shadow-sm ring-4 ring-emerald-100 dark:ring-emerald-950/60">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div class="bg-kawaii-creme dark:bg-kawaii-darkbg p-3 rounded-xl border border-kawaii-gold/15">
+                                <div class="flex items-center justify-between mb-0.5">
+                                    <span class="text-[10px] uppercase font-bold text-emerald-700 dark:text-emerald-400">Ponto 1 • Match Validado</span>
+                                    <span class="text-[10px] text-kawaii-taupe dark:text-kawaii-rose/60">10 Out 2026 • 14:20</span>
+                                </div>
+                                <p class="font-bold text-kawaii-deep dark:text-kawaii-ivory text-xs">Algoritmo Kawaii detectou 98% de afinidade</p>
+                                <p class="text-[11px] text-kawaii-taupe dark:text-kawaii-rose/70 mt-0.5">Conexão iniciada através da Central de Oportunidades com base no público sustentável.</p>
+                            </div>
+                        </div>
+
+                        <!-- Node 2: Proposta -->
+                        <div class="relative">
+                            <div class="absolute -left-6 top-1 w-5 h-5 rounded-full bg-emerald-600 text-kawaii-ivory flex items-center justify-center text-[9px] shadow-sm ring-4 ring-emerald-100 dark:ring-emerald-950/60">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div class="bg-kawaii-creme dark:bg-kawaii-darkbg p-3 rounded-xl border border-kawaii-gold/15">
+                                <div class="flex items-center justify-between mb-0.5">
+                                    <span class="text-[10px] uppercase font-bold text-emerald-700 dark:text-emerald-400">Ponto 2 • Proposta Estratégica Elaborada</span>
+                                    <span class="text-[10px] text-kawaii-taupe dark:text-kawaii-rose/60">12 Out 2026 • 09:30</span>
+                                </div>
+                                <p class="font-bold text-kawaii-deep dark:text-kawaii-ivory text-xs">Minuta oficial enviada por ${userName}</p>
+                                <p class="text-[11px] text-kawaii-taupe dark:text-kawaii-rose/70 mt-0.5">Escopo de co-criação de embalagens botânicas registrado no sistema.</p>
+                            </div>
+                        </div>
+
+                        <!-- Node 3: Negociação Ativa -->
+                        <div class="relative">
+                            <div class="absolute -left-6 top-1 w-5 h-5 rounded-full bg-kawaii-main dark:bg-[#800B13] text-kawaii-ivory flex items-center justify-center text-[9px] shadow-sm ring-4 ring-kawaii-gold/40 animate-pulse">
+                                <i class="fa-solid fa-handshake"></i>
+                            </div>
+                            <div class="bg-kawaii-creme dark:bg-kawaii-darkbg p-3 rounded-xl border-2 border-kawaii-main dark:border-kawaii-gold/40 shadow-sm">
+                                <div class="flex items-center justify-between mb-0.5">
+                                    <span class="text-[10px] uppercase font-bold text-kawaii-main dark:text-kawaii-gold">Ponto 3 • Negociação Bilateral em Andamento</span>
+                                    <span class="text-[10px] text-kawaii-taupe dark:text-kawaii-rose/60">14 Out 2026 • 16:45</span>
+                                </div>
+                                <p class="font-bold text-kawaii-deep dark:text-kawaii-ivory text-xs">Ajuste de cronograma para lançamento em Q3</p>
+                                <p class="text-[11px] text-kawaii-taupe dark:text-kawaii-rose/70 mt-0.5">Contrapartida revisada: divulgação para base de 45k assinantes da parceira.</p>
+                            </div>
+                        </div>
+
+                        <!-- Node 4: Aceite -->
+                        <div class="relative">
+                            <div class="absolute -left-6 top-1 w-5 h-5 rounded-full ${isApproved ? 'bg-emerald-600' : 'bg-amber-500'} text-kawaii-ivory flex items-center justify-center text-[9px] shadow-sm ring-4 ${isApproved ? 'ring-emerald-100 dark:ring-emerald-950/60' : 'ring-amber-100 dark:ring-amber-950/60'}">
+                                <i class="fa-solid ${isApproved ? 'fa-check' : 'fa-clock'}"></i>
+                            </div>
+                            <div class="bg-kawaii-creme dark:bg-kawaii-darkbg p-3 rounded-xl border border-kawaii-gold/15">
+                                <div class="flex items-center justify-between mb-0.5">
+                                    <span class="text-[10px] uppercase font-bold ${isApproved ? 'text-emerald-700 dark:text-emerald-400' : 'text-amber-700 dark:text-amber-400'}">Ponto 4 • Confirmação Bilateral Formal</span>
+                                    <span class="text-[10px] text-kawaii-taupe dark:text-kawaii-rose/60">${isApproved ? 'Concluído' : 'Aguardando validação'}</span>
+                                </div>
+                                <p class="font-bold text-kawaii-deep dark:text-kawaii-ivory text-xs">${isApproved ? 'Acordo formalizado e assinado digitalmente' : 'Aceite de ' + userName.split(' ')[0] + ' confirmado; aguardando confirmação final da parceira'}</p>
+                            </div>
+                        </div>
+
+                        <!-- Node 5: Execução -->
+                        <div class="relative">
+                            <div class="absolute -left-6 top-1 w-5 h-5 rounded-full ${isApproved ? 'bg-kawaii-main dark:bg-[#800B13] ring-4 ring-kawaii-gold/30' : 'bg-kawaii-taupe/40'} text-kawaii-ivory flex items-center justify-center text-[9px] shadow-sm">
+                                <i class="fa-solid fa-rocket"></i>
+                            </div>
+                            <div class="bg-kawaii-creme dark:bg-kawaii-darkbg p-3 rounded-xl border border-kawaii-gold/15 ${isApproved ? '' : 'opacity-60'}">
+                                <div class="flex items-center justify-between mb-0.5">
+                                    <span class="text-[10px] uppercase font-bold ${isApproved ? 'text-kawaii-main dark:text-kawaii-gold' : 'text-kawaii-taupe dark:text-kawaii-rose/60'}">Ponto 5 • Execução & Distribuição</span>
+                                    <span class="text-[10px] text-kawaii-taupe dark:text-kawaii-rose/60">Etapa Final</span>
+                                </div>
+                                <p class="font-bold text-kawaii-deep dark:text-kawaii-ivory text-xs">Produção conjunta das embalagens e campanha co-branded de lançamento.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="mt-6 pt-4 border-t border-kawaii-gold/20 flex items-center justify-between">
+                    <button onclick="closeModal()" class="px-4 py-2.5 rounded-xl border border-kawaii-gold/30 text-kawaii-taupe dark:text-kawaii-rose font-bold text-xs hover:bg-kawaii-creme dark:hover:bg-kawaii-darkbg transition-all">Fechar</button>
+                    <button onclick="confirmFinalPartnership(); closeModal();" class="bg-emerald-700 hover:bg-emerald-800 text-kawaii-ivory px-5 py-2.5 rounded-xl font-bold text-xs shadow-md flex items-center gap-2 transition-all">
+                        <i class="fa-solid fa-circle-check text-xs"></i> Confirmar Acordo Final
+                    </button>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+        }
+
+        // Actions & Feedback Handlers
+        function saveProfileChanges() {
+            const currentSession = getActiveSession() || {};
+            const goals = document.getElementById('prof-goals')?.value;
+            const services = document.getElementById('prof-services')?.value;
+            const needs = document.getElementById('prof-needs')?.value;
+            const audience = document.getElementById('prof-audience')?.value;
+
+            currentSession.profile = {
+                goals,
+                services,
+                needs,
+                audience,
+                updatedAt: new Date().toISOString()
+            };
+            setActiveSession(currentSession);
+
+            showToast('Preferências profissionais e critérios de matching salvos com sucesso!');
+        }
+
+        function saveProposalDraft() {
+            showToast('Rascunho salvo com sucesso na aba Minhas Propostas!');
+            switchTab('propostas');
+        }
+
+        function sendOfficialProposal() {
+            showToast('Proposta oficial enviada! Notificação encaminhada à parceira.');
+            switchTab('propostas');
+        }
+
+        function confirmFinalPartnership() {
+            showToast('Parceria confirmada bilateralmente! Status atualizado para Execução.');
+        }
+
+        function openNotificationModal() {
+            showToast('Você possui 4 novos matches qualificados e 1 negociação pendente de resposta.');
+        }
+
+        function closeModal() {
+            document.getElementById('app-modal').classList.add('hidden');
+        }
+
+        function filterOpportunities(category, btn) {
+            document.querySelectorAll('.opp-filter-btn').forEach(b => {
+                b.className = "opp-filter-btn bg-kawaii-creme dark:bg-kawaii-darkbg text-kawaii-taupe dark:text-kawaii-rose/70 hover:text-kawaii-main text-xs px-3.5 py-2 rounded-xl font-bold border border-kawaii-gold/20 transition-all";
+            });
+            btn.className = "opp-filter-btn bg-kawaii-main text-kawaii-ivory text-xs px-3.5 py-2 rounded-xl font-bold transition-all";
+
+            const cards = document.querySelectorAll('.opp-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category').includes(category)) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+            showToast(`Filtro aplicado: ${category.toUpperCase()}`);
+        }
+
+        function handleOppSearch() {
+            const query = document.getElementById('opp-search').value.toLowerCase();
+            const cards = document.querySelectorAll('.opp-card');
+            cards.forEach(card => {
+                const text = card.getAttribute('data-text').toLowerCase();
+                if (text.includes(query)) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        function showToast(message, title = 'Notificação Kawaii') {
+            const toast = document.getElementById('toast-notification');
+            document.getElementById('toast-title').innerText = title;
+            document.getElementById('toast-message').innerText = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3400);
+        }
+
+        // ================= CARROSSEL DE PARCERIAS CONTROLS =================
+        let currentPartnerSlide = 0;
+        const totalPartnerSlides = 4;
+
+        function updatePartnerCarouselUI() {
+            const track = document.getElementById('partnership-carousel');
+            const counter = document.getElementById('carousel-counter');
+            const dots = document.querySelectorAll('.carousel-dot');
+
+            if (counter) {
+                counter.innerText = `${currentPartnerSlide + 1} / ${totalPartnerSlides}`;
+            }
+
+            dots.forEach((dot, idx) => {
+                if (idx === currentPartnerSlide) {
+                    dot.className = "carousel-dot w-8 h-2 rounded-full bg-kawaii-main dark:bg-kawaii-gold transition-all shadow-sm";
+                } else {
+                    dot.className = "carousel-dot w-2 h-2 rounded-full bg-kawaii-gold/30 hover:bg-kawaii-gold transition-all";
+                }
+            });
+
+            if (track && track.children[currentPartnerSlide]) {
+                const targetSlide = track.children[currentPartnerSlide];
+                track.scrollTo({
+                    left: targetSlide.offsetLeft - track.offsetLeft,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        function nextPartnerSlide() {
+            currentPartnerSlide = (currentPartnerSlide + 1) % totalPartnerSlides;
+            updatePartnerCarouselUI();
+        }
+
+        function prevPartnerSlide() {
+            currentPartnerSlide = (currentPartnerSlide - 1 + totalPartnerSlides) % totalPartnerSlides;
+            updatePartnerCarouselUI();
+        }
+
+        function goToPartnerSlide(idx) {
+            currentPartnerSlide = Math.max(0, Math.min(totalPartnerSlides - 1, idx));
+            updatePartnerCarouselUI();
+        }
+
+        // Auto-detect scroll on touch or trackpad
+        document.addEventListener('DOMContentLoaded', () => {
+            const track = document.getElementById('partnership-carousel');
+            if (track) {
+                track.addEventListener('scroll', () => {
+                    const slideWidth = track.children[0]?.offsetWidth || 340;
+                    const newIndex = Math.round(track.scrollLeft / slideWidth);
+                    if (newIndex !== currentPartnerSlide && newIndex >= 0 && newIndex < totalPartnerSlides) {
+                        currentPartnerSlide = newIndex;
+                        const counter = document.getElementById('carousel-counter');
+                        if (counter) counter.innerText = `${currentPartnerSlide + 1} / ${totalPartnerSlides}`;
+                        const dots = document.querySelectorAll('.carousel-dot');
+                        dots.forEach((dot, idx) => {
+                            dot.className = idx === currentPartnerSlide 
+                                ? "carousel-dot w-8 h-2 rounded-full bg-kawaii-main dark:bg-kawaii-gold transition-all shadow-sm"
+                                : "carousel-dot w-2 h-2 rounded-full bg-kawaii-gold/30 hover:bg-kawaii-gold transition-all";
+                        });
+                    }
+                }, { passive: true });
+            }
+        });
+
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            const text = document.getElementById('theme-text');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                if (icon) icon.className = 'fa-solid fa-moon text-kawaii-gold';
+                if (text) text.innerText = 'Modo Escuro';
+                showToast('Modo Claro ativado.', 'Tema');
+            } else {
+                html.classList.add('dark');
+                if (icon) icon.className = 'fa-solid fa-sun text-kawaii-gold';
+                if (text) text.innerText = 'Modo Claro';
+                showToast('Modo Escuro ativado.', 'Tema');
+            }
+        }
+    
+      // Auto-rolagem contínua (carrossel rolante) para Oportunidades recomendadas
+      (function initRollingCarousel(){
+        const vp = document.getElementById('partner-carousel');
+        if (!vp || vp.dataset.rolling) return;
+        vp.dataset.rolling = '1';
+        let paused = false, pos = 0;
+        vp.addEventListener('mouseenter', () => paused = true);
+        vp.addEventListener('mouseleave', () => paused = false);
+        vp.addEventListener('touchstart', () => paused = true, {passive:true});
+        vp.addEventListener('touchend', () => paused = false, {passive:true});
+        function step(){
+          if (!paused && vp.scrollWidth > vp.clientWidth) {
+            pos += 0.55;
+            if (pos >= vp.scrollWidth - vp.clientWidth) pos = 0;
+            vp.scrollLeft = pos;
+          } else {
+            pos = vp.scrollLeft;
+          }
+          requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      })();
+
+    </script>
+</body>
+</html>
